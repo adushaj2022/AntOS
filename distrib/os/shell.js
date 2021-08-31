@@ -66,7 +66,7 @@ var TSOS;
             // Determine the command and execute it.
             //
             // TypeScript/JavaScript may not support associative arrays in all browsers so we have to iterate over the
-            // command list in attempt to find a match. 
+            // command list in attempt to find a match.
             // TODO: Is there a better way? Probably. Someone work it out and tell me in class.
             var index = 0;
             var found = false;
@@ -85,13 +85,16 @@ var TSOS;
             }
             else {
                 // It's not found, so check for curses and apologies before declaring the command invalid.
-                if (this.curses.indexOf("[" + TSOS.Utils.rot13(cmd) + "]") >= 0) { // Check for curses.
+                if (this.curses.indexOf("[" + TSOS.Utils.rot13(cmd) + "]") >= 0) {
+                    // Check for curses.
                     this.execute(this.shellCurse);
                 }
-                else if (this.apologies.indexOf("[" + cmd + "]") >= 0) { // Check for apologies.
+                else if (this.apologies.indexOf("[" + cmd + "]") >= 0) {
+                    // Check for apologies.
                     this.execute(this.shellApology);
                 }
-                else { // It's just a bad command. {
+                else {
+                    // It's just a bad command. {
                     this.execute(this.shellInvalidCommand);
                 }
             }
@@ -164,16 +167,19 @@ var TSOS;
                 _StdOut.putText("For what?");
             }
         }
-        // Although args is unused in some of these functions, it is always provided in the 
+        // Although args is unused in some of these functions, it is always provided in the
         // actual parameter list when this function is called, so I feel like we need it.
         shellVer(args) {
-            _StdOut.putText(APP_NAME + " version " + APP_VERSION);
+            _StdOut.putText(APP_NAME + " current version " + APP_VERSION);
         }
         shellHelp(args) {
             _StdOut.putText("Commands:");
             for (var i in _OsShell.commandList) {
                 _StdOut.advanceLine();
-                _StdOut.putText("  " + _OsShell.commandList[i].command + " " + _OsShell.commandList[i].description);
+                _StdOut.putText("  " +
+                    _OsShell.commandList[i].command +
+                    " " +
+                    _OsShell.commandList[i].description);
             }
         }
         shellShutdown(args) {
@@ -230,7 +236,7 @@ var TSOS;
         shellRot13(args) {
             if (args.length > 0) {
                 // Requires Utils.ts for rot13() function.
-                _StdOut.putText(args.join(' ') + " = '" + TSOS.Utils.rot13(args.join(' ')) + "'");
+                _StdOut.putText(args.join(" ") + " = '" + TSOS.Utils.rot13(args.join(" ")) + "'");
             }
             else {
                 _StdOut.putText("Usage: rot13 <string>  Please supply a string.");
