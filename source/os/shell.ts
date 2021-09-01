@@ -92,6 +92,35 @@ module TSOS {
       // ps  - list the running processes and their IDs
       // kill <id> - kills the specified process id.
 
+      sc = new ShellCommand(
+        this.shellAbout,
+        "about",
+        "- Gives users more information about the project"
+      );
+      this.commandList[this.commandList.length] = sc;
+
+      sc = new ShellCommand(
+        this.shellWhereAmI,
+        "whereami",
+        "- Tells users where they are"
+      );
+      this.commandList[this.commandList.length] = sc;
+
+      sc = new ShellCommand(this.shellDate, "date", "- Display current date");
+
+      this.commandList[this.commandList.length] = sc;
+
+      sc = new ShellCommand(this.shellTime, "time", "- Display current time");
+
+      this.commandList[this.commandList.length] = sc;
+
+      sc = new ShellCommand(
+        this.shellNumberFact,
+        "fact",
+        "<number> - Displays random fact"
+      );
+      this.commandList[this.commandList.length] = sc;
+
       // Display the initial prompt.
       this.putPrompt();
     }
@@ -260,6 +289,9 @@ module TSOS {
               "Help displays a list of (hopefully) valid commands."
             );
             break;
+          case "about":
+            _StdOut.putText("Gives information about the project");
+            break;
           // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
           default:
             _StdOut.putText("No manual entry for " + args[0] + ".");
@@ -309,6 +341,46 @@ module TSOS {
         _OsShell.promptStr = args[0];
       } else {
         _StdOut.putText("Usage: prompt <string>  Please supply a string.");
+      }
+    }
+
+    public shellAbout(args: string[]) {
+      _StdOut.putText(
+        "AntOS is an online based 6502 operating system written "
+      );
+      _StdOut.advanceLine();
+      _StdOut.putText("in typescript.");
+    }
+
+    public shellWhereAmI(args: string[]) {
+      // gets coordinates, leaving commented for now, not sure if I want this feature
+      //   navigator.geolocation.getCurrentPosition((position) => {
+      //     _StdOut.putText(
+      //       `Latitude: ${position.coords.latitude} & Longitude: ${position.coords.longitude}`
+      //     );
+      //   });
+      _StdOut.putText("Tilted Towers");
+    }
+
+    public shellDate(args: string[]) {
+      const date = new Date();
+      _StdOut.putText(date.toDateString());
+    }
+
+    public shellTime(args: string[]) {
+      const date = new Date();
+      _StdOut.putText(date.toTimeString());
+    }
+
+    public shellNumberFact(args: string[]) {
+      let number = args[0];
+      if (number) {
+        fetch("http://numbersapi.com/" + number)
+          .then((response) => response.text())
+          .then((data) => {
+            _StdOut.putText(data);
+          })
+          .catch((err) => console.log(err));
       }
     }
   }
