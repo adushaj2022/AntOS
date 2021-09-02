@@ -212,7 +212,28 @@ var TSOS;
                     case "about":
                         _StdOut.putText("Gives information about the project");
                         break;
-                    // TODO: Make descriptive MANual page entries for the the rest of the shell commands here.
+                    case "cls":
+                        _StdOut.putText("Clears screen, same as windows command");
+                    case "fact":
+                        _StdOut.putText("Provide a number and receive a random fact");
+                        _StdOut.advanceLine();
+                        _StdOut.putText(" associated with that number");
+                        break;
+                    case "ver":
+                        _StdOut.putText("Displays the current version of AntOS");
+                    case "whereami":
+                        _StdOut.putText("Find out where you (yes, you) currently are");
+                        break;
+                    case "time":
+                        _StdOut.putText("Displays the current time");
+                        break;
+                    case "shutdown":
+                        _StdOut.putText("Shutdown virtual OS :(");
+                    //add prompt, rot13
+                    case "rot13":
+                        _StdOut.putText("Performs a letter sub cypher on a string");
+                    case "prompt":
+                        _StdOut.putText("Accepts a string as a prompt");
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
                 }
@@ -287,13 +308,16 @@ var TSOS;
         }
         shellNumberFact(args) {
             let number = args[0];
-            if (number) {
+            if (/^-?\d+$/.test(number)) {
                 fetch("http://numbersapi.com/" + number)
                     .then((response) => response.text())
                     .then((data) => {
                     _StdOut.putText(data);
                 })
                     .catch((err) => console.log(err));
+            }
+            else {
+                _StdOut.putText("Please enter a number");
             }
         }
     }
