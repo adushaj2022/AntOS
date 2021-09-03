@@ -121,6 +121,14 @@ module TSOS {
       );
       this.commandList[this.commandList.length] = sc;
 
+      sc = new ShellCommand(
+        this.shellStatus,
+        "status",
+        "<status> - Sets status"
+      );
+
+      this.commandList[this.commandList.length] = sc;
+
       // Display the initial prompt.
       this.putPrompt();
     }
@@ -394,7 +402,7 @@ module TSOS {
     }
 
     public shellNumberFact(args: string[]) {
-      let number = args[0];
+      const number = args[0];
       if (/^-?\d+$/.test(number)) {
         fetch("http://numbersapi.com/" + number)
           .then((response) => response.text())
@@ -404,6 +412,16 @@ module TSOS {
           .catch((err) => console.log(err));
       } else {
         _StdOut.putText("Please enter a number");
+      }
+    }
+
+    public shellStatus(args: string[]) {
+      const message = args[0];
+      if (message) {
+        document.getElementById("statusText").innerText = `Status: ${message}`;
+        _StdOut.putText(`Status set to: ${message}`);
+      } else {
+        _StdOut.putText("Please provide a message");
       }
     }
   }

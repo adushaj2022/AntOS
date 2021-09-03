@@ -23,7 +23,7 @@ var TSOS;
         static hostInit() {
             // This is called from index.html's onLoad event via the onDocumentLoad function pointer.
             // Get a global reference to the canvas.  TODO: Should we move this stuff into a Display Device Driver?
-            _Canvas = document.getElementById('display');
+            _Canvas = document.getElementById("display");
             // Get a global reference to the drawing context.
             _DrawingContext = _Canvas.getContext("2d");
             // Enable the added-in canvas text functions (see canvastext.ts for provenance and details).
@@ -49,7 +49,16 @@ var TSOS;
             // Note the REAL clock in milliseconds since January 1, 1970.
             var now = new Date().getTime();
             // Build the log string.
-            var str = "({ clock:" + clock + ", source:" + source + ", msg:" + msg + ", now:" + now + " })" + "\n";
+            var str = "({ clock:" +
+                clock +
+                ", source:" +
+                source +
+                ", msg:" +
+                msg +
+                ", now:" +
+                now +
+                " })" +
+                "\n";
             // Update the log console.
             var taLog = document.getElementById("taHostLog");
             taLog.value = str + taLog.value;
@@ -62,7 +71,8 @@ var TSOS;
             // Disable the (passed-in) start button...
             btn.disabled = true;
             // .. enable the Halt and Reset buttons ...
-            document.getElementById("btnHaltOS").disabled = false;
+            document.getElementById("btnHaltOS").disabled =
+                false;
             document.getElementById("btnReset").disabled = false;
             // .. set focus on the OS console display ...
             document.getElementById("display").focus();
@@ -74,6 +84,22 @@ var TSOS;
             // .. and call the OS Kernel Bootstrap routine.
             _Kernel = new TSOS.Kernel();
             _Kernel.krnBootstrap(); // _GLaDOS.afterStartup() will get called in there, if configured.
+            //here we will set the task bar with date, time, and message
+            const taskBar = document.getElementById("taskBar");
+            const dateTime = document.createElement("div");
+            dateTime.id = "dateTime";
+            const status = document.createElement("div");
+            status.innerText = "Status: ";
+            status.id = "statusText";
+            taskBar.appendChild(dateTime);
+            taskBar.appendChild(status);
+            this.hostTimeDate();
+        }
+        static hostTimeDate() {
+            const dateTime = document.getElementById("dateTime");
+            const date = new Date();
+            dateTime.innerText = date.toTimeString() + "  " + date.toDateString();
+            setTimeout(Control.hostTimeDate, 1000);
         }
         static hostBtnHaltOS_click(btn) {
             Control.hostLog("Emergency halt", "host");
