@@ -39,6 +39,7 @@ var TSOS;
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
                     this.commandHistory.push(this.buffer);
+                    this.commandIndex = this.commandHistory.length;
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
