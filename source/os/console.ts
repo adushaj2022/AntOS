@@ -7,6 +7,9 @@
 
 module TSOS {
   export class Console {
+    private commandHistory: Array<string | null> = [];
+    private commandIndex: number | null = null;
+
     constructor(
       public currentFont = _DefaultFontFamily,
       public currentFontSize = _DefaultFontSize,
@@ -22,6 +25,7 @@ module TSOS {
 
     public clearScreen(): void {
       _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
+      this.commandHistory = []; //reset command history
     }
 
     public resetXY(): void {
@@ -30,7 +34,6 @@ module TSOS {
     }
 
     public handleInput(): void {
-      console.log(_KernelInputQueue.toString());
       while (_KernelInputQueue.getSize() > 0) {
         // Get the next character from the kernel input queue.
         var chr = _KernelInputQueue.dequeue();
@@ -40,6 +43,7 @@ module TSOS {
           // The enter key marks the end of a console command, so ...
           // ... tell the shell ...
           _OsShell.handleInput(this.buffer);
+          this.commandHistory.push(this.buffer);
           // ... and reset our buffer.
           this.buffer = "";
         } else {
@@ -53,6 +57,45 @@ module TSOS {
       }
     }
 
+    public deleteText(): void {
+      if (this.buffer.length === 0) {
+        return;
+      }
+
+      const { width, height } = _Canvas;
+      const y = this.currentYPosition;
+      _DrawingContext.clearRect(11, y - 14, width, height); // chop out current off line
+      this.currentXPosition = 12; // start past the >
+      const newBuffer = this.buffer.slice(0, -1);
+      this.putText(newBuffer); // place new line with removed char
+      this.buffer = newBuffer;
+    }
+
+    /*
+      Here we handle using up and down keys to access previous commands, we have an array of commands
+      and as we hit up or down key we simply move through the array in either direction
+    */
+
+    public accessCommandHistory(key?: number): void {
+      let upper = this.commandHistory.length;
+
+      if (this.commandIndex === null) {
+        this.commandIndex = upper;
+      }
+
+      let i = this.commandIndex;
+
+      if (key === 38 && this.commandIndex > 0) {
+        this.commandIndex = i - 1;
+        //console.log(this.commandHistory[this.commandIndex], this.commandIndex);
+        // place text on screen here
+      } else if (key === 40 && this.commandIndex < upper) {
+        this.commandIndex = i + 1;
+        // console.log(this.commandHistory[this.commandIndex], this.commandIndex);
+        // place text on screen here
+      }
+    }
+
     public putText(text): void {
       /*  My first inclination here was to write two functions: putChar() and putString().
                 Then I remembered that JavaScript is (sadly) untyped and it won't differentiate
@@ -61,6 +104,8 @@ module TSOS {
                 do the same thing, thereby encouraging confusion and decreasing readability, I
                 decided to write one function and use the term "text" to connote string or char.
             */
+
+      //TODO: implement line wrap
       if (text !== "") {
         // Draw the text at the current X and Y coordinates.
         _DrawingContext.drawText(

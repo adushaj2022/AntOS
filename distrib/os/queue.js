@@ -17,7 +17,7 @@ var TSOS;
             return this.q.length;
         }
         isEmpty() {
-            return (this.q.length == 0);
+            return this.q.length === 0;
         }
         enqueue(element) {
             this.q.push(element);
@@ -26,6 +26,13 @@ var TSOS;
             var retVal = null;
             if (this.q.length > 0) {
                 retVal = this.q.shift();
+            }
+            return retVal;
+        }
+        pollLast() {
+            var retVal = null;
+            if (this.q.length > 0) {
+                retVal = this.q.pop();
             }
             return retVal;
         }

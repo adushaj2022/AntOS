@@ -22,28 +22,44 @@ var TSOS;
             this.status = "loaded";
             // More?
         }
-        krnKbdDispatchKeyPress(params) {
-            // Parse the params.  TODO: Check that the params are valid and osTrapError if not.
-            var keyCode = params[0];
-            var isShifted = params[1];
+        krnKbdDispatchKeyPress(params, osTrapError) {
+            let [keyCode, isShifted, isCaps] = params; //destructure params array
+            if (typeof keyCode !== "number" ||
+                typeof isShifted !== "boolean" ||
+                typeof isCaps !== "boolean") {
+                osTrapError("Invalid params");
+            }
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
             var chr = "";
             // Check to see if we even want to deal with the key that was pressed.
-            if ((keyCode >= 65) && (keyCode <= 90)) { // letter
-                if (isShifted === true) {
+            if (keyCode >= 65 && keyCode <= 90) {
+                // letter
+                if (isShifted === true || isCaps) {
                     chr = String.fromCharCode(keyCode); // Uppercase A-Z
                 }
                 else {
                     chr = String.fromCharCode(keyCode + 32); // Lowercase a-z
                 }
-                // TODO: Check for caps-lock and handle as shifted if so.
                 _KernelInputQueue.enqueue(chr);
             }
-            else if (((keyCode >= 48) && (keyCode <= 57)) || // digits
-                (keyCode == 32) || // space
-                (keyCode == 13)) { // enter
+            else if ((keyCode >= 48 && keyCode <= 57) || // digits
+                keyCode == 32 || // space
+                keyCode == 13) {
+                // enter
                 chr = String.fromCharCode(keyCode);
                 _KernelInputQueue.enqueue(chr);
+            }
+            else if ((keyCode >= 186 && keyCode <= 221) ||
+                (keyCode <= 111 && keyCode >= 106)) {
+                chr = String.fromCharCode(keyCode - 48 * Math.floor(keyCode / 48));
+                _KernelInputQueue.enqueue(chr);
+            }
+            else if (keyCode === 8) {
+                _Console.deleteText();
+            }
+            else if (keyCode === 38 || keyCode === 40) {
+                // arrow key
+                _Console.accessCommandHistory(keyCode);
             }
         }
     }

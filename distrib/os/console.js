@@ -13,6 +13,8 @@ var TSOS;
             this.currentXPosition = currentXPosition;
             this.currentYPosition = currentYPosition;
             this.buffer = buffer;
+            this.commandHistory = [];
+            this.commandIndex = null;
         }
         init() {
             this.clearScreen();
@@ -20,22 +22,24 @@ var TSOS;
         }
         clearScreen() {
             _DrawingContext.clearRect(0, 0, _Canvas.width, _Canvas.height);
+            this.commandHistory = []; //reset command history
         }
         resetXY() {
             this.currentXPosition = 0;
             this.currentYPosition = this.currentFontSize;
         }
         handleInput() {
-            console.log(_KernelInputQueue.toString());
             while (_KernelInputQueue.getSize() > 0) {
                 // Get the next character from the kernel input queue.
                 var chr = _KernelInputQueue.dequeue();
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
+                console.log(chr === String.fromCharCode(38));
                 if (chr === String.fromCharCode(13)) {
                     // the Enter key
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
                     _OsShell.handleInput(this.buffer);
+                    this.commandHistory.push(this.buffer);
                     // ... and reset our buffer.
                     this.buffer = "";
                 }
@@ -49,6 +53,33 @@ var TSOS;
                 // TODO: Add a case for Ctrl-C that would allow the user to break the current program.
             }
         }
+        deleteText() {
+            if (this.buffer.length === 0) {
+                return;
+            }
+            const { width, height } = _Canvas;
+            const y = this.currentYPosition;
+            _DrawingContext.clearRect(11, y - 14, width, height); // chop out current off line
+            this.currentXPosition = 12; // start past the >
+            const newBuffer = this.buffer.slice(0, -1);
+            this.putText(newBuffer); // place new line with removed char
+            this.buffer = newBuffer;
+        }
+        accessCommandHistory(key) {
+            let upper = this.commandHistory.length;
+            if (this.commandIndex === null) {
+                this.commandIndex = upper;
+            }
+            let i = this.commandIndex;
+            if (key === 38 && this.commandIndex > 0) {
+                this.commandIndex = i - 1;
+                console.log(this.commandHistory[this.commandIndex], this.commandIndex);
+            }
+            else if (key === 40 && this.commandIndex < upper) {
+                this.commandIndex = i + 1;
+                console.log(this.commandHistory[this.commandIndex], this.commandIndex);
+            }
+        }
         putText(text) {
             /*  My first inclination here was to write two functions: putChar() and putString().
                       Then I remembered that JavaScript is (sadly) untyped and it won't differentiate
@@ -57,6 +88,7 @@ var TSOS;
                       do the same thing, thereby encouraging confusion and decreasing readability, I
                       decided to write one function and use the term "text" to connote string or char.
                   */
+            //TODO: implement line wrap
             if (text !== "") {
                 // Draw the text at the current X and Y coordinates.
                 _DrawingContext.drawText(this.currentFont, this.currentFontSize, this.currentXPosition, this.currentYPosition, text);

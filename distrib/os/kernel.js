@@ -13,6 +13,7 @@ var TSOS;
         // OS Startup and Shutdown Routines
         //
         krnBootstrap() {
+            // Page 8. {
             TSOS.Control.hostLog("bootstrap", "host"); // Use hostLog because we ALWAYS want this, even if _Trace is off.
             // Initialize our global queues.
             _KernelInterruptQueue = new TSOS.Queue(); // A (currently) non-priority queue for interrupt requests (IRQs).
@@ -58,10 +59,10 @@ var TSOS;
         }
         krnOnCPUClockPulse() {
             /* This gets called from the host hardware simulation every time there is a hardware clock pulse.
-               This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
-               This, on the other hand, is the clock pulse from the hardware / VM / host that tells the kernel
-               that it has to look for interrupts and process them if it finds any.
-            */
+                     This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
+                     This, on the other hand, is the clock pulse from the hardware / VM / host that tells the kernel
+                     that it has to look for interrupts and process them if it finds any.
+                  */
             // Check for an interrupt, if there are any. Page 560
             if (_KernelInterruptQueue.getSize() > 0) {
                 // Process the first interrupt on the interrupt queue.
@@ -69,10 +70,12 @@ var TSOS;
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             }
-            else if (_CPU.isExecuting) { // If there are no interrupts then run one CPU cycle if there is anything being processed.
+            else if (_CPU.isExecuting) {
+                // If there are no interrupts then run one CPU cycle if there is anything being processed.
                 _CPU.cycle();
             }
-            else { // If there are no interrupts and there is nothing being executed then just be idle.
+            else {
+                // If there are no interrupts and there is nothing being executed then just be idle.
                 this.krnTrace("Idle");
             }
         }
@@ -102,7 +105,7 @@ var TSOS;
                     this.krnTimerISR(); // Kernel built-in routine for timers (not the clock).
                     break;
                 case KEYBOARD_IRQ:
-                    _krnKeyboardDriver.isr(params); // Kernel mode device driver
+                    _krnKeyboardDriver.isr(params, this.krnTrapError); // Kernel mode device driver
                     _StdIn.handleInput();
                     break;
                 default:
