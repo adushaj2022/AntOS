@@ -33,7 +33,6 @@ var TSOS;
                 // Get the next character from the kernel input queue.
                 var chr = _KernelInputQueue.dequeue();
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
-                console.log(chr === String.fromCharCode(38));
                 if (chr === String.fromCharCode(13)) {
                     // the Enter key
                     // The enter key marks the end of a console command, so ...
@@ -53,6 +52,11 @@ var TSOS;
                 // TODO: Add a case for Ctrl-C that would allow the user to break the current program.
             }
         }
+        /**
+         * Here we can make a function just to remove a line
+         * this is because we can now use it for backspaces and accessing
+         * previous commands via arrow keys
+         */
         deleteText() {
             if (this.buffer.length === 0) {
                 return;
@@ -61,10 +65,20 @@ var TSOS;
             const y = this.currentYPosition;
             _DrawingContext.clearRect(11, y - 14, width, height); // chop out current off line
             this.currentXPosition = 12; // start past the >
+        }
+        /**
+         * Handle Backspace here
+         */
+        deleteChar() {
+            this.deleteText(); //delete line
             const newBuffer = this.buffer.slice(0, -1);
             this.putText(newBuffer); // place new line with removed char
             this.buffer = newBuffer;
         }
+        /*
+          Here we handle using up and down keys to access previous commands, we have an array of commands
+          and as we hit up or down key we simply move through the array in either direction
+        */
         accessCommandHistory(key) {
             let upper = this.commandHistory.length;
             if (this.commandIndex === null) {
@@ -73,12 +87,13 @@ var TSOS;
             let i = this.commandIndex;
             if (key === 38 && this.commandIndex > 0) {
                 this.commandIndex = i - 1;
-                console.log(this.commandHistory[this.commandIndex], this.commandIndex);
             }
             else if (key === 40 && this.commandIndex < upper) {
                 this.commandIndex = i + 1;
-                console.log(this.commandHistory[this.commandIndex], this.commandIndex);
             }
+            this.deleteText();
+            this.buffer = this.commandHistory[this.commandIndex] || ""; //default to empty
+            this.putText(this.buffer);
         }
         putText(text) {
             /*  My first inclination here was to write two functions: putChar() and putString().

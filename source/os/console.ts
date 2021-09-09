@@ -57,6 +57,11 @@ module TSOS {
       }
     }
 
+    /**
+     * Here we can make a function just to remove a line
+     * this is because we can now use it for backspaces and accessing
+     * previous commands via arrow keys
+     */
     public deleteText(): void {
       if (this.buffer.length === 0) {
         return;
@@ -66,6 +71,13 @@ module TSOS {
       const y = this.currentYPosition;
       _DrawingContext.clearRect(11, y - 14, width, height); // chop out current off line
       this.currentXPosition = 12; // start past the >
+    }
+
+    /**
+     * Handle Backspace here
+     */
+    public deleteChar(): void {
+      this.deleteText(); //delete line
       const newBuffer = this.buffer.slice(0, -1);
       this.putText(newBuffer); // place new line with removed char
       this.buffer = newBuffer;
@@ -87,13 +99,12 @@ module TSOS {
 
       if (key === 38 && this.commandIndex > 0) {
         this.commandIndex = i - 1;
-        //console.log(this.commandHistory[this.commandIndex], this.commandIndex);
-        // place text on screen here
       } else if (key === 40 && this.commandIndex < upper) {
         this.commandIndex = i + 1;
-        // console.log(this.commandHistory[this.commandIndex], this.commandIndex);
-        // place text on screen here
       }
+      this.deleteText();
+      this.buffer = this.commandHistory[this.commandIndex] || ""; //default to empty
+      this.putText(this.buffer);
     }
 
     public putText(text): void {

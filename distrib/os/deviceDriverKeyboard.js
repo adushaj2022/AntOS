@@ -55,11 +55,11 @@ var TSOS;
                 _KernelInputQueue.enqueue(chr);
             }
             else if (keyCode === 8) {
-                _Console.deleteText();
+                _Console.deleteChar();
             }
             else if (keyCode === 38 || keyCode === 40) {
                 // arrow key
-                _Console.accessCommandHistory(keyCode);
+                _Console.accessCommandHistory(keyCode); // type safety here
             }
         }
     }
