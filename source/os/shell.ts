@@ -137,11 +137,17 @@ module TSOS {
       _StdOut.putText(this.promptStr);
     }
 
-    public handleInput(buffer) {
+    public handleInput(buffer, tab?: boolean) {
       _Kernel.krnTrace("Shell Command~" + buffer);
       //
       // Parse the input...
       //
+
+      //if tab is true we know we are parsing an incomplete command
+      if (tab) {
+        this.execute(this.shellSimilarCommand);
+        return;
+      }
       var userCommand = this.parseInput(buffer);
       // ... and assign the command and args to local variables.
       var cmd = userCommand.command;
@@ -236,6 +242,10 @@ module TSOS {
       } else {
         _StdOut.putText("Type 'help' for, well... help.");
       }
+    }
+
+    public shellSimilarCommand() {
+      _StdOut.putText("Those are the most similar commands");
     }
 
     public shellCurse() {

@@ -33,7 +33,19 @@ var TSOS;
                 // Get the next character from the kernel input queue.
                 var chr = _KernelInputQueue.dequeue();
                 // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
-                if (chr === String.fromCharCode(13)) {
+                if (chr === String.fromCharCode(38)) {
+                    this.accessCommandHistory(38);
+                }
+                else if (chr === String.fromCharCode(40)) {
+                    this.accessCommandHistory(40);
+                }
+                else if (chr === String.fromCharCode(8)) {
+                    this.deleteChar();
+                }
+                else if (chr === String.fromCharCode(9)) {
+                    this.commandCompletion();
+                }
+                else if (chr === String.fromCharCode(13)) {
                     // the Enter key
                     // The enter key marks the end of a console command, so ...
                     // ... tell the shell ...
@@ -95,6 +107,38 @@ var TSOS;
             this.deleteText();
             this.buffer = this.commandHistory[this.commandIndex] || ""; //default to empty
             this.putText(this.buffer);
+        }
+        commandCompletion() {
+            if (this.buffer.length === 0) {
+                return;
+            }
+            const commands = _OsShell.commandList;
+            const similarCommands = [];
+            let prefix = new String(this.buffer);
+            commands.forEach(({ command }) => {
+                if (command === null || command === void 0 ? void 0 : command.startsWith(this.buffer)) {
+                    similarCommands.push(command);
+                }
+            });
+            // we only have one command that has the same prefix
+            if (similarCommands.length === 1) {
+                this.deleteText();
+                this.buffer = similarCommands[0];
+                this.putText(this.buffer);
+            }
+            else if (similarCommands.length >= 2) {
+                /**
+                 * we have multiple strings with a common prefix
+                 * so if we follow what bash does it will print those strings to the screen
+                 */
+                similarCommands.forEach((str) => {
+                    this.advanceLine();
+                    this.putText(str);
+                });
+                _OsShell.handleInput("", true);
+                this.buffer = prefix;
+                this.putText(this.buffer);
+            }
         }
         putText(text) {
             /*  My first inclination here was to write two functions: putChar() and putString().

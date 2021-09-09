@@ -63,10 +63,17 @@ module TSOS {
         chr = String.fromCharCode(keyCode - 48 * Math.floor(keyCode / 48));
         _KernelInputQueue.enqueue(chr);
       } else if (keyCode === 8) {
-        _Console.deleteChar();
+        //backspace
+        chr = String.fromCharCode(keyCode);
+        _KernelInputQueue.enqueue(chr);
       } else if (keyCode === 38 || keyCode === 40) {
         // arrow key
-        _Console.accessCommandHistory(keyCode as number); // type safety here
+        chr = String.fromCharCode(keyCode);
+        _KernelInputQueue.enqueue(chr);
+      } else if (keyCode === 9) {
+        //tab
+        chr = String.fromCharCode(keyCode);
+        _KernelInputQueue.enqueue(chr);
       }
     }
   }

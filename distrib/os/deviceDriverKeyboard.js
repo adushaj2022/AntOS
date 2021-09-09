@@ -55,11 +55,19 @@ var TSOS;
                 _KernelInputQueue.enqueue(chr);
             }
             else if (keyCode === 8) {
-                _Console.deleteChar();
+                //backspace
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
             }
             else if (keyCode === 38 || keyCode === 40) {
                 // arrow key
-                _Console.accessCommandHistory(keyCode); // type safety here
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
+            }
+            else if (keyCode === 9) {
+                //tab
+                chr = String.fromCharCode(keyCode);
+                _KernelInputQueue.enqueue(chr);
             }
         }
     }
