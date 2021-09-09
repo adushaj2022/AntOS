@@ -333,7 +333,7 @@ var TSOS;
         shellStatus(args) {
             const message = args[0];
             if (message) {
-                document.getElementById("statusText").innerText = `Status: ${message}`;
+                TSOS.Control.setStatus(message);
                 _StdOut.putText(`Status set to: ${message}`);
             }
             else {

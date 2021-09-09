@@ -50,6 +50,10 @@ module TSOS {
       }
     }
 
+    public static setStatus(msg: string): void {
+      document.getElementById("statusText").innerText = `Status: ${msg}`;
+    }
+
     public static hostLog(msg: string, source: string = "?"): void {
       // Note the OS CLOCK.
       var clock: number = _OSclock;
@@ -136,7 +140,7 @@ module TSOS {
 
     public static hostBtnReset_click(btn): void {
       // The easiest and most thorough way to do this is to reload (not refresh) the document.
-      location.reload(true);
+      location.reload();
       // That boolean parameter is the 'forceget' flag. When it is true it causes the page to always
       // be reloaded from the server. If it is false or not specified the browser may reload the
       // page from its cache, which is not what we want.

@@ -428,7 +428,7 @@ module TSOS {
     public shellStatus(args: string[]) {
       const message = args[0];
       if (message) {
-        document.getElementById("statusText").innerText = `Status: ${message}`;
+        Control.setStatus(message);
         _StdOut.putText(`Status set to: ${message}`);
       } else {
         _StdOut.putText("Please provide a message");

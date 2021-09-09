@@ -43,6 +43,9 @@ var TSOS;
                 _GLaDOS.init();
             }
         }
+        static setStatus(msg) {
+            document.getElementById("statusText").innerText = `Status: ${msg}`;
+        }
         static hostLog(msg, source = "?") {
             // Note the OS CLOCK.
             var clock = _OSclock;
@@ -112,7 +115,7 @@ var TSOS;
         }
         static hostBtnReset_click(btn) {
             // The easiest and most thorough way to do this is to reload (not refresh) the document.
-            location.reload(true);
+            location.reload();
             // That boolean parameter is the 'forceget' flag. When it is true it causes the page to always
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
