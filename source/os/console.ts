@@ -146,7 +146,7 @@ module TSOS {
         });
 
         /**
-         * here we take the longest common prefix and make it our buffer
+         * here we take the longest common prefix of our similar commands and make it our buffer
          * here is an example:
          *    Care
          *    Cat
@@ -160,15 +160,7 @@ module TSOS {
       }
     }
 
-    public putText(text): void {
-      /*  My first inclination here was to write two functions: putChar() and putString().
-                Then I remembered that JavaScript is (sadly) untyped and it won't differentiate
-                between the two. (Although TypeScript would. But we're compiling to JavaScipt anyway.)
-                So rather than be like PHP and write two (or more) functions that
-                do the same thing, thereby encouraging confusion and decreasing readability, I
-                decided to write one function and use the term "text" to connote string or char.
-            */
-
+    public putText(text: any): void {
       //TODO: implement line wrap
       if (text !== "") {
         // Draw the text at the current X and Y coordinates.
@@ -186,6 +178,30 @@ module TSOS {
           text
         );
         this.currentXPosition = this.currentXPosition + offset;
+      }
+    }
+
+    /**
+     * lw -> line wrap
+     * Very similar to put text but we will use that as a utility to write this function,
+     * this allows for line wrap. The idea is pretty simple, identify the amount of chars that can go in a line
+     * next, take that number and divide it by the length of the text. Example if we have a 100 character text
+     * but a 20 character limit we know we need 5 lines. To print the right characters we use the built in
+     * string.prototype.subtring method, so we can grab the first 0 - 20, then advance to 20 - 40 and so on
+     * and so fourth. This is similar to paginating
+     */
+    public lwPutText(text: string | number | boolean): void {
+      text = String(text);
+      const CHAR_LIMIT = 55;
+      let upper = CHAR_LIMIT; // average amount of characters that we can use to cover a whole line
+      let paginate = Math.ceil(text.length / CHAR_LIMIT);
+      let i = 0;
+      let lower = 0;
+      while (i++ < paginate) {
+        this.putText(text.substring(lower, upper).trimLeft());
+        this.advanceLine();
+        lower += CHAR_LIMIT;
+        upper += CHAR_LIMIT;
       }
     }
 

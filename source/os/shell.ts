@@ -275,9 +275,9 @@ module TSOS {
 
     public shellHelp(args: string[]) {
       _StdOut.putText("Commands:");
+      _StdOut.advanceLine();
       for (var i in _OsShell.commandList) {
-        _StdOut.advanceLine();
-        _StdOut.putText(
+        _StdOut.lwPutText(
           "  " +
             _OsShell.commandList[i].command +
             " " +
@@ -384,11 +384,9 @@ module TSOS {
     }
 
     public shellAbout(args: string[]) {
-      _StdOut.putText(
-        "AntOS is an online based 6502 operating system written "
+      _StdOut.lwPutText(
+        `This is an online operating system based on the 6502 apple computer, it is written in typescript`
       );
-      _StdOut.advanceLine();
-      _StdOut.putText("in typescript.");
     }
 
     public shellWhereAmI(args: string[]) {

@@ -194,9 +194,9 @@ var TSOS;
         }
         shellHelp(args) {
             _StdOut.putText("Commands:");
+            _StdOut.advanceLine();
             for (var i in _OsShell.commandList) {
-                _StdOut.advanceLine();
-                _StdOut.putText("  " +
+                _StdOut.lwPutText("  " +
                     _OsShell.commandList[i].command +
                     " " +
                     _OsShell.commandList[i].description);
@@ -295,9 +295,7 @@ var TSOS;
             }
         }
         shellAbout(args) {
-            _StdOut.putText("AntOS is an online based 6502 operating system written ");
-            _StdOut.advanceLine();
-            _StdOut.putText("in typescript.");
+            _StdOut.lwPutText(`This is an online operating system based on the 6502 apple computer, it is written in typescript`);
         }
         shellWhereAmI(args) {
             // gets coordinates, leaving commented for now, not sure if I want this feature
