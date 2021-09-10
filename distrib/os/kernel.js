@@ -153,6 +153,7 @@ var TSOS;
         krnTrapError(msg) {
             TSOS.Control.hostLog("OS ERROR - TRAP: " + msg);
             // TODO: Display error on console, perhaps in some sort of colored screen. (Maybe blue?)
+            _OsShell.shellBSOD(msg);
             this.krnShutdown();
         }
     }

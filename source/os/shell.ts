@@ -129,6 +129,22 @@ module TSOS {
 
       this.commandList[this.commandList.length] = sc;
 
+      sc = new ShellCommand(
+        this.shellLoad,
+        "load",
+        "loads user code into memory"
+      );
+
+      this.commandList[this.commandList.length] = sc;
+
+      sc = new ShellCommand(
+        this.shellBSOD,
+        "bsod",
+        "displays bluescreen of death (testing)"
+      );
+
+      this.commandList[this.commandList.length] = sc;
+
       // Display the initial prompt.
       this.putPrompt();
     }
@@ -327,11 +343,19 @@ module TSOS {
             break;
           case "shutdown":
             _StdOut.putText("Shutdown virtual OS :(");
+            break;
           //add prompt, rot13
           case "rot13":
             _StdOut.putText("Performs a letter sub cypher on a string");
+            break;
           case "prompt":
             _StdOut.putText("Accepts a string as a prompt");
+            break;
+          case "load":
+            _StdOut.lwPutText(
+              "Will load the users code into memory, only accepting hex code"
+            );
+            break;
           default:
             _StdOut.putText("No manual entry for " + args[0] + ".");
         }
@@ -431,6 +455,38 @@ module TSOS {
       } else {
         _StdOut.putText("Please provide a message");
       }
+    }
+
+    public shellLoad(args: string[]) {
+      const data = Control.hostGetUserInput();
+      if (!data) {
+        _StdOut.putText("Input is empty");
+        return;
+      }
+
+      const numbers = data.split(" ");
+      let valid = true;
+
+      /**
+       * check all the space seperated data, if its hex value does not equal itself we know
+       * it is not a valid piece of data
+       */
+      numbers.forEach((num) => {
+        let hexValue = parseInt(num, 16).toString(16).toUpperCase();
+        if (hexValue !== num.toUpperCase()) {
+          valid = false;
+        }
+      });
+
+      if (valid) {
+        _StdOut.putText("Successfully loaded");
+      } else {
+        _StdOut.putText("Inproper input, data not loaded");
+      }
+    }
+
+    public shellBSOD(args: string[]): void {
+      _StdOut.displayBSOD();
     }
   }
 }

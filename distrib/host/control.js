@@ -120,6 +120,10 @@ var TSOS;
             // be reloaded from the server. If it is false or not specified the browser may reload the
             // page from its cache, which is not what we want.
         }
+        static hostGetUserInput() {
+            const { value } = document.getElementById("taProgramInput");
+            return value;
+        }
     }
     TSOS.Control = Control;
 })(TSOS || (TSOS = {}));
