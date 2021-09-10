@@ -145,8 +145,17 @@ module TSOS {
           this.putText(str);
         });
 
+        /**
+         * here we take the longest common prefix and make it our buffer
+         * here is an example:
+         *    Care
+         *    Cat
+         *    Capital
+         * Our longestr prefix is: Ca
+         **/
+        this.buffer = Utils.longestCommonPrefix(similarCommands);
+
         _OsShell.handleInput("", true);
-        this.buffer = prefix as string;
         this.putText(this.buffer);
       }
     }
