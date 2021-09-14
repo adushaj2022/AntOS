@@ -34,7 +34,7 @@ var TSOS;
             // Check to see if we even want to deal with the key that was pressed.
             if (keyCode >= 65 && keyCode <= 90) {
                 // letter
-                if (isShifted === true || isCaps) {
+                if (isShifted || isCaps) {
                     chr = String.fromCharCode(keyCode); // Uppercase A-Z
                 }
                 else {

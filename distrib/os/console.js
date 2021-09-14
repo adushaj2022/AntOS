@@ -209,10 +209,7 @@ var TSOS;
             _DrawingContext.fillStyle = "blue";
             _DrawingContext.fillRect(0, 0, _Canvas.width, _Canvas.height);
             _StdOut.lwPutText(msg || "ERROR, THE OS HAS TRAPPED");
-            setTimeout(() => {
-                this.init();
-                _OsShell.putPrompt();
-            }, 2000);
+            TSOS.Control.hostBtnHaltOS_click(globalThis);
         }
     }
     TSOS.Console = Console;
