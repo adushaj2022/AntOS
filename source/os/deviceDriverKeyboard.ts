@@ -29,7 +29,7 @@ module TSOS {
       params: any[],
       osTrapError: (mess: any) => void
     ): boolean | void {
-      let [keyCode, isShifted, isCaps] = params; //destructure params array
+      let [keyCode, isShifted, isCaps, code] = params; //destructure params array
       if (
         typeof keyCode !== "number" ||
         typeof isShifted !== "boolean" ||
@@ -37,8 +37,53 @@ module TSOS {
       ) {
         osTrapError("Invalid params");
       }
+
       _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
       var chr = "";
+
+      /*
+        First deal with special characters, since keycode is depreciated, using
+        code is prefered if we have caps or shift on then we know all these digits
+        map to the correspoding characters
+      */
+      if (isShifted || isCaps) {
+        switch (code) {
+          case "Digit1":
+            _KernelInputQueue.enqueue("!");
+            return;
+          case "Digit2":
+            _KernelInputQueue.enqueue("@");
+            return;
+          case "Digit3":
+            _KernelInputQueue.enqueue("#");
+            return;
+          case "Digit4":
+            _KernelInputQueue.enqueue("$");
+            return;
+          case "Digit5":
+            _KernelInputQueue.enqueue("%");
+            return;
+          case "Digit6":
+            _KernelInputQueue.enqueue("^");
+            return;
+          case "Digit7":
+            _KernelInputQueue.enqueue("&");
+            return;
+          case "Digit8":
+            _KernelInputQueue.enqueue("*");
+            return;
+          case "Digit9":
+            _KernelInputQueue.enqueue("(");
+            return;
+          case "Digit0":
+            _KernelInputQueue.enqueue(")");
+            return;
+
+          default:
+            break;
+        }
+      }
+
       // Check to see if we even want to deal with the key that was pressed.
       if (keyCode >= 65 && keyCode <= 90) {
         // letter
