@@ -42,6 +42,18 @@ module TSOS {
 
       // Check for our testing and enrichment core, which
       // may be referenced here (from index.html) as function Glados().
+
+      //here we will set the task bar with date, time, and message
+      const taskBar = document.getElementById("taskBar");
+      const dateTime = document.createElement("div");
+      dateTime.id = "dateTime";
+      const status = document.createElement("div");
+      status.innerText = "Status: ";
+      status.id = "statusText";
+      taskBar.appendChild(dateTime);
+      taskBar.appendChild(status);
+      this.hostTimeDate();
+
       if (typeof Glados === "function") {
         // function Glados() is here, so instantiate Her into
         // the global (and properly capitalized) _GLaDOS variable.
@@ -108,17 +120,6 @@ module TSOS {
       // .. and call the OS Kernel Bootstrap routine.
       _Kernel = new Kernel();
       _Kernel.krnBootstrap(); // _GLaDOS.afterStartup() will get called in there, if configured.
-
-      //here we will set the task bar with date, time, and message
-      const taskBar = document.getElementById("taskBar");
-      const dateTime = document.createElement("div");
-      dateTime.id = "dateTime";
-      const status = document.createElement("div");
-      status.innerText = "Status: ";
-      status.id = "statusText";
-      taskBar.appendChild(dateTime);
-      taskBar.appendChild(status);
-      this.hostTimeDate();
     }
 
     private static hostTimeDate() {
