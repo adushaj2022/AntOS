@@ -448,7 +448,7 @@ module TSOS {
     }
 
     public shellStatus(args: string[]) {
-      const message = args[0];
+      const message = args.join(" "); // handle sentences
       if (message) {
         Control.setStatus(message);
         _StdOut.putText(`Status set to: ${message}`);

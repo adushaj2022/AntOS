@@ -339,7 +339,7 @@ var TSOS;
             }
         }
         shellStatus(args) {
-            const message = args[0];
+            const message = args.join(" ");
             if (message) {
                 TSOS.Control.setStatus(message);
                 _StdOut.putText(`Status set to: ${message}`);
