@@ -472,6 +472,10 @@ module TSOS {
        * it is not a valid piece of data
        */
       numbers.forEach((num) => {
+        if (Number(num) < 10) {
+          return; // handle cases like 09 00 02 03, these are all valid
+        }
+
         let hexValue = parseInt(num, 16).toString(16).toUpperCase();
         if (hexValue !== num.toUpperCase()) {
           valid = false;
