@@ -1,7 +1,9 @@
 # Grading
 
 Project 1 has its own branch, I am noting here that, that should be graded for project 1
-2019 - 2021 Browser-based Operating System in TypeScript
+
+# 2019 - 2021 Browser-based Operating System in TypeScript
+
 ========================================================
 
 This is Alan's Operating Systems class initial project.
