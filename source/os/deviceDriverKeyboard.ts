@@ -30,11 +30,7 @@ module TSOS {
       osTrapError: (mess: any) => void
     ): boolean | void {
       let [keyCode, isShifted, isCaps, code] = params; //destructure params array
-      if (
-        typeof keyCode !== "number" ||
-        typeof isShifted !== "boolean" ||
-        typeof isCaps !== "boolean"
-      ) {
+      if (typeof keyCode !== "number" || typeof isShifted !== "boolean") {
         osTrapError("Invalid params");
       }
 
