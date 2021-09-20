@@ -15,6 +15,7 @@ body {
 .boxes {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
 }
 
 .container {
@@ -74,10 +75,15 @@ h3 {
   color: black;
   font-family: Arial, Helvetica, sans-serif;
   font-size: 8pt;
-  /* position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  margin-bottom: 10px; */
   text-align: center;
+}
+
+@media (min-height: 800px) {
+  .footerText {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    margin-bottom: 10px;
+  }
 }
