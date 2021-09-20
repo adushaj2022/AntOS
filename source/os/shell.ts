@@ -222,8 +222,12 @@ module TSOS {
       // 1. Remove leading and trailing spaces.
       buffer = Utils.trim(buffer);
 
-      // 2. Lower-case it.
-      buffer = buffer.toLowerCase();
+      // 2. Lower-case it, furthermore simply lowercase the command.
+      // example: for status we do not want to lowercase the message
+      let temp = buffer.split(" ");
+      temp[0] = temp[0].toLowerCase();
+
+      buffer = temp.join(" ");
 
       // 3. Separate on spaces so we can determine the command and command-line args, if any.
       var tempList = buffer.split(" ");
