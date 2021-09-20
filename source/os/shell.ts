@@ -223,7 +223,10 @@ module TSOS {
       buffer = Utils.trim(buffer);
 
       // 2. Lower-case it.
-      buffer = buffer.toLowerCase();
+      let temp = buffer.split(" ");
+      temp[0] = temp[0].toLowerCase();
+
+      buffer = temp.join(" ");
 
       // 3. Separate on spaces so we can determine the command and command-line args, if any.
       var tempList = buffer.split(" ");
