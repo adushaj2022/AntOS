@@ -26,6 +26,10 @@ module TSOS {
       // Get a global reference to the canvas.  TODO: Should we move this stuff into a Display Device Driver?
       _Canvas = <HTMLCanvasElement>document.getElementById("display");
 
+      _Memory = new Memory();
+      _Memory.init();
+      _MemoryAccessor = new MemoryAccessor(_Memory);
+
       // Get a global reference to the drawing context.
       _DrawingContext = _Canvas.getContext("2d");
 

@@ -5,7 +5,6 @@ var TSOS;
             this.mainMemory = new Array(0xffff); //representation of memory
             this.mar = 0x0000; //Memory Address Reg
             this.mdr = 0x00; //Memory Data Reg
-            this.fillArray(); //when Memory is created, it will be initiated to 0
         }
         //setter for memory address register
         setMAR(mar) {
@@ -24,7 +23,7 @@ var TSOS;
             return this.mdr;
         }
         //sets mar, mdr, and all of memory to 0
-        reset() {
+        init() {
             this.fillArray();
             this.setMAR(0x0000);
             this.setMDR(0x00);

@@ -4,9 +4,7 @@ module TSOS {
     private mar: number = 0x0000; //Memory Address Reg
     private mdr: number = 0x00; //Memory Data Reg
 
-    constructor() {
-      this.fillArray(); //when Memory is created, it will be initiated to 0
-    }
+    constructor() {}
 
     //setter for memory address register
     public setMAR(mar: number): void {
@@ -29,7 +27,7 @@ module TSOS {
     }
 
     //sets mar, mdr, and all of memory to 0
-    public reset(): void {
+    public init(): void {
       this.fillArray();
       this.setMAR(0x0000);
       this.setMDR(0x00);
