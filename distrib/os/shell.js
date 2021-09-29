@@ -332,7 +332,7 @@ var TSOS;
                 fetch("http://numbersapi.com/" + number)
                     .then((response) => response.text())
                     .then((data) => {
-                    _StdOut.putText(data);
+                    _StdOut.lwPutText(data);
                 })
                     .catch((err) => console.log(err));
             }
@@ -372,7 +372,11 @@ var TSOS;
                 }
             });
             if (valid) {
-                _StdOut.putText("Successfully loaded");
+                _MemoryAccessor.loadMemory(numbers); // load memory
+                _Pcb = new TSOS.ProcessControlBlock(); // create pcb
+                _Pcb.pid = _ReadyQueue.getSize();
+                _ReadyQueue.enqueue(_Pcb);
+                _StdOut.putText(`Process Control - PID: ${_Pcb.pid}`);
             }
             else {
                 _StdOut.putText("Inproper input, data not loaded");

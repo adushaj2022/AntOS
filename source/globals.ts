@@ -29,7 +29,7 @@ var _CPU: TSOS.Cpu; // Utilize TypeScript's type annotation system to ensure tha
 var _Memory: TSOS.Memory;
 var _MemoryAccessor: TSOS.MemoryAccessor;
 //	Software	(OS)
-var _MemoryManager: any = null;
+var _MemoryManager: TSOS.MemoryManager = null;
 
 var _OSclock: number = 0; // Page 23.
 
@@ -49,7 +49,7 @@ var _KernelInterruptQueue: TSOS.Queue<any> = null;
 var _KernelInputQueue: TSOS.Queue<any> = null;
 var _KernelBuffers = null;
 var _ReadyQueue: TSOS.Queue<TSOS.ProcessControlBlock> | null = null;
-
+var _Pcb: TSOS.ProcessControlBlock = null;
 // Standard input and output
 var _StdIn: TSOS.Console = null;
 var _StdOut: TSOS.Console = null;
