@@ -9,8 +9,8 @@
    ------------ */
 
 module TSOS {
-  export class Queue {
-    constructor(public q = new Array()) {}
+  export class Queue<arrType> {
+    constructor(public q = new Array<arrType>()) {}
 
     public getSize() {
       return this.q.length;
