@@ -121,6 +121,7 @@ module TSOS {
         Devices.hostClockPulse,
         CPU_CLOCK_INTERVAL
       );
+
       // .. and call the OS Kernel Bootstrap routine.
       _Kernel = new Kernel();
       _Kernel.krnBootstrap(); // _GLaDOS.afterStartup() will get called in there, if configured.

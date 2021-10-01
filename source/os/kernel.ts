@@ -16,7 +16,7 @@ module TSOS {
       // Page 8. {
       Control.hostLog("bootstrap", "host"); // Use hostLog because we ALWAYS want this, even if _Trace is off.
 
-      _MemoryManager = new MemoryManager();
+      _MemoryManager = new MemoryManager(_Memory.mainMemory);
       // Initialize our global queues.
       _KernelInterruptQueue = new Queue<any>(); // A (currently) non-priority queue for interrupt requests (IRQs).
       _KernelBuffers = new Array(); // Buffers... for the kernel.

@@ -42,19 +42,6 @@ var TSOS;
                 this.mainMemory[i] = 0x00;
             }
         }
-        //method to check if array has anything besides 0s (is it empty or not)
-        isMemoryEmpty() {
-            for (let i = 0x00; i < this.mainMemory.length; ++i) {
-                if (this.mainMemory[i] != 0x00) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        //get total addressable Space --> array is private therefore well use this to get the length
-        totalAddressableSpace() {
-            return this.mainMemory.length + 0x01;
-        }
         memoryDump(fromAddress, toAddress) {
             let memoryContents = [];
             for (let i = fromAddress; i <= toAddress; ++i) {

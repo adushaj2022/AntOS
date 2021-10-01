@@ -1,34 +1,34 @@
 module TSOS {
   export class MemoryAccessor {
-    public ram: Memory;
+    public memory: Memory;
 
     private lob: number = 0x00;
     private hob: number = 0x00;
 
-    constructor(ram: Memory) {
-      this.ram = ram;
+    constructor(memory: Memory) {
+      this.memory = memory;
     }
 
     public writeIntermediate(address: number, data: number): void {
-      this.ram.setMAR(address);
-      this.ram.setMDR(data);
-      this.ram.write(); //set the MAR and MDR, then we can write to Memory
+      this.memory.setMAR(address);
+      this.memory.setMDR(data);
+      this.memory.write(); //set the MAR and MDR, then we can write to Memory
     }
 
     public readIntermediate(address: number): number {
       this.setMAR(address);
-      return this.ram.read(); //accepts an address and gives us the data there
+      return this.memory.read(); //accepts an address and gives us the data there
     }
 
     //Helper / Util method
     public setMAR(mar: number, martwo?: number): void {
-      // this method will accept one paramter or two (method overloading)
+      // this method will accept one pamemoryter or two (method overloading)
       if (typeof mar === "number" && typeof martwo === "undefined") {
-        return this.ram.setMAR(mar); //in this case, it will accept a one 4 digit hex number and set it
+        return this.memory.setMAR(mar); //in this case, it will accept a one 4 digit hex number and set it
       } else if (typeof mar === "number" && typeof martwo === "number") {
         this.setLowOrderByte(mar); //set the bytes
         this.setHighOrderByte(martwo); //set the bytes so we can convert on the next line
-        return this.ram.setMAR(this.convert_to_li_format()); //in this case it will accept two two digit hex numbers and convert them then set the converted number
+        return this.memory.setMAR(this.convert_to_li_format()); //in this case it will accept two two digit hex numbers and convert them then set the converted number
       }
     }
     /*

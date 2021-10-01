@@ -1,6 +1,6 @@
 module TSOS {
   export class Memory {
-    private mainMemory: number[] = new Array(0xffff); //representation of memory
+    public mainMemory: number[] = new Array(0xffff); //representation of memory
     private mar: number = 0x0000; //Memory Address Reg
     private mdr: number = 0x00; //Memory Data Reg
 
@@ -48,21 +48,6 @@ module TSOS {
       for (let i = 0x00; i < this.mainMemory.length; ++i) {
         this.mainMemory[i] = 0x00;
       }
-    }
-
-    //method to check if array has anything besides 0s (is it empty or not)
-    public isMemoryEmpty(): boolean {
-      for (let i = 0x00; i < this.mainMemory.length; ++i) {
-        if (this.mainMemory[i] != 0x00) {
-          return false;
-        }
-      }
-      return true;
-    }
-
-    //get total addressable Space --> array is private therefore well use this to get the length
-    public totalAddressableSpace(): number {
-      return this.mainMemory.length + 0x01;
     }
 
     public memoryDump(

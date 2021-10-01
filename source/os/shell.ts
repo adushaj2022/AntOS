@@ -461,7 +461,7 @@ module TSOS {
     }
 
     public shellLoad(args: string[]) {
-      const data = Control.hostGetUserInput();
+      const data = Control.hostGetUserInput().trim();
       if (!data) {
         _StdOut.putText("Input is empty");
         return;
@@ -488,7 +488,7 @@ module TSOS {
       if (valid) {
         _MemoryAccessor.loadMemory(numbers); // load memory
         _Pcb = new ProcessControlBlock(); // create pcb
-        _Pcb.pid = _ReadyQueue.getSize();
+        _Pcb.pid = _ReadyQueue.getSize() ?? 0;
         _ReadyQueue.enqueue(_Pcb);
         _StdOut.putText(`Process Control - PID: ${_Pcb.pid}`);
       } else {

@@ -351,7 +351,8 @@ var TSOS;
             }
         }
         shellLoad(args) {
-            const data = TSOS.Control.hostGetUserInput();
+            var _a;
+            const data = TSOS.Control.hostGetUserInput().trim();
             if (!data) {
                 _StdOut.putText("Input is empty");
                 return;
@@ -374,7 +375,7 @@ var TSOS;
             if (valid) {
                 _MemoryAccessor.loadMemory(numbers); // load memory
                 _Pcb = new TSOS.ProcessControlBlock(); // create pcb
-                _Pcb.pid = _ReadyQueue.getSize();
+                _Pcb.pid = (_a = _ReadyQueue.getSize()) !== null && _a !== void 0 ? _a : 0;
                 _ReadyQueue.enqueue(_Pcb);
                 _StdOut.putText(`Process Control - PID: ${_Pcb.pid}`);
             }
