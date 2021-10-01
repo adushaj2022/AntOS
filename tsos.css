@@ -67,6 +67,11 @@ h3 {
   cursor: default;
 }
 
+#divLog {
+  display: flex;
+  flex-direction: column;
+}
+
 .normal_button {
   width: 100px;
 }
