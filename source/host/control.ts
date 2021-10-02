@@ -114,12 +114,12 @@ module TSOS {
 
       // ... Create and initialize the CPU (because it's part of the hardware)  ...
       _CPU = new Cpu(); // Note: We could simulate multi-core systems by instantiating more than one instance of the CPU here.
-      _CPU.init(); //       There's more to do, like dealing with scheduling and such, but this would be a start. Pretty cool.
 
       this.hostDisplayMemory(_MemoryAccessor.memory.mainMemory); // display memory on start
       this.hostDisplayCpu(_CPU);
 
       // ... then set the host clock pulse ...
+      // @ts-ignore
       _hardwareClockID = setInterval(
         Devices.hostClockPulse,
         CPU_CLOCK_INTERVAL
@@ -170,22 +170,22 @@ module TSOS {
       const row = document.createElement("tr");
 
       const pc = document.createElement("td");
-      pc.innerText = String(cpu.PC);
+      pc.innerText = String(cpu.program_counter);
 
       const ir = document.createElement("td");
-      ir.innerText = String(cpu.iRegister);
+      ir.innerText = String(cpu.insuction_register);
 
       const acc = document.createElement("td");
-      acc.innerText = String(cpu.Acc);
+      acc.innerText = String(cpu.accumulator);
 
       const xr = document.createElement("td");
-      xr.innerText = String(cpu.Xreg);
+      xr.innerText = String(cpu.x_register);
 
       const yr = document.createElement("td");
-      yr.innerText = String(cpu.Yreg);
+      yr.innerText = String(cpu.y_register);
 
       const zr = document.createElement("td");
-      zr.innerText = String(cpu.Zflag);
+      zr.innerText = String(cpu.zFlag);
 
       row.insertAdjacentElement("beforeend", pc);
       row.insertAdjacentElement("beforeend", ir);
@@ -214,7 +214,7 @@ module TSOS {
           }
           memoryTable.insertAdjacentElement("beforeend", row); // insert tow
           row = document.createElement("tr"); // re initilize
-          tds = []; // reset rowe
+          tds = []; // reset row
         }
       }
     }
@@ -222,6 +222,7 @@ module TSOS {
     public static hostDisplayPcbs(pcb: ProcessControlBlock) {
       const pcbTable = document.getElementById("pcbBody");
       const row = document.createElement("tr");
+      row.id = String(pcb.pid);
       /* 
         in the future I may want to loop through PCB object and dynamically create tds,
         did not do this now because I fear the order may get messed up

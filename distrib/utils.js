@@ -73,6 +73,38 @@ var TSOS;
         static showHexValue(num, len = 2) {
             return num.toString(16).toUpperCase().padStart(len, "0");
         }
+        static twos_comp(hex_number) {
+            //get twos comp of a number (for branching)
+            const flip_bits = (str) => str
+                .split("")
+                .map((x) => (1 - x).toString())
+                .join(""); //flip bits
+            let num = flip_bits(hex_number.toString(2)); //turn into decimal
+            let res = parseInt(num, 2) + 1; //add 1
+            return res;
+        }
+        static instructionSetMap() {
+            const map = new Map(); //hashmap of insctrutions
+            map.set(0xa9, 1); // map each instruction to the amount of steps it takes
+            map.set(0xad, 2);
+            map.set(0x8d, 2);
+            map.set(0x8a, 0);
+            map.set(0x98, 0);
+            map.set(0x6d, 2);
+            map.set(0xa2, 1);
+            map.set(0xae, 2);
+            map.set(0xaa, 0);
+            map.set(0xa0, 1);
+            map.set(0xac, 2);
+            map.set(0xa8, 0);
+            map.set(0xea, 0);
+            map.set(0x00, 0);
+            map.set(0xec, 2);
+            map.set(0xd0, 1);
+            map.set(0xee, 2);
+            map.set(0xff, 0);
+            return map;
+        }
         // REFERENCE: https://www.javascripttutorial.net/dom/manipulating/remove-all-child-nodes/
         // Helper method to delete all children nodes of an html element
         static removeAllChildNodes(element) {

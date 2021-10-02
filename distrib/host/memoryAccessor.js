@@ -49,6 +49,26 @@ var TSOS;
         getHighOrderByte() {
             return this.hob; //getter for high order byte
         }
+        //Helper / Util method
+        getMAR() {
+            return this.memory.getMAR();
+        }
+        //Helper / Util method
+        setMDR(mdr) {
+            this.memory.setMDR(mdr);
+        }
+        //Helper / Util method
+        getMDR() {
+            return this.memory.getMDR();
+        }
+        //Helper / Util method
+        read() {
+            return this.memory.read();
+        }
+        //Helper / Util method
+        write() {
+            return this.memory.write();
+        }
         convert_to_li_format() {
             let b = this.getLowOrderByte(); //get LOB
             let a = this.getHighOrderByte(); //get HOB

@@ -5,6 +5,7 @@ module TSOS {
     private lob: number = 0x00;
     private hob: number = 0x00;
 
+    // Memory gets passed in, then we access its actual memory contents with methods here
     constructor(memory: Memory) {
       this.memory = memory;
     }
@@ -31,10 +32,7 @@ module TSOS {
         return this.memory.setMAR(this.convert_to_li_format()); //in this case it will accept two two digit hex numbers and convert them then set the converted number
       }
     }
-    /*
-      Array of strings is passed because the string hex value will be passed, and we will parse it,
-      offset will help us set memory at different locations other thanst arting for 0
-    */
+
     public loadMemory(arr: Array<number>, offset: number = 0): number {
       for (let i = 0; i < arr.length; i++) {
         this.writeIntermediate(i + offset, arr[i]);
@@ -57,6 +55,31 @@ module TSOS {
 
     public getHighOrderByte(): number {
       return this.hob; //getter for high order byte
+    }
+
+    //Helper / Util method
+    public getMAR(): number {
+      return this.memory.getMAR();
+    }
+
+    //Helper / Util method
+    public setMDR(mdr: number): void {
+      this.memory.setMDR(mdr);
+    }
+
+    //Helper / Util method
+    public getMDR(): number {
+      return this.memory.getMDR();
+    }
+
+    //Helper / Util method
+    public read(): number {
+      return this.memory.read();
+    }
+
+    //Helper / Util method
+    public write(): void {
+      return this.memory.write();
     }
 
     public convert_to_li_format(): number {

@@ -409,12 +409,14 @@ var TSOS;
                 _StdOut.putText("Please pass a number");
                 return;
             }
+            // iterate through Queue and find our pcb
             for (let pcb of _ReadyQueue.q) {
                 if (pcb.pid === Number(arg)) {
-                    _CPU.isExecuting = true;
-                    _Pcb = pcb; // set global Pcb to current one being ran
+                    _CPU.isExecuting = true; // set this to true, time to run program
+                    _Pcb = pcb; // set global Pcb to current one being ran, we will access this from cpu
                 }
             }
+            // pcb doesnt exist
             if (!_CPU.isExecuting) {
                 _StdOut.putText("No pid found");
             }
