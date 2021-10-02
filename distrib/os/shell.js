@@ -357,7 +357,7 @@ var TSOS;
                 _StdOut.putText("Input is empty");
                 return;
             }
-            const numbers = data.split(" ");
+            let numbers = data.split(" ");
             let valid = true;
             /**
              * check all the space seperated data, if its hex value does not equal itself we know
@@ -372,12 +372,14 @@ var TSOS;
                     valid = false;
                 }
             });
+            numbers = numbers.map((n) => parseInt(n, 16)); // convert to numbers, not string represention
             if (valid) {
                 _MemoryAccessor.loadMemory(numbers); // load memory
                 _Pcb = new TSOS.ProcessControlBlock(); // create pcb
                 _Pcb.pid = (_a = _ReadyQueue.getSize()) !== null && _a !== void 0 ? _a : 0;
                 _ReadyQueue.enqueue(_Pcb);
                 TSOS.Control.hostDisplayPcbs(_Pcb); // display to gui
+                TSOS.Control.hostDisplayMemory(_MemoryAccessor.memory.mainMemory); // display to gui
                 _StdOut.putText(`Process Control - PID: ${_Pcb.pid}`);
             }
             else {

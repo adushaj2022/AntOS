@@ -12,6 +12,10 @@ body {
   width: 100%;
 }
 
+.mtable {
+  height: 400px !important;
+}
+
 .boxes {
   display: flex;
   justify-content: space-between;
@@ -61,6 +65,12 @@ h3 {
   font-style: normal;
 }
 
+.tableContainer {
+  height: 220px !important;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
 #display {
   background-color: #f7f7f7;
   border: 2px solid red;
@@ -68,6 +78,11 @@ h3 {
 }
 
 #divLog {
+  display: flex;
+  flex-direction: column;
+}
+
+#divUserProgramInput {
   display: flex;
   flex-direction: column;
 }

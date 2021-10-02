@@ -69,6 +69,17 @@ var TSOS;
             }
             return res;
         }
+        // Way to make our hex look better 0 --> 00 or 9 --> 09
+        static showHexValue(num, len = 2) {
+            return num.toString(16).toUpperCase().padStart(len, "0");
+        }
+        // REFERENCE: https://www.javascripttutorial.net/dom/manipulating/remove-all-child-nodes/
+        // Helper method to delete all children nodes of an html element
+        static removeAllChildNodes(element) {
+            while (element.firstChild) {
+                element.removeChild(element.firstChild);
+            }
+        }
     }
     TSOS.Utils = Utils;
 })(TSOS || (TSOS = {}));

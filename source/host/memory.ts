@@ -1,6 +1,6 @@
 module TSOS {
   export class Memory {
-    public mainMemory: number[] = new Array(0xffff); //representation of memory
+    public mainMemory: number[] = new Array(0xff); //representation of memory
     private mar: number = 0x0000; //Memory Address Reg
     private mdr: number = 0x00; //Memory Data Reg
 

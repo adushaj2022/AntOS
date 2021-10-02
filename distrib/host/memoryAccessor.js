@@ -33,7 +33,7 @@ var TSOS;
         */
         loadMemory(arr, offset = 0) {
             for (let i = 0; i < arr.length; i++) {
-                this.writeIntermediate(i + offset, parseInt(arr[i + offset], 16));
+                this.writeIntermediate(i + offset, arr[i]);
             }
             return arr.length + offset; // return the last index we used, needed for when were creating multiple pids
         }

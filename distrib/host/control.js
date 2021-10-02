@@ -49,6 +49,7 @@ var TSOS;
             taskBar.appendChild(dateTime);
             taskBar.appendChild(status);
             this.hostTimeDate();
+            this.hostDisplayMemory(_MemoryAccessor.memory.mainMemory); // display memory on start
             if (typeof Glados === "function") {
                 // function Glados() is here, so instantiate Her into
                 // the global (and properly capitalized) _GLaDOS variable.
@@ -127,9 +128,33 @@ var TSOS;
             const { value } = document.getElementById("taProgramInput");
             return value;
         }
+        static hostDisplayMemory(memoryArray) {
+            const contents = memoryArray;
+            const memoryTable = document.getElementById("memoryBody");
+            TSOS.Utils.removeAllChildNodes(memoryTable); // reset the board
+            let row = document.createElement("tr");
+            let tds = [];
+            for (let i = 0; i < contents.length; i++) {
+                let td = document.createElement("td");
+                td.innerHTML = `<small> ${TSOS.Utils.showHexValue(contents[i])} </small>`;
+                tds.push(td);
+                if ((i + 1) % 8 === 0 && i !== 0) {
+                    for (let td of tds) {
+                        row.insertAdjacentElement("beforeend", td);
+                    }
+                    memoryTable.insertAdjacentElement("beforeend", row);
+                    row = document.createElement("tr");
+                    tds = [];
+                }
+            }
+        }
         static hostDisplayPcbs(pcb) {
             const pcbTable = document.getElementById("pcbBody");
             const row = document.createElement("tr");
+            /*
+              in the future I may want to loop through PCB object and dynamically create tds,
+              did not do this now because I fear the order may get messed up
+            */
             const pid = document.createElement("td");
             pid.innerText = String(pcb.pid);
             const ir = document.createElement("td");

@@ -35,9 +35,9 @@ module TSOS {
       Array of strings is passed because the string hex value will be passed, and we will parse it,
       offset will help us set memory at different locations other thanst arting for 0
     */
-    public loadMemory(arr: Array<string>, offset: number = 0): number {
+    public loadMemory(arr: Array<number>, offset: number = 0): number {
       for (let i = 0; i < arr.length; i++) {
-        this.writeIntermediate(i + offset, parseInt(arr[i + offset], 16));
+        this.writeIntermediate(i + offset, arr[i]);
       }
 
       return arr.length + offset; // return the last index we used, needed for when were creating multiple pids

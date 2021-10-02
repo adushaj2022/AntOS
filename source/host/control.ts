@@ -28,7 +28,7 @@ module TSOS {
 
       _Memory = new Memory();
       _Memory.init();
-      _MemoryAccessor = new MemoryAccessor(_Memory);
+      _MemoryAccessor = new MemoryAccessor(_Memory); // pass in memory, we will access it through here
 
       // Get a global reference to the drawing context.
       _DrawingContext = _Canvas.getContext("2d");
@@ -57,6 +57,8 @@ module TSOS {
       taskBar.appendChild(dateTime);
       taskBar.appendChild(status);
       this.hostTimeDate();
+
+      this.hostDisplayMemory(_MemoryAccessor.memory.mainMemory); // display memory on start
 
       if (typeof Glados === "function") {
         // function Glados() is here, so instantiate Her into
@@ -158,6 +160,29 @@ module TSOS {
       ) as HTMLInputElement;
 
       return value;
+    }
+
+    public static hostDisplayMemory(memoryArray: Array<number>) {
+      const contents = memoryArray;
+      const memoryTable = document.getElementById("memoryBody");
+      Utils.removeAllChildNodes(memoryTable); // reset the board
+      let row = document.createElement("tr");
+      let tds = [];
+      for (let i = 0; i < contents.length; i++) {
+        let td = document.createElement("td");
+        td.innerHTML = `<small> ${Utils.showHexValue(contents[i])} </small>`;
+        tds.push(td);
+
+        // split table rows by 8
+        if ((i + 1) % 8 === 0 && i !== 0) {
+          for (let td of tds) {
+            row.insertAdjacentElement("beforeend", td);
+          }
+          memoryTable.insertAdjacentElement("beforeend", row); // insert tow
+          row = document.createElement("tr"); // re initilize
+          tds = []; // reset rowe
+        }
+      }
     }
 
     public static hostDisplayPcbs(pcb: ProcessControlBlock) {

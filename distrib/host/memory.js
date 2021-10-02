@@ -2,7 +2,7 @@ var TSOS;
 (function (TSOS) {
     class Memory {
         constructor() {
-            this.mainMemory = new Array(0xffff); //representation of memory
+            this.mainMemory = new Array(0xff); //representation of memory
             this.mar = 0x0000; //Memory Address Reg
             this.mdr = 0x00; //Memory Data Reg
         }

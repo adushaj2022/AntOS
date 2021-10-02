@@ -467,7 +467,7 @@ module TSOS {
         return;
       }
 
-      const numbers = data.split(" ");
+      let numbers: number[] | string[] = data.split(" ");
       let valid = true;
 
       /**
@@ -484,6 +484,7 @@ module TSOS {
           valid = false;
         }
       });
+      numbers = numbers.map((n) => parseInt(n, 16)); // convert to numbers, not string represention
 
       if (valid) {
         _MemoryAccessor.loadMemory(numbers); // load memory
@@ -491,6 +492,7 @@ module TSOS {
         _Pcb.pid = _ReadyQueue.getSize() ?? 0;
         _ReadyQueue.enqueue(_Pcb);
         Control.hostDisplayPcbs(_Pcb); // display to gui
+        Control.hostDisplayMemory(_MemoryAccessor.memory.mainMemory); // display to gui
         _StdOut.putText(`Process Control - PID: ${_Pcb.pid}`);
       } else {
         _StdOut.putText("Inproper input, data not loaded");
