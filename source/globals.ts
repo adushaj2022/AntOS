@@ -26,6 +26,8 @@ const KEYBOARD_IRQ: number = 1;
 //
 var _CPU: TSOS.Cpu; // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
 
+var _Offset = -1; // keep track of end of last program
+
 var _Memory: TSOS.Memory;
 var _MemoryAccessor: TSOS.MemoryAccessor;
 //	Software	(OS)

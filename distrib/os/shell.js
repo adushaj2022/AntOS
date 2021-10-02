@@ -61,7 +61,9 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellLoad, "load", "loads user code into memory");
             this.commandList[this.commandList.length] = sc;
-            sc = new TSOS.ShellCommand(this.shellBSOD, "bsod", "displays bluescreen of death (testing)");
+            sc = new TSOS.ShellCommand(this.shellBSOD, "bsod", "displays bluescreen of death");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellRun, "run", "<pid> - runs that program");
             this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
@@ -256,6 +258,12 @@ var TSOS;
                     case "load":
                         _StdOut.lwPutText("Will load the users code into memory, only accepting hex code");
                         break;
+                    case "bsod":
+                        _StdOut.lwPutText("Display the blue screen of the death");
+                        break;
+                    case "run":
+                        _StdOut.lwPutText("Accepts a parameter, pid number, it will then run that program");
+                        break;
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
                 }
@@ -374,6 +382,12 @@ var TSOS;
             });
             numbers = numbers.map((n) => parseInt(n, 16)); // convert to numbers, not string represention
             if (valid) {
+                /*
+                  Here we will load our memory, and create our pcbs,
+                  we also utilize control to update GUI, when loading multiple proams into memory (project 3)
+                  we need to keep track of the startLocation and endLocation in memory for our
+                  pcbs. For npw just assume we start at 0 and end at the end of the program
+                */
                 _MemoryAccessor.loadMemory(numbers); // load memory
                 _Pcb = new TSOS.ProcessControlBlock(); // create pcb
                 _Pcb.pid = (_a = _ReadyQueue.getSize()) !== null && _a !== void 0 ? _a : 0;
@@ -388,6 +402,22 @@ var TSOS;
         }
         shellBSOD(args) {
             _StdOut.displayBSOD();
+        }
+        shellRun(args) {
+            const arg = args[0];
+            if (!/^-?\d+$/.test(arg)) {
+                _StdOut.putText("Please pass a number");
+                return;
+            }
+            for (let pcb of _ReadyQueue.q) {
+                if (pcb.pid === Number(arg)) {
+                    _CPU.isExecuting = true;
+                    _Pcb = pcb; // set global Pcb to current one being ran
+                }
+            }
+            if (!_CPU.isExecuting) {
+                _StdOut.putText("No pid found");
+            }
         }
     }
     TSOS.Shell = Shell;

@@ -13,6 +13,8 @@ module TSOS {
     yRegister: number = 0;
     zRegister: number = 0;
     programCounter: number = 0;
+    memoryStart: number = 0;
+    memoryEnd: number = 0;
     public constructor() {}
   }
 }

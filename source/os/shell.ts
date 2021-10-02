@@ -140,8 +140,12 @@ module TSOS {
       sc = new ShellCommand(
         this.shellBSOD,
         "bsod",
-        "displays bluescreen of death (testing)"
+        "displays bluescreen of death"
       );
+
+      this.commandList[this.commandList.length] = sc;
+
+      sc = new ShellCommand(this.shellRun, "run", "<pid> - runs that program");
 
       this.commandList[this.commandList.length] = sc;
 
@@ -359,6 +363,14 @@ module TSOS {
               "Will load the users code into memory, only accepting hex code"
             );
             break;
+          case "bsod":
+            _StdOut.lwPutText("Display the blue screen of the death");
+            break;
+          case "run":
+            _StdOut.lwPutText(
+              "Accepts a parameter, pid number, it will then run that program"
+            );
+            break;
           default:
             _StdOut.putText("No manual entry for " + args[0] + ".");
         }
@@ -487,6 +499,12 @@ module TSOS {
       numbers = numbers.map((n) => parseInt(n, 16)); // convert to numbers, not string represention
 
       if (valid) {
+        /*
+          Here we will load our memory, and create our pcbs,
+          we also utilize control to update GUI, when loading multiple proams into memory (project 3)
+          we need to keep track of the startLocation and endLocation in memory for our
+          pcbs. For npw just assume we start at 0 and end at the end of the program
+        */
         _MemoryAccessor.loadMemory(numbers); // load memory
         _Pcb = new ProcessControlBlock(); // create pcb
         _Pcb.pid = _ReadyQueue.getSize() ?? 0;
@@ -501,6 +519,28 @@ module TSOS {
 
     public shellBSOD(args: string[]): void {
       _StdOut.displayBSOD();
+    }
+
+    public shellRun(args: string[]): void {
+      const arg = args[0];
+
+      if (!/^-?\d+$/.test(arg)) {
+        _StdOut.putText("Please pass a number");
+        return;
+      }
+
+      // iterate through Queue and find our pcb
+      for (let pcb of _ReadyQueue.q) {
+        if (pcb.pid === Number(arg)) {
+          _CPU.isExecuting = true; // set this to true, time to run program
+          _Pcb = pcb; // set global Pcb to current one being ran, we will access this from cpu
+        }
+      }
+
+      // pcb doesnt exist
+      if (!_CPU.isExecuting) {
+        _StdOut.putText("No pid found");
+      }
     }
   }
 }
