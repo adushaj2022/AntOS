@@ -377,6 +377,7 @@ var TSOS;
                 _Pcb = new TSOS.ProcessControlBlock(); // create pcb
                 _Pcb.pid = (_a = _ReadyQueue.getSize()) !== null && _a !== void 0 ? _a : 0;
                 _ReadyQueue.enqueue(_Pcb);
+                TSOS.Control.hostDisplayPcbs(_Pcb); // display to gui
                 _StdOut.putText(`Process Control - PID: ${_Pcb.pid}`);
             }
             else {

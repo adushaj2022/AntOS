@@ -127,6 +127,29 @@ var TSOS;
             const { value } = document.getElementById("taProgramInput");
             return value;
         }
+        static hostDisplayPcbs(pcb) {
+            const pcbTable = document.getElementById("pcbBody");
+            const row = document.createElement("tr");
+            const pid = document.createElement("td");
+            pid.innerText = String(pcb.pid);
+            const ir = document.createElement("td");
+            ir.innerText = String(pcb.iRegister);
+            const xr = document.createElement("td");
+            xr.innerText = String(pcb.xRegister);
+            const yr = document.createElement("td");
+            yr.innerText = String(pcb.yRegister);
+            const pc = document.createElement("td");
+            pc.innerText = String(pcb.programCounter);
+            const state = document.createElement("td");
+            state.innerText = pcb.state;
+            row.insertAdjacentElement("beforeend", pid);
+            row.insertAdjacentElement("beforeend", ir);
+            row.insertAdjacentElement("beforeend", xr);
+            row.insertAdjacentElement("beforeend", yr);
+            row.insertAdjacentElement("beforeend", pc);
+            row.insertAdjacentElement("beforeend", state);
+            pcbTable.insertAdjacentElement("beforeend", row);
+        }
     }
     TSOS.Control = Control;
 })(TSOS || (TSOS = {}));

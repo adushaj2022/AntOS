@@ -9,6 +9,7 @@ var TSOS;
         constructor() {
             this.pid = 0;
             this.state = "ready";
+            this.iRegister = 0;
             this.xRegister = 0;
             this.yRegister = 0;
             this.zRegister = 0;

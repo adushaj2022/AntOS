@@ -159,5 +159,40 @@ module TSOS {
 
       return value;
     }
+
+    public static hostDisplayPcbs(pcb: ProcessControlBlock) {
+      const pcbTable = document.getElementById("pcbBody");
+      const row = document.createElement("tr");
+      /* 
+        in the future I may want to loop through PCB object and dynamically create tds,
+        did not do this now because I fear the order may get messed up
+      */
+      const pid = document.createElement("td");
+      pid.innerText = String(pcb.pid);
+
+      const ir = document.createElement("td");
+      ir.innerText = String(pcb.iRegister);
+
+      const xr = document.createElement("td");
+      xr.innerText = String(pcb.xRegister);
+
+      const yr = document.createElement("td");
+      yr.innerText = String(pcb.yRegister);
+
+      const pc = document.createElement("td");
+      pc.innerText = String(pcb.programCounter);
+
+      const state = document.createElement("td");
+      state.innerText = pcb.state;
+
+      row.insertAdjacentElement("beforeend", pid);
+      row.insertAdjacentElement("beforeend", ir);
+      row.insertAdjacentElement("beforeend", xr);
+      row.insertAdjacentElement("beforeend", yr);
+      row.insertAdjacentElement("beforeend", pc);
+      row.insertAdjacentElement("beforeend", state);
+
+      pcbTable.insertAdjacentElement("beforeend", row);
+    }
   }
 }

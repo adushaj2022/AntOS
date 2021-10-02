@@ -490,6 +490,7 @@ module TSOS {
         _Pcb = new ProcessControlBlock(); // create pcb
         _Pcb.pid = _ReadyQueue.getSize() ?? 0;
         _ReadyQueue.enqueue(_Pcb);
+        Control.hostDisplayPcbs(_Pcb); // display to gui
         _StdOut.putText(`Process Control - PID: ${_Pcb.pid}`);
       } else {
         _StdOut.putText("Inproper input, data not loaded");
