@@ -26,7 +26,7 @@ var TSOS;
             _Canvas = document.getElementById("display");
             _Memory = new TSOS.Memory();
             _Memory.init();
-            _MemoryAccessor = new TSOS.MemoryAccessor(_Memory);
+            _MemoryAccessor = new TSOS.MemoryAccessor(_Memory); // pass in memory, we will access it through here
             // Get a global reference to the drawing context.
             _DrawingContext = _Canvas.getContext("2d");
             // Enable the added-in canvas text functions (see canvastext.ts for provenance and details).
@@ -49,7 +49,6 @@ var TSOS;
             taskBar.appendChild(dateTime);
             taskBar.appendChild(status);
             this.hostTimeDate();
-            this.hostDisplayMemory(_MemoryAccessor.memory.mainMemory); // display memory on start
             if (typeof Glados === "function") {
                 // function Glados() is here, so instantiate Her into
                 // the global (and properly capitalized) _GLaDOS variable.
@@ -96,6 +95,8 @@ var TSOS;
             // ... Create and initialize the CPU (because it's part of the hardware)  ...
             _CPU = new TSOS.Cpu(); // Note: We could simulate multi-core systems by instantiating more than one instance of the CPU here.
             _CPU.init(); //       There's more to do, like dealing with scheduling and such, but this would be a start. Pretty cool.
+            this.hostDisplayMemory(_MemoryAccessor.memory.mainMemory); // display memory on start
+            this.hostDisplayCpu(_CPU);
             // ... then set the host clock pulse ...
             _hardwareClockID = setInterval(TSOS.Devices.hostClockPulse, CPU_CLOCK_INTERVAL);
             // .. and call the OS Kernel Bootstrap routine.
@@ -128,6 +129,30 @@ var TSOS;
             const { value } = document.getElementById("taProgramInput");
             return value;
         }
+        static hostDisplayCpu(cpu) {
+            const cpuTable = document.getElementById("cpuBody");
+            TSOS.Utils.removeAllChildNodes(cpuTable);
+            const row = document.createElement("tr");
+            const pc = document.createElement("td");
+            pc.innerText = String(cpu.PC);
+            const ir = document.createElement("td");
+            ir.innerText = String(cpu.iRegister);
+            const acc = document.createElement("td");
+            acc.innerText = String(cpu.Acc);
+            const xr = document.createElement("td");
+            xr.innerText = String(cpu.Xreg);
+            const yr = document.createElement("td");
+            yr.innerText = String(cpu.Yreg);
+            const zr = document.createElement("td");
+            zr.innerText = String(cpu.Zflag);
+            row.insertAdjacentElement("beforeend", pc);
+            row.insertAdjacentElement("beforeend", ir);
+            row.insertAdjacentElement("beforeend", acc);
+            row.insertAdjacentElement("beforeend", xr);
+            row.insertAdjacentElement("beforeend", yr);
+            row.insertAdjacentElement("beforeend", zr);
+            cpuTable.insertAdjacentElement("beforeend", row);
+        }
         static hostDisplayMemory(memoryArray) {
             const contents = memoryArray;
             const memoryTable = document.getElementById("memoryBody");
@@ -138,13 +163,14 @@ var TSOS;
                 let td = document.createElement("td");
                 td.innerHTML = `<small> ${TSOS.Utils.showHexValue(contents[i])} </small>`;
                 tds.push(td);
+                // split table rows by 8
                 if ((i + 1) % 8 === 0 && i !== 0) {
                     for (let td of tds) {
                         row.insertAdjacentElement("beforeend", td);
                     }
-                    memoryTable.insertAdjacentElement("beforeend", row);
-                    row = document.createElement("tr");
-                    tds = [];
+                    memoryTable.insertAdjacentElement("beforeend", row); // insert tow
+                    row = document.createElement("tr"); // re initilize
+                    tds = []; // reset rowe
                 }
             }
         }

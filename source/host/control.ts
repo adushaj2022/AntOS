@@ -58,8 +58,6 @@ module TSOS {
       taskBar.appendChild(status);
       this.hostTimeDate();
 
-      this.hostDisplayMemory(_MemoryAccessor.memory.mainMemory); // display memory on start
-
       if (typeof Glados === "function") {
         // function Glados() is here, so instantiate Her into
         // the global (and properly capitalized) _GLaDOS variable.
@@ -118,6 +116,9 @@ module TSOS {
       _CPU = new Cpu(); // Note: We could simulate multi-core systems by instantiating more than one instance of the CPU here.
       _CPU.init(); //       There's more to do, like dealing with scheduling and such, but this would be a start. Pretty cool.
 
+      this.hostDisplayMemory(_MemoryAccessor.memory.mainMemory); // display memory on start
+      this.hostDisplayCpu(_CPU);
+
       // ... then set the host clock pulse ...
       _hardwareClockID = setInterval(
         Devices.hostClockPulse,
@@ -160,6 +161,39 @@ module TSOS {
       ) as HTMLInputElement;
 
       return value;
+    }
+
+    public static hostDisplayCpu(cpu: Cpu) {
+      const cpuTable = document.getElementById("cpuBody");
+      Utils.removeAllChildNodes(cpuTable);
+
+      const row = document.createElement("tr");
+
+      const pc = document.createElement("td");
+      pc.innerText = String(cpu.PC);
+
+      const ir = document.createElement("td");
+      ir.innerText = String(cpu.iRegister);
+
+      const acc = document.createElement("td");
+      acc.innerText = String(cpu.Acc);
+
+      const xr = document.createElement("td");
+      xr.innerText = String(cpu.Xreg);
+
+      const yr = document.createElement("td");
+      yr.innerText = String(cpu.Yreg);
+
+      const zr = document.createElement("td");
+      zr.innerText = String(cpu.Zflag);
+
+      row.insertAdjacentElement("beforeend", pc);
+      row.insertAdjacentElement("beforeend", ir);
+      row.insertAdjacentElement("beforeend", acc);
+      row.insertAdjacentElement("beforeend", xr);
+      row.insertAdjacentElement("beforeend", yr);
+      row.insertAdjacentElement("beforeend", zr);
+      cpuTable.insertAdjacentElement("beforeend", row);
     }
 
     public static hostDisplayMemory(memoryArray: Array<number>) {
