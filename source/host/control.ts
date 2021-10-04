@@ -167,19 +167,19 @@ module TSOS {
       const row = document.createElement("tr");
 
       const pc = document.createElement("td");
-      pc.innerText = String(cpu.program_counter);
+      pc.innerText = Utils.showHexValue(cpu.program_counter);
 
       const ir = document.createElement("td");
-      ir.innerText = String(cpu.insuction_register);
+      ir.innerText = Utils.showHexValue(cpu.insuction_register);
 
       const acc = document.createElement("td");
-      acc.innerText = String(cpu.accumulator);
+      acc.innerText = Utils.showHexValue(cpu.accumulator);
 
       const xr = document.createElement("td");
-      xr.innerText = String(cpu.x_register);
+      xr.innerText = Utils.showHexValue(cpu.x_register);
 
       const yr = document.createElement("td");
-      yr.innerText = String(cpu.y_register);
+      yr.innerText = Utils.showHexValue(cpu.y_register);
 
       const zr = document.createElement("td");
       zr.innerText = String(cpu.zFlag);
@@ -220,7 +220,7 @@ module TSOS {
       const pcbTable = document.getElementById("pcbBody");
       const row = document.createElement("tr");
       row.id = String(pcb.pid);
-      /* 
+      /*
         in the future I may want to loop through PCB object and dynamically create tds,
         did not do this now because I fear the order may get messed up
       */

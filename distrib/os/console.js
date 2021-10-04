@@ -175,7 +175,7 @@ var TSOS;
             let i = 0;
             let lower = 0;
             if (paginate === 1) {
-                return this.putText(text);
+                return this.putText(text); // no need to wrap
             }
             while (i++ < paginate) {
                 this.putText(text.substring(lower, upper).trimLeft());
