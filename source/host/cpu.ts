@@ -269,7 +269,7 @@ module TSOS {
       this.doWriteBack = false;
     }
 
-    /*  
+    /*
         Real 6502s can only complete one insctrution cycle per pulse
         We take this into account
     */

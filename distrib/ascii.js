@@ -1,14 +1,9 @@
 var TSOS;
 (function (TSOS) {
+    /**
+     * Mini Ascii library, this was apart of Professor Gormanlys project requirements, thought it may be cool to add
+     */
     class Ascii {
-        /*
-          since we have a one to one mapping, with each ascii code having a corresponding character and
-          vice versa, we will use a hashmap to decrease ambiguity. Rather than have 2 two large if else blocks
-          we can create the map once, and use the functions belowe to get the key(number) or value(string) for the desired output
-          */
-        /*
-              type script does not have a character type that is why we will simply use string
-          */
         static fromCharCode(asciNum) {
             Ascii.populateMap();
             for (const [key, value] of Ascii.Dictionary.entries()) {

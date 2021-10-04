@@ -14,8 +14,6 @@ var TSOS;
             this.yRegister = 0;
             this.zRegister = false;
             this.programCounter = 0;
-            this.memoryStart = 0;
-            this.memoryEnd = 0;
         }
     }
     TSOS.ProcessControlBlock = ProcessControlBlock;

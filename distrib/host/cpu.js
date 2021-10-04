@@ -14,11 +14,10 @@ var TSOS;
 (function (TSOS) {
     let cycle;
     (function (cycle) {
-        cycle[cycle["c_fetch"] = 0] = "c_fetch";
-        cycle[cycle["c_decode"] = 1] = "c_decode";
-        cycle[cycle["c_execute"] = 2] = "c_execute";
-        cycle[cycle["c_writeBack"] = 3] = "c_writeBack";
-        cycle[cycle["c_interruptCheck"] = 4] = "c_interruptCheck";
+        cycle[cycle["fetch"] = 0] = "fetch";
+        cycle[cycle["decode"] = 1] = "decode";
+        cycle[cycle["execute"] = 2] = "execute";
+        cycle[cycle["write_back"] = 3] = "write_back";
     })(cycle || (cycle = {}));
     class Cpu {
         constructor() {
@@ -29,7 +28,7 @@ var TSOS;
             this.program_counter = 0; //program counter
             this.cpuClockCount = 0; //clockCount to count pulses
             this.curr_steps = 0; //keep track of which operand we are on for two operand instructions
-            this.curr_cycle = cycle.c_fetch;
+            this.curr_cycle = cycle.fetch;
             this.postdecode = 0; //switch to tell us we finished a decode
             this.postexecute = 0; //switch to tell us we finished a execute
             this.preinterrupt = 0; //switch to tell us we need to perform an interrupt
@@ -188,8 +187,8 @@ var TSOS;
                     this.process_String = false;
                     return;
                 }
-                _Console.lwPutText(TSOS.Ascii.fromCharCode(this.memory.readIntermediate(this.memory.getMAR()))); //print char
-                this.memory.setMAR(this.memory.getMAR() + 1); //increment MAR
+                _Console.lwPutText(TSOS.Ascii.fromCharCode(this.memory.readIntermediate(this.memory.getMAR()))); // print char
+                this.memory.setMAR(this.memory.getMAR() + 1); // increment MAR
                 return;
             }
             if (this.executeTwo) {
@@ -265,11 +264,9 @@ var TSOS;
             We take this into account
         */
         cycle() {
-            /*
-                Second case is for processing a string while the condition is true we will keep executing
-                when false, then do interrupt check and complete (thats why we increment preinterrupt)
-              */
             this.program_log(); // show output to table
+            _Kernel.krnTrace("Cpu executing");
+            // If we are at processing a string, return and execute
             if (this.process_String) {
                 this.execute();
                 return;
@@ -286,7 +283,7 @@ var TSOS;
                     //after we finish second execute we now
                     //have writeback set to true and twoExecute to false
                     //therefore we do the write back and reset the execute switch
-                    this.curr_cycle = cycle.c_fetch; //move pointer to preInterrupt
+                    this.curr_cycle = cycle.fetch; //move pointer to fetch
                     this.doExecute = false;
                     this.write_back();
                     return;
@@ -296,48 +293,47 @@ var TSOS;
                 //this indicates we just finished a decode
                 if (this.process_String) {
                     //check for String
-                    this.curr_cycle = cycle.c_execute;
+                    this.curr_cycle = cycle.execute;
                 }
                 else if (this.doExecute) {
                     //if the instruction is ready for an execute -- go ahead and execute
                     this.doExecute = false;
-                    this.curr_cycle = cycle.c_execute; //change pointer to fetch to grab new instrc
+                    this.curr_cycle = cycle.execute; //change pointer to fetch to grab new instrc
                     ++this.postexecute;
                 }
                 //if oneStep and twoStep are false, this indicates we are in a no operand instr like "98"
                 //similarly these instructions also do not have executes (with FF as an exception)
                 else if (!this.oneStep && !this.twoStep && !this.doExecute) {
-                    this.curr_cycle = cycle.c_fetch; //end cycle insctruction with an interrupt check
+                    this.curr_cycle = cycle.fetch; // fetch again, this is the end of the cycle
                 }
                 //this is the case for a single op code operand-- A9 06, we will call the second decode, then reset its one step
                 // and two step to false and then the above condition will get triggered next time around
                 else if (this.oneStep) {
-                    this.curr_cycle = cycle.c_decode;
+                    this.curr_cycle = cycle.decode;
                 }
                 //this is the case for a two operand instr like 8D 00 40, first decode grabs 8d, second grabs 00
                 //third grabs 40, and when the third finishes it, we will make the "doExecute" set to true
                 //we do this because we then need to write to memory
                 else if (this.twoStep) {
                     if (!this.doExecute) {
-                        this.curr_cycle = cycle.c_decode;
+                        this.curr_cycle = cycle.decode;
                     }
                 }
                 this.postdecode = 0; //reset the switch
             }
-            //use these four cycles to do what they need, but above we will have to navigate to pick the right one
+            //use these three cycles to do what they need, but above we will have to navigate to pick the right one
             //some are concominate like fetch always always points to a decode
-            //same with execute pointing to INTERRUPT CHECK (ASSUMING WE DO NOT HAVE MULTIPLE EXECUTES)
             //-------------------------------------------------------------------------------------
-            if (this.curr_cycle === cycle.c_fetch) {
-                this.curr_cycle = cycle.c_decode;
+            if (this.curr_cycle === cycle.fetch) {
+                this.curr_cycle = cycle.decode;
                 this.fetch();
             }
-            else if (this.curr_cycle === cycle.c_decode) {
+            else if (this.curr_cycle === cycle.decode) {
                 ++this.postdecode;
                 this.decode();
             }
-            else if (this.curr_cycle === cycle.c_execute) {
-                this.curr_cycle = cycle.c_fetch;
+            else if (this.curr_cycle === cycle.execute) {
+                this.curr_cycle = cycle.fetch;
                 this.postexecute = 1;
                 this.execute();
             }

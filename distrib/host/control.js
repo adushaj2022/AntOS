@@ -121,9 +121,6 @@ var TSOS;
         static hostBtnReset_click(btn) {
             // The easiest and most thorough way to do this is to reload (not refresh) the document.
             location.reload();
-            // That boolean parameter is the 'forceget' flag. When it is true it causes the page to always
-            // be reloaded from the server. If it is false or not specified the browser may reload the
-            // page from its cache, which is not what we want.
         }
         static hostGetUserInput() {
             const { value } = document.getElementById("taProgramInput");
@@ -170,7 +167,7 @@ var TSOS;
                     }
                     memoryTable.insertAdjacentElement("beforeend", row); // insert tow
                     row = document.createElement("tr"); // re initilize
-                    tds = []; // reset rowe
+                    tds = []; // reset row
                 }
             }
         }

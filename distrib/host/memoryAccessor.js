@@ -1,6 +1,7 @@
 var TSOS;
 (function (TSOS) {
     class MemoryAccessor {
+        // Memory gets passed in, then we access its actual memory contents with methods here
         constructor(memory) {
             this.lob = 0x00;
             this.hob = 0x00;
@@ -27,10 +28,6 @@ var TSOS;
                 return this.memory.setMAR(this.convert_to_li_format()); //in this case it will accept two two digit hex numbers and convert them then set the converted number
             }
         }
-        /*
-          Array of strings is passed because the string hex value will be passed, and we will parse it,
-          offset will help us set memory at different locations other thanst arting for 0
-        */
         loadMemory(arr, offset = 0) {
             for (let i = 0; i < arr.length; i++) {
                 this.writeIntermediate(i + offset, arr[i]);
