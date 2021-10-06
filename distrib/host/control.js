@@ -174,21 +174,26 @@ var TSOS;
         static hostDisplayPcbs(pcb) {
             const pcbTable = document.getElementById("pcbBody");
             const row = document.createElement("tr");
+            const prevRecord = document.getElementById(String(pcb.pid));
+            if (prevRecord) {
+                TSOS.Utils.removeAllChildNodes(prevRecord);
+                prevRecord === null || prevRecord === void 0 ? void 0 : prevRecord.remove();
+            }
             row.id = String(pcb.pid);
             /*
               in the future I may want to loop through PCB object and dynamically create tds,
               did not do this now because I fear the order may get messed up
             */
             const pid = document.createElement("td");
-            pid.innerText = String(pcb.pid);
+            pid.innerText = TSOS.Utils.showHexValue(pcb.pid);
             const ir = document.createElement("td");
-            ir.innerText = String(pcb.iRegister);
+            ir.innerText = TSOS.Utils.showHexValue(pcb.iRegister);
             const xr = document.createElement("td");
-            xr.innerText = String(pcb.xRegister);
+            xr.innerText = TSOS.Utils.showHexValue(pcb.xRegister);
             const yr = document.createElement("td");
-            yr.innerText = String(pcb.yRegister);
+            yr.innerText = TSOS.Utils.showHexValue(pcb.yRegister);
             const pc = document.createElement("td");
-            pc.innerText = String(pcb.programCounter);
+            pc.innerText = TSOS.Utils.showHexValue(pcb.programCounter);
             const state = document.createElement("td");
             state.innerText = pcb.state;
             row.insertAdjacentElement("beforeend", pid);

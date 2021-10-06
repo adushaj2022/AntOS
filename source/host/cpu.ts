@@ -161,13 +161,13 @@ module TSOS {
           this.doExecute = false;
           this.isExecuting = false;
           // Need to update PCB row in table
-          // _Pcb.iRegister = this.insuction_register;
-          // _Pcb.xRegister = this.x_register;
-          // _Pcb.yRegister = this.y_register;
-          // _Pcb.zRegister = this.zFlag;
-          // _Pcb.programCounter = this.program_counter;
-          // _Pcb.state = "done";
-          // Control.hostDisplayPcbs(_Pcb);
+          _Pcb.iRegister = this.insuction_register;
+          _Pcb.xRegister = this.x_register;
+          _Pcb.yRegister = this.y_register;
+          _Pcb.zRegister = this.zFlag;
+          _Pcb.programCounter = this.program_counter;
+          _Pcb.state = "done";
+          Control.hostDisplayPcbs(_Pcb);
           _Console.advanceLine();
         } else if (instr === 0xff) {
           //process system calls,
