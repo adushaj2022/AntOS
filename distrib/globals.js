@@ -10,6 +10,7 @@
 //
 // Global CONSTANTS (TypeScript 1.5 introduced const. Very cool.)
 //
+let _ctrl = false; // Is control key clicked
 const APP_NAME = "AntOS"; // 'cause Bob and I were at a loss for a better name.
 const APP_VERSION = "1.01"; // What did you expect?
 const CPU_CLOCK_INTERVAL = 50; // This is in ms (milliseconds) so 1000 = 1 second.

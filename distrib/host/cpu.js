@@ -158,7 +158,7 @@ var TSOS;
                     _Pcb.programCounter = this.program_counter;
                     _Pcb.state = "done";
                     TSOS.Control.hostDisplayPcbs(_Pcb);
-                    _Console.advanceLine();
+                    _OsShell.handleInput("", true, _OsShell.shellMessage);
                 }
                 else if (instr === 0xff) {
                     //process system calls,

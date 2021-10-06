@@ -71,14 +71,14 @@ var TSOS;
         putPrompt() {
             _StdOut.putText(this.promptStr);
         }
-        handleInput(buffer, tab) {
+        handleInput(buffer, tab, cb) {
             _Kernel.krnTrace("Shell Command~" + buffer);
             //
             // Parse the input...
             //
             //if tab is true we know we are parsing an incomplete command
             if (tab) {
-                this.execute(this.shellSimilarCommand);
+                this.execute(cb);
                 return;
             }
             var userCommand = this.parseInput(buffer);
@@ -357,6 +357,9 @@ var TSOS;
             else {
                 _StdOut.putText("Please provide a message");
             }
+        }
+        shellMessage() {
+            _StdOut.putText("Progrem successfully executed");
         }
         shellLoad(args) {
             var _a;

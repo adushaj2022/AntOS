@@ -29,11 +29,12 @@ module TSOS {
       params: any[],
       osTrapError: (mess: any) => void
     ): boolean | void {
-      let [keyCode, isShifted, isCaps, code] = params; //destructure params array
+      let [keyCode, isShifted, isCaps, code, ctrl] = params; //destructure params array
       if (typeof keyCode !== "number" || typeof isShifted !== "boolean") {
         osTrapError("Invalid params");
       }
 
+      _ctrl = ctrl; // store this in a global var
       _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
       var chr = "";
 
@@ -79,7 +80,6 @@ module TSOS {
             break;
         }
       }
-
       // Check to see if we even want to deal with the key that was pressed.
       if (keyCode >= 65 && keyCode <= 90) {
         // letter

@@ -37,6 +37,7 @@ module TSOS {
       while (_KernelInputQueue.getSize() > 0) {
         // Get the next character from the kernel input queue.
         var chr = _KernelInputQueue.dequeue();
+
         // Check to see if it's "special" (enter or ctrl-c) or "normal" (anything else that the keyboard device driver gave us).
         if (chr === String.fromCharCode(38)) {
           this.accessCommandHistory(38);
@@ -56,6 +57,9 @@ module TSOS {
           // ... and reset our buffer.
           this.buffer = "";
         } else {
+          if (chr.toUpperCase() === String.fromCharCode(67) && _ctrl) {
+            _CPU.isExecuting = false; // control C, break
+          }
           // This is a "normal" character, so ...
           // ... draw it on the screen...
           this.putText(chr);
@@ -155,7 +159,7 @@ module TSOS {
          **/
         this.buffer = Utils.longestCommonPrefix(similarCommands);
 
-        _OsShell.handleInput("", true);
+        _OsShell.handleInput("", true, _OsShell.shellSimilarCommand);
         this.putText(this.buffer);
       }
     }

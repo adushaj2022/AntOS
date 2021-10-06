@@ -23,10 +23,11 @@ var TSOS;
             // More?
         }
         krnKbdDispatchKeyPress(params, osTrapError) {
-            let [keyCode, isShifted, isCaps, code] = params; //destructure params array
+            let [keyCode, isShifted, isCaps, code, ctrl] = params; //destructure params array
             if (typeof keyCode !== "number" || typeof isShifted !== "boolean") {
                 osTrapError("Invalid params");
             }
+            _ctrl = ctrl; // store this in a global var
             _Kernel.krnTrace("Key code:" + keyCode + " shifted:" + isShifted);
             var chr = "";
             /*

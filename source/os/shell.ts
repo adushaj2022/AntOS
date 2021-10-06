@@ -157,7 +157,7 @@ module TSOS {
       _StdOut.putText(this.promptStr);
     }
 
-    public handleInput(buffer, tab?: boolean) {
+    public handleInput(buffer, tab?: boolean, cb?: () => any) {
       _Kernel.krnTrace("Shell Command~" + buffer);
       //
       // Parse the input...
@@ -165,7 +165,7 @@ module TSOS {
 
       //if tab is true we know we are parsing an incomplete command
       if (tab) {
-        this.execute(this.shellSimilarCommand);
+        this.execute(cb);
         return;
       }
       var userCommand = this.parseInput(buffer);
@@ -470,6 +470,10 @@ module TSOS {
       } else {
         _StdOut.putText("Please provide a message");
       }
+    }
+
+    public shellMessage() {
+      _StdOut.putText("Progrem successfully executed");
     }
 
     public shellLoad(args: string[]) {

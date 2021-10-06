@@ -55,7 +55,8 @@ module TSOS {
           event.which,
           event.shiftKey,
           event.getModifierState("CapsLock"),
-          event.code
+          event.code,
+          event.ctrlKey
         );
         // Enqueue this interrupt on the kernel interrupt queue so that it gets to the Interrupt handler.
         _KernelInterruptQueue.enqueue(new Interrupt(KEYBOARD_IRQ, params));

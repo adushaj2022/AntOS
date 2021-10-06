@@ -11,6 +11,8 @@
 //
 // Global CONSTANTS (TypeScript 1.5 introduced const. Very cool.)
 //
+let _ctrl = false; // Is control key clicked
+
 const APP_NAME: string = "AntOS"; // 'cause Bob and I were at a loss for a better name.
 const APP_VERSION: string = "1.01"; // What did you expect?
 

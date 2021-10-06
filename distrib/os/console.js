@@ -56,6 +56,9 @@ var TSOS;
                     this.buffer = "";
                 }
                 else {
+                    if (chr.toUpperCase() === String.fromCharCode(67) && _ctrl) {
+                        _CPU.isExecuting = false; // control C, break
+                    }
                     // This is a "normal" character, so ...
                     // ... draw it on the screen...
                     this.putText(chr);
@@ -144,7 +147,7 @@ var TSOS;
                  * Our longestr prefix is: Ca
                  **/
                 this.buffer = TSOS.Utils.longestCommonPrefix(similarCommands);
-                _OsShell.handleInput("", true);
+                _OsShell.handleInput("", true, _OsShell.shellSimilarCommand);
                 this.putText(this.buffer);
             }
         }
