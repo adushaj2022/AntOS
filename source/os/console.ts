@@ -59,6 +59,9 @@ module TSOS {
         } else {
           if (chr.toUpperCase() === String.fromCharCode(67) && _ctrl) {
             _CPU.isExecuting = false; // control C, break
+            _OsShell.handleInput("", true, () => {
+              this.putText("Program stopped");
+            });
           }
           // This is a "normal" character, so ...
           // ... draw it on the screen...
