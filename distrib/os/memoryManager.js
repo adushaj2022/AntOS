@@ -14,7 +14,7 @@ var TSOS;
         }
         //get total addressable Space --> array is private therefore well use this to get the length
         totalAddressableSpace() {
-            return this.mainMemory.length + 0x01;
+            return this.mainMemory.length;
         }
         isAddressAvailable(start, end) {
             for (let i = start; i < end; i++) {

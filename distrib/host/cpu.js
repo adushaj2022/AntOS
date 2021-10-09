@@ -116,9 +116,11 @@ var TSOS;
                     this.memory.setHighOrderByte(value);
                     this.memory.setLowOrderByte(this.lob);
                     this.address = this.memory.convert_to_li_format();
+                    console.log(TSOS.Utils.showHexValue(this.address));
                     this.set_y_register(this.memory.readIntermediate(this.address));
-                    this.program_counter += 1;
+                    this.program_counter += 2; // this seems to be one step behind, increment 2
                 case 0xea: // leave here for readability, I know its useless
+                    this.program_counter -= 1;
                     break; // no op
                 case 0x00:
                     this.isExecuting = false;
@@ -148,7 +150,14 @@ var TSOS;
                 // HANDLE OVERFLOWS
                 case 0xd0:
                     if (this.zFlag === 0) {
-                        this.program_counter += value; //-1;
+                        let space = _MemoryManager.totalAddressableSpace();
+                        if (this.program_counter + value > space) {
+                            this.program_counter =
+                                ((this.program_counter + value) % space) - 1;
+                        }
+                        else {
+                            this.program_counter += value;
+                        }
                     }
                     break;
                 case 0xee:
@@ -162,13 +171,12 @@ var TSOS;
                 case 0xff:
                     if (this.get_x_register() === 1) {
                         this.printNumber = true;
-                        this.program_counter -= 1;
                     }
                     else if (this.get_x_register() === 2) {
                         this.printString = true;
                         this.stringCounter = this.get_y_register(); // dont forget to reset
-                        this.program_counter -= 1;
                     }
+                    this.program_counter -= 1;
                     break;
                 default:
                     break;
