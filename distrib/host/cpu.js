@@ -152,8 +152,9 @@ var TSOS;
                     if (this.zFlag === 0) {
                         let space = _MemoryManager.totalAddressableSpace();
                         if (this.program_counter + value > space) {
-                            this.program_counter =
-                                ((this.program_counter + value) % space) - 1;
+                            // this.program_counter =
+                            //   ((this.program_counter + value) % space) - 1;
+                            this.program_counter -= TSOS.Utils.twos_comp(value);
                         }
                         else {
                             this.program_counter += value;
@@ -218,14 +219,14 @@ var TSOS;
         cycle() {
             this.program_log();
             // for debugging
-            console.log({
-                acc: this.getAccumulator(),
-                z: this.zFlag,
-                pc: this.program_counter,
-                x: TSOS.Utils.showHexValue(this.get_x_register()),
-                y: TSOS.Utils.showHexValue(this.get_y_register()),
-                ir: TSOS.Utils.showHexValue(this.getInstructionRegister()),
-            });
+            // console.log({
+            //   acc: this.getAccumulator(),
+            //   z: this.zFlag,
+            //   pc: this.program_counter,
+            //   x: Utils.showHexValue(this.get_x_register()),
+            //   y: Utils.showHexValue(this.get_y_register()),
+            //   ir: Utils.showHexValue(this.getInstructionRegister()),
+            // });
             TSOS.Control.hostDisplayMemory(this.memory.memory.mainMemory);
             switch (this.curr_cycle) {
                 case cycle.fetch:
