@@ -197,7 +197,7 @@ var TSOS;
                     break;
                 case 0xff:
                     if (this.printNumber) {
-                        _Console.lwPutText(this.get_y_register());
+                        _Console.lwPutText(this.get_y_register(), true);
                         this.printNumber = false;
                     }
                     else if (this.printString) {
@@ -206,7 +206,7 @@ var TSOS;
                             this.printString = false;
                         }
                         else {
-                            _Console.lwPutText(TSOS.Ascii.fromCharCode(num));
+                            _Console.lwPutText(TSOS.Ascii.fromCharCode(num), true);
                             this.stringCounter++;
                         }
                     }

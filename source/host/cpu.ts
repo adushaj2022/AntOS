@@ -220,14 +220,14 @@ module TSOS {
 
         case 0xff:
           if (this.printNumber) {
-            _Console.lwPutText(this.get_y_register());
+            _Console.lwPutText(this.get_y_register(), true);
             this.printNumber = false;
           } else if (this.printString) {
             let num = this.memory.readIntermediate(this.stringCounter);
             if (num === 0x00) {
               this.printString = false;
             } else {
-              _Console.lwPutText(Ascii.fromCharCode(num));
+              _Console.lwPutText(Ascii.fromCharCode(num), true);
               this.stringCounter++;
             }
           }

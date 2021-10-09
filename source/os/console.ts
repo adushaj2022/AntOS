@@ -197,7 +197,7 @@ module TSOS {
      * string.prototype.subtring method, so we can grab the first 0 - 20, then advance to 20 - 40 and so on
      * and so fourth. This is similar to paginating
      */
-    public lwPutText(text: string | number | boolean): void {
+    public lwPutText(text: string | number | boolean, output = false): void {
       text = String(text);
       const CHAR_LIMIT = 55;
       let upper = CHAR_LIMIT; // average amount of characters that we can use to cover a whole line
@@ -205,7 +205,7 @@ module TSOS {
       let i = 0;
       let lower = 0;
 
-      if (paginate === 1) {
+      if (paginate === 1 && output) {
         return this.putText(text); // no need to wrap
       }
 

@@ -173,14 +173,14 @@ var TSOS;
          * string.prototype.subtring method, so we can grab the first 0 - 20, then advance to 20 - 40 and so on
          * and so fourth. This is similar to paginating
          */
-        lwPutText(text) {
+        lwPutText(text, output = false) {
             text = String(text);
             const CHAR_LIMIT = 55;
             let upper = CHAR_LIMIT; // average amount of characters that we can use to cover a whole line
             let paginate = Math.ceil(text.length / CHAR_LIMIT);
             let i = 0;
             let lower = 0;
-            if (paginate === 1) {
+            if (paginate === 1 && output) {
                 return this.putText(text); // no need to wrap
             }
             while (i++ < paginate) {
