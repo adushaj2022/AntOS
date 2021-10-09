@@ -109,6 +109,16 @@ module TSOS {
         false;
       (<HTMLButtonElement>document.getElementById("btnReset")).disabled = false;
 
+      (<HTMLButtonElement>document.getElementById("step")).disabled = false;
+
+      document
+        .getElementById("step")
+        .addEventListener("click", Control.hostActivateSingleStep_click);
+
+      document
+        .getElementById("next")
+        .addEventListener("click", Control.hostGetNextStep);
+
       // .. set focus on the OS console display ...
       document.getElementById("display").focus();
 
@@ -145,6 +155,27 @@ module TSOS {
       // Stop the interval that's simulating our clock pulse.
       clearInterval(_hardwareClockID);
       // TODO: Is there anything else we need to do here?
+    }
+
+    public static hostActivateSingleStep_click(e: any) {
+      if (!_isSingleStep) {
+        // Styles
+        e.srcElement.classList.remove("is-link");
+        e.srcElement.classList.add("is-danger");
+        (<HTMLButtonElement>document.getElementById("next")).disabled = false;
+      } else {
+        (<HTMLButtonElement>document.getElementById("next")).disabled = true;
+        e.srcElement.classList.add("is-link");
+        e.srcElement.classList.remove("is-danger");
+      }
+
+      _isSingleStep = !_isSingleStep;
+    }
+
+    public static hostGetNextStep(_: any) {
+      if (_isSingleStep) {
+        _CPU.cycle();
+      }
     }
 
     public static hostBtnReset_click(btn): void {

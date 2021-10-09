@@ -359,7 +359,7 @@ var TSOS;
             }
         }
         shellMessage() {
-            _StdOut.putText("Progrem successfully executed");
+            _StdOut.putText("Program complete");
         }
         shellLoad(args) {
             var _a;
@@ -417,8 +417,10 @@ var TSOS;
                 if (pcb.pid === Number(arg)) {
                     _CPU.isExecuting = true; // set this to true, time to run program
                     _Pcb = pcb; // set global Pcb to current one being ran, we will access this from cpu
+                    _Pcb.state = "termintating";
                 }
             }
+            TSOS.Control.hostDisplayPcbs(_Pcb);
             // pcb doesnt exist
             if (!_CPU.isExecuting) {
                 _StdOut.putText("No pid found");

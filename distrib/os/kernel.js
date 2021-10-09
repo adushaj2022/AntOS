@@ -72,7 +72,7 @@ var TSOS;
                 var interrupt = _KernelInterruptQueue.dequeue();
                 this.krnInterruptHandler(interrupt.irq, interrupt.params);
             }
-            else if (_CPU.isExecuting) {
+            else if (_CPU.isExecuting && !_isSingleStep) {
                 // If there are no interrupts then run one CPU cycle if there is anything being processed.
                 _CPU.cycle();
             }

@@ -136,10 +136,9 @@ module TSOS {
           this.memory.setHighOrderByte(value);
           this.memory.setLowOrderByte(this.lob);
           this.address = this.memory.convert_to_li_format();
-          console.log(Utils.showHexValue(this.address));
           this.set_y_register(this.memory.readIntermediate(this.address));
           this.program_counter += 2; // this seems to be one step behind, increment 2
-        case 0xea: // leave here for readability, I know its useless
+        case 0xea:
           this.program_counter -= 1;
           break; // no op
         case 0x00:
@@ -149,7 +148,7 @@ module TSOS {
           _Pcb.yRegister = this.y_register;
           _Pcb.zRegister = this.zFlag;
           _Pcb.programCounter = this.program_counter;
-          _Pcb.state = "done";
+          _Pcb.state = "finished";
           Control.hostDisplayPcbs(_Pcb);
           _OsShell.handleInput("", true, _OsShell.shellMessage);
           break;

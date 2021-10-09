@@ -41,6 +41,8 @@ body {
 
 #divButtonBar {
   margin: 6px;
+  display: flex;
+  justify-content: space-between;
 }
 
 h1 {

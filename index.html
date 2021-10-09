@@ -54,7 +54,8 @@
     <div class="container">
       <div id="divMain">
         <div id="divButtonBar">
-          <input
+          <div class="btnRow">
+            <input
             type="button"
             id="btnStartOS"
             name="brnStartOS"
@@ -85,6 +86,12 @@
             tabindex="2"
             onclick="TSOS.Control.hostBtnReset_click(this);"
           />
+          </div>
+          <div id="stepBtnRow">
+            <Button disabled class="is-rounded button is-link" id="step">Single Step</Button>
+            <Button disabled class="is-rounded button is-link" id="next">Next</Button>
+          </div>
+
         </div>
 
         <div id="taskBar" class="box"></div>
@@ -168,11 +175,11 @@
               <div class="tableContainer">
                 <table class="table is-striped">
                   <tbody id="memoryBody">
-   
+
                   </tbody>
                </table>
               </div>
-           
+
             </article>
           </div>
         </div>
