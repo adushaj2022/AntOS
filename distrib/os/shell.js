@@ -324,7 +324,7 @@ var TSOS;
             //       `Latitude: ${position.coords.latitude} & Longitude: ${position.coords.longitude}`
             //     );
             //   });
-            _StdOut.putText("Tilted Towers");
+            _StdOut.putText("LIBERTY CITY");
         }
         shellDate(args) {
             const date = new Date();

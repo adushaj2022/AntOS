@@ -435,7 +435,7 @@ module TSOS {
       //       `Latitude: ${position.coords.latitude} & Longitude: ${position.coords.longitude}`
       //     );
       //   });
-      _StdOut.putText("Tilted Towers");
+      _StdOut.putText("LIBERTY CITY");
     }
 
     public shellDate(args: string[]) {

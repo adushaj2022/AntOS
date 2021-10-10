@@ -57,7 +57,11 @@ module TSOS {
           // ... and reset our buffer.
           this.buffer = "";
         } else {
-          if (chr.toUpperCase() === String.fromCharCode(67) && _ctrl) {
+          if (
+            chr.toUpperCase() === String.fromCharCode(67) &&
+            _ctrl &&
+            _CPU.isExecuting
+          ) {
             _CPU.isExecuting = false; // control C, break
             _OsShell.handleInput("", true, () => {
               this.putText("Program stopped");
@@ -184,7 +188,12 @@ module TSOS {
           this.currentFontSize,
           text
         );
-        this.currentXPosition = this.currentXPosition + offset;
+
+        if (this.currentXPosition + offset >= _Canvas.width - 4) {
+          this.advanceLine();
+        } else {
+          this.currentXPosition = this.currentXPosition + offset;
+        }
       }
     }
 
