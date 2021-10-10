@@ -7,12 +7,11 @@
 module TSOS {
   export class ProcessControlBlock {
     pid: number = 0;
-    state: "waiting" | "termintating" | "exiting" | "ready" | "finished" =
-      "ready";
+    state: "waiting" | "running" | "new" | "ready" | "terminated" = "new";
     iRegister: number = 0;
     xRegister: number = 0;
     yRegister: number = 0;
-    zRegister: number | boolean = false;
+    zRegister: number = 0;
     programCounter: number = 0;
     public constructor() {}
   }

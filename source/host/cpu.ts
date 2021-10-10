@@ -25,7 +25,6 @@ module TSOS {
     public insuction_register: number = 0; //current instruction initialzied to 0
     public program_counter = 0; //program counter
     public curr_cycle: cycle = cycle.fetch;
-    public map: Map<number, number>; //hashmap of insctrutions
     public zFlag = 0; //zFLag to tell us if we can branch
     public isExecuting = false;
     public memory: MemoryAccessor = _MemoryAccessor;
@@ -40,9 +39,7 @@ module TSOS {
     public lob = -1;
     public address = 0;
 
-    constructor() {
-      this.map = Utils.instructionSetMap();
-    }
+    constructor() {}
 
     private setInsctrutionRegister(insuction_register: number): void {
       this.insuction_register = insuction_register;
@@ -148,7 +145,7 @@ module TSOS {
           _Pcb.yRegister = this.y_register;
           _Pcb.zRegister = this.zFlag;
           _Pcb.programCounter = this.program_counter;
-          _Pcb.state = "finished";
+          _Pcb.state = "terminated";
           Control.hostDisplayPcbs(_Pcb);
           _OsShell.handleInput("", true, _OsShell.shellMessage);
           break;
@@ -231,7 +228,6 @@ module TSOS {
               this.stringCounter++;
             }
           }
-        // string or int
         default:
           break;
       }
@@ -239,16 +235,6 @@ module TSOS {
 
     public cycle(): void {
       this.program_log();
-      // for debugging
-      // console.log({
-      //   acc: this.getAccumulator(),
-      //   z: this.zFlag,
-      //   pc: this.program_counter,
-      //   x: Utils.showHexValue(this.get_x_register()),
-      //   y: Utils.showHexValue(this.get_y_register()),
-      //   ir: Utils.showHexValue(this.getInstructionRegister()),
-      // });
-      Control.hostDisplayMemory(this.memory.memory.mainMemory);
       switch (this.curr_cycle) {
         case cycle.fetch:
           this.fetch();
@@ -275,6 +261,13 @@ module TSOS {
     public program_log(): void {
       //log to see the current cpu state
       Control.hostDisplayCpu(this);
+      Control.hostDisplayMemory(this.memory.memory.mainMemory);
+      _Pcb.iRegister = this.insuction_register;
+      _Pcb.programCounter = this.program_counter;
+      _Pcb.xRegister = this.x_register;
+      _Pcb.yRegister = this.y_register;
+      _Pcb.zRegister = this.zFlag;
+      Control.hostDisplayPcbs(_Pcb);
     }
   }
 }

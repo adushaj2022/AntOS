@@ -35,7 +35,6 @@ var TSOS;
             this.stringCounter = 0;
             this.lob = -1;
             this.address = 0;
-            this.map = TSOS.Utils.instructionSetMap();
         }
         setInsctrutionRegister(insuction_register) {
             this.insuction_register = insuction_register;
@@ -128,7 +127,7 @@ var TSOS;
                     _Pcb.yRegister = this.y_register;
                     _Pcb.zRegister = this.zFlag;
                     _Pcb.programCounter = this.program_counter;
-                    _Pcb.state = "finished";
+                    _Pcb.state = "terminated";
                     TSOS.Control.hostDisplayPcbs(_Pcb);
                     _OsShell.handleInput("", true, _OsShell.shellMessage);
                     break;
@@ -210,23 +209,12 @@ var TSOS;
                             this.stringCounter++;
                         }
                     }
-                // string or int
                 default:
                     break;
             }
         }
         cycle() {
             this.program_log();
-            // for debugging
-            // console.log({
-            //   acc: this.getAccumulator(),
-            //   z: this.zFlag,
-            //   pc: this.program_counter,
-            //   x: Utils.showHexValue(this.get_x_register()),
-            //   y: Utils.showHexValue(this.get_y_register()),
-            //   ir: Utils.showHexValue(this.getInstructionRegister()),
-            // });
-            TSOS.Control.hostDisplayMemory(this.memory.memory.mainMemory);
             switch (this.curr_cycle) {
                 case cycle.fetch:
                     this.fetch();
@@ -253,6 +241,13 @@ var TSOS;
         program_log() {
             //log to see the current cpu state
             TSOS.Control.hostDisplayCpu(this);
+            TSOS.Control.hostDisplayMemory(this.memory.memory.mainMemory);
+            _Pcb.iRegister = this.insuction_register;
+            _Pcb.programCounter = this.program_counter;
+            _Pcb.xRegister = this.x_register;
+            _Pcb.yRegister = this.y_register;
+            _Pcb.zRegister = this.zFlag;
+            TSOS.Control.hostDisplayPcbs(_Pcb);
         }
     }
     TSOS.Cpu = Cpu;
