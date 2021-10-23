@@ -35,15 +35,18 @@
     <script type="text/javascript" src="distrib/os/userCommand.js"></script>
     <script type="text/javascript" src="distrib/os/kernel.js"></script>
     <script type="text/javascript" src="distrib/os/memoryManager.js"></script>
-    <script type="text/javascript" src="distrib/os/processControlBlock.js"></script>
+    <script
+      type="text/javascript"
+      src="distrib/os/processControlBlock.js"
+    ></script>
 
     <!-- Other Routines -->
     <script type="text/javascript" src="distrib/utils.js"></script>
     <!-- Uncomment the line below to enable GLaDOS testing. -->
-    <script
+    <!-- <script
       type="text/javascript"
       src="http://alanclasses.github.io/TSOS/test/glados-ip2.js"
-    ></script>
+    ></script> -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"
@@ -56,42 +59,45 @@
         <div id="divButtonBar">
           <div class="btnRow">
             <input
-            type="button"
-            id="btnStartOS"
-            name="brnStartOS"
-            class="button is-primary mx-1"
-            value="Start"
-            tabindex="0"
-            onclick="TSOS.Control.hostBtnStartOS_click(this);"
-          />
+              type="button"
+              id="btnStartOS"
+              name="brnStartOS"
+              class="button is-primary mx-1"
+              value="Start"
+              tabindex="0"
+              onclick="TSOS.Control.hostBtnStartOS_click(this);"
+            />
 
-          <input
-            type="button"
-            id="btnHaltOS"
-            name="brnHaltOS"
-            class="button is-danger mx-1"
-            disabled="disabled"
-            value="Halt"
-            tabindex="1"
-            onclick="TSOS.Control.hostBtnHaltOS_click(this);"
-          />
+            <input
+              type="button"
+              id="btnHaltOS"
+              name="brnHaltOS"
+              class="button is-danger mx-1"
+              disabled="disabled"
+              value="Halt"
+              tabindex="1"
+              onclick="TSOS.Control.hostBtnHaltOS_click(this);"
+            />
 
-          <input
-            type="button"
-            id="btnReset"
-            name="brnReset"
-            class="button is-warning mx-1"
-            disabled="disabled"
-            value="Reset"
-            tabindex="2"
-            onclick="TSOS.Control.hostBtnReset_click(this);"
-          />
+            <input
+              type="button"
+              id="btnReset"
+              name="brnReset"
+              class="button is-warning mx-1"
+              disabled="disabled"
+              value="Reset"
+              tabindex="2"
+              onclick="TSOS.Control.hostBtnReset_click(this);"
+            />
           </div>
           <div id="stepBtnRow">
-            <Button disabled class="is-rounded button is-link" id="step">Single Step</Button>
-            <Button disabled class="is-rounded button is-link" id="next">Next</Button>
+            <button disabled class="is-rounded button is-link" id="step">
+              Single Step
+            </button>
+            <button disabled class="is-rounded button is-link" id="next">
+              Next
+            </button>
           </div>
-
         </div>
 
         <div id="taskBar" class="box"></div>
@@ -115,44 +121,36 @@
               ></textarea>
             </label>
             <article class="panel is-info">
-              <p class="panel-heading is-size-6">
-                CPU
-              </p>
-            <table class="table is-striped">
-               <thead>
+              <p class="panel-heading is-size-6">CPU</p>
+              <table class="table is-striped">
+                <thead>
                   <tr>
-                     <th>PC</th>
-                     <th>IR</th>
-                     <th>ACC</th>
-                     <th>X</th>
-                     <th>Y</th>
-                     <th>Z</th>
+                    <th>PC</th>
+                    <th>IR</th>
+                    <th>ACC</th>
+                    <th>X</th>
+                    <th>Y</th>
+                    <th>Z</th>
                   </tr>
-               </thead>
-               <tbody id="cpuBody">
-
-               </tbody>
-            </table>
+                </thead>
+                <tbody id="cpuBody"></tbody>
+              </table>
             </article>
             <article class="panel is-info">
-              <p class="panel-heading is-size-6">
-                Processes
-              </p>
-            <table class="table is-striped">
-               <thead>
+              <p class="panel-heading is-size-6">Processes</p>
+              <table class="table is-striped">
+                <thead>
                   <tr>
-                     <th>PID</th>
-                     <th>IR</th>
-                     <th>XR</th>
-                     <th>YR</th>
-                     <th>PC</th>
-                     <th>State</th>
+                    <th>PID</th>
+                    <th>IR</th>
+                    <th>XR</th>
+                    <th>YR</th>
+                    <th>PC</th>
+                    <th>State</th>
                   </tr>
-               </thead>
-               <tbody id="pcbBody">
-
-               </tbody>
-            </table>
+                </thead>
+                <tbody id="pcbBody"></tbody>
+              </table>
             </article>
           </div>
 
@@ -169,17 +167,12 @@
               ></textarea>
             </label>
             <article class="panel is-info">
-              <p class="panel-heading is-size-6">
-                Memory
-              </p>
+              <p class="panel-heading is-size-6">Memory</p>
               <div class="tableContainer">
                 <table class="table is-striped">
-                  <tbody id="memoryBody">
-
-                  </tbody>
-               </table>
+                  <tbody id="memoryBody"></tbody>
+                </table>
               </div>
-
             </article>
           </div>
         </div>
