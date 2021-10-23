@@ -251,17 +251,21 @@ module TSOS {
       const pcbTable = document.getElementById("pcbBody");
       const row = document.createElement("tr");
 
+      // if null, then remove everything, and return, we have nothing to add here
+      if (pcb === null) {
+        return Utils.removeAllChildNodes(pcbTable);
+      }
+
+      // we dont want duplicates, and we want to presever order here to
       const prevRecord = document.getElementById(String(pcb.pid));
       if (prevRecord) {
         Utils.removeAllChildNodes(prevRecord);
         prevRecord?.remove();
       }
 
+      // lets build our table row
       row.id = String(pcb.pid);
-      /*
-        in the future I may want to loop through PCB object and dynamically create tds,
-        did not do this now because I fear the order may get messed up
-      */
+
       const pid = document.createElement("td");
       pid.innerText = Utils.showHexValue(pcb.pid);
 
@@ -288,6 +292,10 @@ module TSOS {
       row.insertAdjacentElement("beforeend", state);
 
       pcbTable.insertAdjacentElement("beforeend", row);
+    }
+
+    public static removeProcessPid(pid: number) {
+      document.getElementById(String(pid))?.remove();
     }
   }
 }

@@ -22,6 +22,7 @@ module TSOS {
       _KernelBuffers = new Array(); // Buffers... for the kernel.
       _KernelInputQueue = new Queue<any>(); // Where device input lands before being processed out somewhere.
       _ReadyQueue = new Queue<ProcessControlBlock>();
+      _ResidentList = new Queue<ProcessControlBlock>();
       // Initialize the console.
       _Console = new Console(); // The command line interface / console I/O device.
       _Console.init();
@@ -178,8 +179,8 @@ module TSOS {
 
     public krnLoadMemory(code: number[]): string {
       _Pcb = new ProcessControlBlock(); // create pcb
-      _Pcb.pid = _ReadyQueue.getSize();
-      _ReadyQueue.enqueue(_Pcb);
+      _Pcb.pid = _ResidentList.getSize();
+      _ResidentList.enqueue(_Pcb); // add to resident queue
 
       let partitionId = _MemoryManager.usePartition(_Pcb);
       if (typeof partitionId === "boolean") {
@@ -192,6 +193,17 @@ module TSOS {
       Control.hostDisplayPcbs(_Pcb);
       Control.hostDisplayMemory(_MemoryAccessor.memory.mainMemory);
       return `PCB created - pid - ${_Pcb.pid}`;
+    }
+
+    public krnClearMemory() {
+      _MemoryManager.setPartitions(); // reset partitons
+      _MemoryAccessor.memory.fillArray(); // reset to 0s
+      _CPU.resetRegisters();
+      _ReadyQueue.q.length = 0; // remove from all pcbs from queue
+      _ResidentList.q.length = 0;
+      Control.hostDisplayMemory(_MemoryAccessor.memory.mainMemory); // update gui
+      Control.hostDisplayPcbs(null); // update gui
+      Control.hostDisplayCpu(_CPU);
     }
   }
 }

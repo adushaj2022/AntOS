@@ -32,14 +32,28 @@ module TSOS {
     public printString = false;
     public printNumber = false;
 
-    public prev_pc = -1;
-
     public stringCounter = 0;
 
     public lob = -1;
     public address = 0;
 
     constructor() {}
+
+    public resetRegisters() {
+      this.accumulator = 0;
+      this.x_register = 0;
+      this.y_register = 0;
+      this.insuction_register = 0;
+      this.program_counter = 0;
+      this.curr_cycle = cycle.fetch;
+      this.zFlag = 0;
+      this.isExecuting = false;
+      this.printString = false;
+      this.printNumber = false;
+      this.stringCounter = 0;
+      this.lob = -1;
+      this.address = 0;
+    }
 
     private setInsctrutionRegister(insuction_register: number): void {
       this.insuction_register = insuction_register;
@@ -234,6 +248,7 @@ module TSOS {
     }
 
     public cycle(): void {
+      // make sure our pcb is not terminated or null
       this.program_log();
       switch (this.curr_cycle) {
         case cycle.fetch:

@@ -13,6 +13,7 @@
 let _ctrl = false; // Is control key clicked
 const APP_NAME = "AntOS"; // 'cause Bob and I were at a loss for a better name.
 const APP_VERSION = "1.01"; // What did you expect?
+let _QUANTUM = 6;
 const CPU_CLOCK_INTERVAL = 50; // This is in ms (milliseconds) so 1000 = 1 second.
 const TIMER_IRQ = 0; // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
 // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
@@ -42,6 +43,7 @@ var _KernelInterruptQueue = null;
 var _KernelInputQueue = null;
 var _KernelBuffers = null;
 var _ReadyQueue = null;
+var _ResidentList = null;
 var _Pcb = null;
 // Standard input and output
 var _StdIn = null;

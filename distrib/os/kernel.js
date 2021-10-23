@@ -21,6 +21,7 @@ var TSOS;
             _KernelBuffers = new Array(); // Buffers... for the kernel.
             _KernelInputQueue = new TSOS.Queue(); // Where device input lands before being processed out somewhere.
             _ReadyQueue = new TSOS.Queue();
+            _ResidentList = new TSOS.Queue();
             // Initialize the console.
             _Console = new TSOS.Console(); // The command line interface / console I/O device.
             _Console.init();
@@ -160,8 +161,8 @@ var TSOS;
         }
         krnLoadMemory(code) {
             _Pcb = new TSOS.ProcessControlBlock(); // create pcb
-            _Pcb.pid = _ReadyQueue.getSize();
-            _ReadyQueue.enqueue(_Pcb);
+            _Pcb.pid = _ResidentList.getSize();
+            _ResidentList.enqueue(_Pcb); // add to resident queue
             let partitionId = _MemoryManager.usePartition(_Pcb);
             if (typeof partitionId === "boolean") {
                 return "No memory partitons available (call apple)";
@@ -171,6 +172,16 @@ var TSOS;
             TSOS.Control.hostDisplayPcbs(_Pcb);
             TSOS.Control.hostDisplayMemory(_MemoryAccessor.memory.mainMemory);
             return `PCB created - pid - ${_Pcb.pid}`;
+        }
+        krnClearMemory() {
+            _MemoryManager.setPartitions(); // reset partitons
+            _MemoryAccessor.memory.fillArray(); // reset to 0s
+            _CPU.resetRegisters();
+            _ReadyQueue.q.length = 0; // remove from all pcbs from queue
+            _ResidentList.q.length = 0;
+            TSOS.Control.hostDisplayMemory(_MemoryAccessor.memory.mainMemory); // update gui
+            TSOS.Control.hostDisplayPcbs(null); // update gui
+            TSOS.Control.hostDisplayCpu(_CPU);
         }
     }
     TSOS.Kernel = Kernel;

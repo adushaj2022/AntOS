@@ -16,6 +16,7 @@ let _ctrl = false; // Is control key clicked
 const APP_NAME: string = "AntOS"; // 'cause Bob and I were at a loss for a better name.
 const APP_VERSION: string = "1.01"; // What did you expect?
 
+let _QUANTUM = 6;
 const CPU_CLOCK_INTERVAL: number = 50; // This is in ms (milliseconds) so 1000 = 1 second.
 
 const TIMER_IRQ: number = 0; // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
@@ -53,6 +54,7 @@ var _KernelInterruptQueue: TSOS.Queue<any> = null;
 var _KernelInputQueue: TSOS.Queue<any> = null;
 var _KernelBuffers = null;
 var _ReadyQueue: TSOS.Queue<TSOS.ProcessControlBlock> | null = null;
+var _ResidentList: TSOS.Queue<TSOS.ProcessControlBlock> | null = null;
 var _Pcb: TSOS.ProcessControlBlock = null;
 // Standard input and output
 var _StdIn: TSOS.Console = null;

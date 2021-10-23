@@ -65,6 +65,20 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellRun, "run", "<pid> - runs that program");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellClearMem, "clearmem", "clear all memory partitions");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellRunAll, "runall", "execute all cpu programs");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellRunAll, "runall", "execute all cpu programs");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellPs, "ps", "displays active processes");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellKill, "kill", "<pid> kill process by pid");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellKillAll, "killall", "kill all processes");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "<num> set round robin quantum");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -91,6 +105,7 @@ var TSOS;
             // TypeScript/JavaScript may not support associative arrays in all browsers so we have to iterate over the
             // command list in attempt to find a match.
             // TODO: Is there a better way? Probably. Someone work it out and tell me in class.
+            // Full support https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Property_accessors :)
             var index = 0;
             var found = false;
             var fn = undefined;
@@ -264,6 +279,8 @@ var TSOS;
                     case "run":
                         _StdOut.lwPutText("Accepts a parameter, pid number, it will then run that program");
                         break;
+                    case "clearmem":
+                        _StdOut.putText("Clear all memory partitions, resets everything");
                     default:
                         _StdOut.putText("No manual entry for " + args[0] + ".");
                 }
@@ -318,13 +335,7 @@ var TSOS;
             _StdOut.lwPutText(`This is an online operating system based on the 6502 apple computer, it is written in typescript`);
         }
         shellWhereAmI(args) {
-            // gets coordinates, leaving commented for now, not sure if I want this feature
-            //   navigator.geolocation.getCurrentPosition((position) => {
-            //     _StdOut.putText(
-            //       `Latitude: ${position.coords.latitude} & Longitude: ${position.coords.longitude}`
-            //     );
-            //   });
-            _StdOut.putText("LIBERTY CITY");
+            _StdOut.lwPutText("LIBERTY CITY, great place to visit; an even better place to leave :)");
         }
         shellDate(args) {
             const date = new Date();
@@ -401,17 +412,66 @@ var TSOS;
                 return;
             }
             // iterate through Queue and find our pcb
-            for (let pcb of _ReadyQueue.q) {
+            for (let pcb of _ResidentList.q) {
                 if (pcb.pid === Number(arg)) {
                     _CPU.isExecuting = true; // set this to true, time to run program
                     _Pcb = pcb; // set global Pcb to current one being ran, we will access this from cpu
                     _Pcb.state = "running";
+                    _ReadyQueue.enqueue(_Pcb); // move to ready queue since we are now running
                 }
             }
             TSOS.Control.hostDisplayPcbs(_Pcb);
             // pcb doesnt exist
             if (!_CPU.isExecuting) {
                 _StdOut.putText("No pid found");
+            }
+        }
+        shellClearMem(args) {
+            _Kernel.krnClearMemory();
+            _StdOut.lwPutText("All memory partitons cleared, all programs terminated");
+        }
+        shellRunAll(args) {
+            // to be implemented soon
+        }
+        shellPs(args) {
+            let found = false;
+            for (let process of _ReadyQueue.q) {
+                if (process.state === "running") {
+                    _StdOut.lwPutText(JSON.stringify(process));
+                    found = true;
+                }
+            }
+            if (!found)
+                _StdOut.putText("No running processes, sorry");
+        }
+        shellKill(args) {
+            const pid = Number(args[0]);
+            if (typeof pid !== "number") {
+                _StdOut.putText("Please enter a valid process id");
+            }
+            else {
+                // _ReadyQueue.q = _ReadyQueue.q.filter((p) => p.pid !== pid);
+                // _ResidentList.q = _ReadyQueue.q.filter((p) => p.pid !== pid);
+                //  if (_Pcb.pid === pid) _Pcb = null; // onlyset to null if its active
+                //  Control.removeProcessPid(pid);
+                /**
+                 * ask: What do we do here, do we remove that space in memory ? remove it from ready queue and pcb ?
+                 *  If the program is running we may also have to reset program counter
+                 */
+            }
+        }
+        shellKillAll(args) {
+            _Kernel.krnClearMemory(); //ask: is this ok ?
+            _StdOut.putText("All processes killed ");
+        }
+        shellQuantum(args) {
+            const q = Number(args[0]);
+            if (typeof q !== "number") {
+                _StdOut.putText("Please pass a number");
+            }
+            else {
+                _StdOut.putText(`Quantum set to ${q}`);
+                _QUANTUM = q;
             }
         }
     }

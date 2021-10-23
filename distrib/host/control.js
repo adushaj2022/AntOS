@@ -200,16 +200,18 @@ var TSOS;
         static hostDisplayPcbs(pcb) {
             const pcbTable = document.getElementById("pcbBody");
             const row = document.createElement("tr");
+            // if null, then remove everything, and return, we have nothing to add here
+            if (pcb === null) {
+                return TSOS.Utils.removeAllChildNodes(pcbTable);
+            }
+            // we dont want duplicates, and we want to presever order here to
             const prevRecord = document.getElementById(String(pcb.pid));
             if (prevRecord) {
                 TSOS.Utils.removeAllChildNodes(prevRecord);
                 prevRecord === null || prevRecord === void 0 ? void 0 : prevRecord.remove();
             }
+            // lets build our table row
             row.id = String(pcb.pid);
-            /*
-              in the future I may want to loop through PCB object and dynamically create tds,
-              did not do this now because I fear the order may get messed up
-            */
             const pid = document.createElement("td");
             pid.innerText = TSOS.Utils.showHexValue(pcb.pid);
             const ir = document.createElement("td");
@@ -229,6 +231,10 @@ var TSOS;
             row.insertAdjacentElement("beforeend", pc);
             row.insertAdjacentElement("beforeend", state);
             pcbTable.insertAdjacentElement("beforeend", row);
+        }
+        static removeProcessPid(pid) {
+            var _a;
+            (_a = document.getElementById(String(pid))) === null || _a === void 0 ? void 0 : _a.remove();
         }
     }
     TSOS.Control = Control;
