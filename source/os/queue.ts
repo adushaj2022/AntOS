@@ -24,6 +24,14 @@ module TSOS {
       this.q.push(element);
     }
 
+    public peekFirst() {
+      return this.q[0];
+    }
+
+    public peekLast() {
+      return this.q[this.q.length - 1];
+    }
+
     public dequeue() {
       var retVal = null;
       if (this.q.length > 0) {

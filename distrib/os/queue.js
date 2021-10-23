@@ -22,6 +22,12 @@ var TSOS;
         enqueue(element) {
             this.q.push(element);
         }
+        peekFirst() {
+            return this.q[0];
+        }
+        peekLast() {
+            return this.q[this.q.length - 1];
+        }
         dequeue() {
             var retVal = null;
             if (this.q.length > 0) {

@@ -412,7 +412,12 @@ var TSOS;
                 _StdOut.putText("Please pass a number");
                 return;
             }
-            // iterate through Queue and find our pcb
+            /**
+             * Here lets go through our resident list, if we see a process with the same pid as the one
+             * the user entered, lets set that pcb to our global variable, next loop through partitions
+             * and see if we have a corresping place in memory for our program, we need to se that id so the CPU
+             *  can know how much to offset when reading and writing
+             */
             for (let pcb of _ResidentList.q) {
                 if (pcb.pid === Number(arg)) {
                     _CPU.resetRegisters();
@@ -423,7 +428,6 @@ var TSOS;
                     for (let partition of _MemoryManager.partitions) {
                         if (((_a = partition.process) === null || _a === void 0 ? void 0 : _a.pid) === pcb.pid) {
                             _CurrentPartition = partition.id;
-                            console.log(_CurrentPartition);
                         }
                     }
                 }
@@ -439,7 +443,15 @@ var TSOS;
             _StdOut.lwPutText("All memory partitons cleared, all programs terminated");
         }
         shellRunAll(args) {
-            // to be implemented soon
+            if (_ResidentList.getSize() < 2) {
+                return _StdOut.lwPutText("You need at least 2 progs to run runall");
+            }
+            _ReadyQueue.q = [..._ResidentList.q]; // move from resident list to ready queue
+            _ResidentList.q.length = 0; // empty resident list
+            console.log(_ResidentList, "rl");
+            console.log(_ReadyQueue, "rq");
+            _CPU.isExecuting = true;
+            TSOS.RoundRobinScheduler.isActivated = true;
         }
         shellPs(args) {
             let found = false;

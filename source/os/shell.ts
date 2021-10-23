@@ -602,7 +602,16 @@ module TSOS {
     }
 
     public shellRunAll(args: string[]) {
-      // to be implemented soon
+      if (_ResidentList.getSize() < 2) {
+        return _StdOut.lwPutText("You need at least 2 progs to run runall");
+      }
+      _ReadyQueue.q = [..._ResidentList.q]; // move from resident list to ready queue
+      _ResidentList.q.length = 0; // empty resident list
+      console.log(_ResidentList, "rl");
+      console.log(_ReadyQueue, "rq");
+      _CPU.isExecuting = true;
+
+      RoundRobinScheduler.isActivated = true;
     }
 
     public shellPs(args: string[]) {
