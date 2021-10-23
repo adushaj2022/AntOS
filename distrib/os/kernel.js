@@ -158,6 +158,20 @@ var TSOS;
             this.krnShutdown();
             _OsShell.shellBSOD(msg);
         }
+        krnLoadMemory(code) {
+            _Pcb = new TSOS.ProcessControlBlock(); // create pcb
+            _Pcb.pid = _ReadyQueue.getSize();
+            _ReadyQueue.enqueue(_Pcb);
+            let partitionId = _MemoryManager.usePartition(_Pcb);
+            if (typeof partitionId === "boolean") {
+                return "No memory partitons available (call apple)";
+            }
+            _MemoryAccessor.loadMemory(code, partitionId * 256); // load memory
+            // Tell Control to update GUI
+            TSOS.Control.hostDisplayPcbs(_Pcb);
+            TSOS.Control.hostDisplayMemory(_MemoryAccessor.memory.mainMemory);
+            return `PCB created - pid - ${_Pcb.pid}`;
+        }
     }
     TSOS.Kernel = Kernel;
 })(TSOS || (TSOS = {}));

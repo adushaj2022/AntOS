@@ -167,7 +167,7 @@ module TSOS {
         // HANDLE OVERFLOWS
         case 0xd0:
           if (this.zFlag === 0) {
-            let space = _MemoryManager.totalAddressableSpace();
+            let space = PARTITION_SIZE;
             if (this.program_counter + value > space) {
               // this.program_counter =
               //   ((this.program_counter + value) % space) - 1;

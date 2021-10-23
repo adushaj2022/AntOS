@@ -362,7 +362,6 @@ var TSOS;
             _StdOut.putText("Program complete");
         }
         shellLoad(args) {
-            var _a;
             const data = TSOS.Control.hostGetUserInput().trim();
             if (!data) {
                 _StdOut.putText("Input is empty");
@@ -385,19 +384,8 @@ var TSOS;
             });
             numbers = numbers.map((n) => parseInt(n, 16)); // convert to numbers, not string represention
             if (valid) {
-                /*
-                  Here we will load our memory, and create our pcbs,
-                  we also utilize control to update GUI, when loading multiple proams into memory (project 3)
-                  we need to keep track of the startLocation and endLocation in memory for our
-                  pcbs. For npw just assume we start at 0 and end at the end of the program
-                */
-                _MemoryAccessor.loadMemory(numbers); // load memory
-                _Pcb = new TSOS.ProcessControlBlock(); // create pcb
-                _Pcb.pid = (_a = _ReadyQueue.getSize()) !== null && _a !== void 0 ? _a : 0;
-                _ReadyQueue.enqueue(_Pcb);
-                TSOS.Control.hostDisplayPcbs(_Pcb); // display to gui
-                TSOS.Control.hostDisplayMemory(_MemoryAccessor.memory.mainMemory); // display to gui
-                _StdOut.putText(`Process Control - PID: ${_Pcb.pid}`);
+                let answer = _Kernel.krnLoadMemory(numbers); // Kernel will return a message here, like pid: 1 or no more partitons
+                _StdOut.putText(answer);
             }
             else {
                 _StdOut.putText("Inproper input, data not loaded");
