@@ -23,6 +23,8 @@ const PARTITION_SIZE = 255;
 // Global Variables
 // TODO: Make a global object and use that instead of the "_" naming convention in the global namespace.
 //
+// when a user hits run pid, we need to know which memory partition is being used
+let _CurrentPartition = -1;
 var _CPU; // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
 var _Offset = -1; // keep track of end of last program
 var _Memory;

@@ -406,6 +406,7 @@ var TSOS;
             _StdOut.displayBSOD();
         }
         shellRun(args) {
+            var _a;
             const arg = args[0];
             if (!/^-?\d+$/.test(arg)) {
                 _StdOut.putText("Please pass a number");
@@ -414,10 +415,17 @@ var TSOS;
             // iterate through Queue and find our pcb
             for (let pcb of _ResidentList.q) {
                 if (pcb.pid === Number(arg)) {
+                    _CPU.resetRegisters();
                     _CPU.isExecuting = true; // set this to true, time to run program
                     _Pcb = pcb; // set global Pcb to current one being ran, we will access this from cpu
                     _Pcb.state = "running";
                     _ReadyQueue.enqueue(_Pcb); // move to ready queue since we are now running
+                    for (let partition of _MemoryManager.partitions) {
+                        if (((_a = partition.process) === null || _a === void 0 ? void 0 : _a.pid) === pcb.pid) {
+                            _CurrentPartition = partition.id;
+                            console.log(_CurrentPartition);
+                        }
+                    }
                 }
             }
             TSOS.Control.hostDisplayPcbs(_Pcb);

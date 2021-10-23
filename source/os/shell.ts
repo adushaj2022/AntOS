@@ -567,13 +567,24 @@ module TSOS {
         return;
       }
 
-      // iterate through Queue and find our pcb
+      /**
+       * Here lets go through our resident list, if we see a process with the same pid as the one
+       * the user entered, lets set that pcb to our global variable, next loop through partitions
+       * and see if we have a corresping place in memory for our program, we need to se that id so the CPU
+       *  can know how much to offset when reading and writing
+       */
       for (let pcb of _ResidentList.q) {
         if (pcb.pid === Number(arg)) {
+          _CPU.resetRegisters();
           _CPU.isExecuting = true; // set this to true, time to run program
           _Pcb = pcb; // set global Pcb to current one being ran, we will access this from cpu
           _Pcb.state = "running";
           _ReadyQueue.enqueue(_Pcb); // move to ready queue since we are now running
+          for (let partition of _MemoryManager.partitions) {
+            if (partition.process?.pid === pcb.pid) {
+              _CurrentPartition = partition.id;
+            }
+          }
         }
       }
       Control.hostDisplayPcbs(_Pcb);
