@@ -19,11 +19,11 @@ module TSOS {
   }
 
   export class Cpu {
-    public accumulator: number = 0; //accumulator initialized to 0
-    public x_register: number = 0; //x reg initialized to 0
-    public y_register: number = 0; //y reg initialized to 0
-    public insuction_register: number = 0; //current instruction initialzied to 0
-    public program_counter = 0; //program counter
+    public accumulator: number = 0;
+    public x_register: number = 0;
+    public y_register: number = 0;
+    public insuction_register: number = 0;
+    public program_counter = 0;
     public curr_cycle: cycle = cycle.fetch;
     public zFlag = 0; //zFLag to tell us if we can branch
     public isExecuting = false;
@@ -222,8 +222,6 @@ module TSOS {
           if (this.zFlag === 0) {
             let space = PARTITION_SIZE;
             if (this.program_counter + value > space) {
-              // this.program_counter =
-              //   ((this.program_counter + value) % space) - 1;
               this.program_counter -= Utils.twos_comp(value);
             } else {
               this.program_counter += value;

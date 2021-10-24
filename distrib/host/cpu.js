@@ -20,11 +20,11 @@ var TSOS;
     })(cycle = TSOS.cycle || (TSOS.cycle = {}));
     class Cpu {
         constructor() {
-            this.accumulator = 0; //accumulator initialized to 0
-            this.x_register = 0; //x reg initialized to 0
-            this.y_register = 0; //y reg initialized to 0
-            this.insuction_register = 0; //current instruction initialzied to 0
-            this.program_counter = 0; //program counter
+            this.accumulator = 0;
+            this.x_register = 0;
+            this.y_register = 0;
+            this.insuction_register = 0;
+            this.program_counter = 0;
             this.curr_cycle = cycle.fetch;
             this.zFlag = 0; //zFLag to tell us if we can branch
             this.isExecuting = false;
@@ -176,8 +176,6 @@ var TSOS;
                     if (this.zFlag === 0) {
                         let space = PARTITION_SIZE;
                         if (this.program_counter + value > space) {
-                            // this.program_counter =
-                            //   ((this.program_counter + value) % space) - 1;
                             this.program_counter -= TSOS.Utils.twos_comp(value);
                         }
                         else {

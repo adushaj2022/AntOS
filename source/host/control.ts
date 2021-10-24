@@ -294,7 +294,7 @@ module TSOS {
       pcbTable.insertAdjacentElement("beforeend", row);
     }
 
-    public static removeProcessPid(pid: number) {
+    public static hostRemoveProcessPid(pid: number) {
       document.getElementById(String(pid))?.remove();
     }
   }

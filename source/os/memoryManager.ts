@@ -22,8 +22,6 @@ module TSOS {
       }
       return true;
     }
-
-    //get total addressable Space --> array is private therefore well use this to get the length
     public totalAddressableSpace(): number {
       return this.mainMemory.length;
     }

@@ -100,10 +100,6 @@ var TSOS;
             //
             // Determine the command and execute it.
             //
-            // TypeScript/JavaScript may not support associative arrays in all browsers so we have to iterate over the
-            // command list in attempt to find a match.
-            // TODO: Is there a better way? Probably. Someone work it out and tell me in class.
-            // Full support https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Property_accessors :)
             var index = 0;
             var found = false;
             var fn = undefined;
@@ -368,7 +364,11 @@ var TSOS;
             }
         }
         shellMessage() {
-            _StdOut.putText("Program complete");
+            let message = "";
+            if (TSOS.RoundRobinScheduler.isActivated) {
+                message += "Pid: " + _CurrentPcbId + " ";
+            }
+            _StdOut.putText(message + "Program complete");
         }
         shellLoad(args) {
             const data = TSOS.Control.hostGetUserInput().trim();
@@ -442,7 +442,7 @@ var TSOS;
         }
         shellRunAll(args) {
             if (_ResidentList.getSize() < 2) {
-                return _StdOut.lwPutText("You need at least 2 progs to run runall");
+                return _StdOut.lwPutText("You need at least 2 programs to run runall");
             }
             _ReadyQueue.q = [..._ResidentList.q]; // move from resident list to ready queue
             _ResidentList.q.length = 0; // empty resident list
@@ -457,8 +457,9 @@ var TSOS;
                     found = true;
                 }
             }
-            if (!found)
+            if (!found) {
                 _StdOut.putText("No running processes, sorry");
+            }
         }
         shellKill(args) {
             const pid = Number(args[0]);
@@ -466,10 +467,6 @@ var TSOS;
                 _StdOut.putText("Please enter a valid process id");
             }
             else {
-                // _ReadyQueue.q = _ReadyQueue.q.filter((p) => p.pid !== pid);
-                // _ResidentList.q = _ReadyQueue.q.filter((p) => p.pid !== pid);
-                //  if (_Pcb.pid === pid) _Pcb = null; // onlyset to null if its active
-                //  Control.removeProcessPid(pid);
                 /**
                  * ask: What do we do here, do we remove that space in memory ? remove it from ready queue and pcb ?
                  *  If the program is running we may also have to reset program counter
@@ -477,7 +474,7 @@ var TSOS;
             }
         }
         shellKillAll(args) {
-            _Kernel.krnClearMemory(); //ask: is this ok ?
+            _Kernel.krnClearMemory(); // ask: is this ok ?
             _StdOut.putText("All processes killed ");
         }
         shellQuantum(args) {

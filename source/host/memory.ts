@@ -49,16 +49,5 @@ module TSOS {
         this.mainMemory[i] = 0x00;
       }
     }
-
-    public memoryDump(
-      fromAddress: number,
-      toAddress: number
-    ): Array<string | number> {
-      let memoryContents = [];
-      for (let i = fromAddress; i <= toAddress; ++i) {
-        memoryContents.push[this.mainMemory[i]];
-      }
-      return memoryContents;
-    }
   }
 }

@@ -42,13 +42,6 @@ var TSOS;
                 this.mainMemory[i] = 0x00;
             }
         }
-        memoryDump(fromAddress, toAddress) {
-            let memoryContents = [];
-            for (let i = fromAddress; i <= toAddress; ++i) {
-                memoryContents.push[this.mainMemory[i]];
-            }
-            return memoryContents;
-        }
     }
     TSOS.Memory = Memory;
 })(TSOS || (TSOS = {}));

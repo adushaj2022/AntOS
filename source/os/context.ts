@@ -19,6 +19,7 @@ module TSOS {
       _CPU.printString = pcb.printString;
       _CPU.stringCounter = pcb.stringCounter;
       _CPU.lob = pcb.lob;
+      _CPU.address = pcb.address;
     }
 
     // lets set the info on the pcbs here
@@ -44,7 +45,7 @@ module TSOS {
 
     static allTerminated() {
       let status = true;
-      for (let [key, val] of this.processMap) {
+      for (let [_, val] of this.processMap) {
         if (val.state !== "terminated") {
           status = false;
         }

@@ -232,7 +232,7 @@ var TSOS;
             row.insertAdjacentElement("beforeend", state);
             pcbTable.insertAdjacentElement("beforeend", row);
         }
-        static removeProcessPid(pid) {
+        static hostRemoveProcessPid(pid) {
             var _a;
             (_a = document.getElementById(String(pid))) === null || _a === void 0 ? void 0 : _a.remove();
         }

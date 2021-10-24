@@ -89,8 +89,11 @@ module TSOS {
 
       const { width, height } = _Canvas;
       const y = this.currentYPosition;
-      _DrawingContext.clearRect(11, y - 14, width, height); // chop out current off line
-      this.currentXPosition = 12; // start past the >
+      const PROMPT_WIDTH = 11;
+      const LINE_HEIGHT = y - 14;
+
+      _DrawingContext.clearRect(PROMPT_WIDTH, LINE_HEIGHT, width, height); // chop out current off line
+      this.currentXPosition = PROMPT_WIDTH + 1; // start past the >
     }
 
     /**
@@ -134,7 +137,6 @@ module TSOS {
 
       const commands = _OsShell.commandList;
       const similarCommands = [];
-      let prefix = new String(this.buffer);
       commands.forEach(({ command }) => {
         if (command?.startsWith(this.buffer)) {
           similarCommands.push(command);
@@ -173,6 +175,7 @@ module TSOS {
 
     public putText(text: any): void {
       //TODO: implement line wrap
+      const XLIMIT = _Canvas.width - 4;
       if (text !== "") {
         // Draw the text at the current X and Y coordinates.
         _DrawingContext.drawText(
@@ -189,7 +192,7 @@ module TSOS {
           text
         );
 
-        if (this.currentXPosition + offset >= _Canvas.width - 4) {
+        if (this.currentXPosition + offset >= XLIMIT) {
           this.advanceLine();
         } else {
           this.currentXPosition = this.currentXPosition + offset;
