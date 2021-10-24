@@ -37,6 +37,15 @@ var TSOS;
         static getInfo(pid) {
             return this.processMap.get(pid);
         }
+        static allTerminated() {
+            let status = true;
+            for (let [key, val] of this.processMap) {
+                if (val.state !== "terminated") {
+                    status = false;
+                }
+            }
+            return status;
+        }
     }
     // easy to way to keep track of pcb data
     Context.processMap = new Map();

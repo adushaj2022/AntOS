@@ -8,11 +8,11 @@ var TSOS;
          *  processes.
          */
         static doCycle() {
-            var _a;
             if (this.count % _QUANTUM === 0 && this.count !== 0) {
                 // update cpu here, and perform switch
                 let top = _ReadyQueue.dequeue();
-                _ReadyQueue.enqueue(top);
+                if (top.state !== "terminated")
+                    _ReadyQueue.enqueue(top);
                 let prev = top;
                 let next = _ReadyQueue.peekFirst();
                 TSOS.Context.setPcbInfo(prev);
@@ -22,9 +22,9 @@ var TSOS;
                 this.process = _ReadyQueue.peekFirst();
                 if (this.process) {
                     _CurrentPartition = this.process.memoryPartitionId;
+                    _CurrentPcbId = this.process.pid;
                 }
             }
-            console.log(_CPU, "PID", (_a = this.process) === null || _a === void 0 ? void 0 : _a.pid);
             _CPU.cycle();
             this.count++;
         }

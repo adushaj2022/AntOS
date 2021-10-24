@@ -178,6 +178,15 @@ module TSOS {
         case 0x00:
           if (!RoundRobinScheduler.isActivated) {
             this.isExecuting = false;
+          } else {
+            Context.processMap.get(_CurrentPcbId).state = "terminated";
+            if (Context.allTerminated()) {
+              this.isExecuting = false;
+              _OsShell.handleInput("", true, () =>
+                _Console.putText("ALL programs completed")
+              );
+              return;
+            }
           }
           // _Pcb.iRegister = this.insuction_register;
           // _Pcb.xRegister = this.x_register;
@@ -186,6 +195,7 @@ module TSOS {
           // _Pcb.programCounter = this.program_counter;
           // _Pcb.state = "terminated";
           // Control.hostDisplayPcbs(_Pcb);
+          console.log(Context.processMap);
           _OsShell.handleInput("", true, _OsShell.shellMessage);
           break;
 

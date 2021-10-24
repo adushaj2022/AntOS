@@ -600,8 +600,6 @@ module TSOS {
       }
       _ReadyQueue.q = [..._ResidentList.q]; // move from resident list to ready queue
       _ResidentList.q.length = 0; // empty resident list
-      console.log(_ResidentList, "rl");
-      console.log(_ReadyQueue, "rq");
       _CPU.isExecuting = true;
 
       RoundRobinScheduler.isActivated = true;

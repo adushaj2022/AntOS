@@ -139,6 +139,14 @@ var TSOS;
                     if (!TSOS.RoundRobinScheduler.isActivated) {
                         this.isExecuting = false;
                     }
+                    else {
+                        TSOS.Context.processMap.get(_CurrentPcbId).state = "terminated";
+                        if (TSOS.Context.allTerminated()) {
+                            this.isExecuting = false;
+                            _OsShell.handleInput("", true, () => _Console.putText("ALL programs completed"));
+                            return;
+                        }
+                    }
                     // _Pcb.iRegister = this.insuction_register;
                     // _Pcb.xRegister = this.x_register;
                     // _Pcb.yRegister = this.y_register;
@@ -146,6 +154,7 @@ var TSOS;
                     // _Pcb.programCounter = this.program_counter;
                     // _Pcb.state = "terminated";
                     // Control.hostDisplayPcbs(_Pcb);
+                    console.log(TSOS.Context.processMap);
                     _OsShell.handleInput("", true, _OsShell.shellMessage);
                     break;
                 case 0xec:

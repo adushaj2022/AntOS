@@ -14,7 +14,7 @@ let _ctrl = false; // Is control key clicked
 const APP_NAME = "AntOS"; // 'cause Bob and I were at a loss for a better name.
 const APP_VERSION = "1.01"; // What did you expect?
 let _QUANTUM = 6;
-const CPU_CLOCK_INTERVAL = 50; // This is in ms (milliseconds) so 1000 = 1 second.
+const CPU_CLOCK_INTERVAL = 1; // This is in ms (milliseconds) so 1000 = 1 second.
 const TIMER_IRQ = 0; // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
 // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 const KEYBOARD_IRQ = 1;
@@ -23,10 +23,10 @@ const PARTITION_SIZE = 255;
 // Global Variables
 // TODO: Make a global object and use that instead of the "_" naming convention in the global namespace.
 //
+let _CurrentPcbId = 0;
 // when a user hits run pid, we need to know which memory partition is being used
 let _CurrentPartition = -1;
 var _CPU; // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
-var _Offset = -1; // keep track of end of last program
 var _Memory;
 var _MemoryAccessor;
 //	Software	(OS)

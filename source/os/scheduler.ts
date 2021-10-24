@@ -12,8 +12,8 @@ module TSOS {
     static doCycle() {
       if (this.count % _QUANTUM === 0 && this.count !== 0) {
         // update cpu here, and perform switch
-        let top = _ReadyQueue.dequeue();
-        _ReadyQueue.enqueue(top);
+        let top: ProcessControlBlock = _ReadyQueue.dequeue();
+        if (top.state !== "terminated") _ReadyQueue.enqueue(top);
 
         let prev: ProcessControlBlock = top;
         let next: ProcessControlBlock = _ReadyQueue.peekFirst();
@@ -24,6 +24,7 @@ module TSOS {
         this.process = _ReadyQueue.peekFirst();
         if (this.process) {
           _CurrentPartition = this.process.memoryPartitionId;
+          _CurrentPcbId = this.process.pid;
         }
       }
       _CPU.cycle();
