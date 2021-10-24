@@ -13,6 +13,13 @@ module TSOS {
     yRegister: number = 0;
     zRegister: number = 0;
     programCounter: number = 0;
+    memoryPartitionId: number = 0;
+    accumulator: number = 0;
+    cycle: cycle = cycle.fetch;
+    activeAddress: number = 0;
+    printString: boolean = false;
+    printNumber: boolean = false;
+    stringCounter: boolean = false;
     public constructor() {}
   }
 }

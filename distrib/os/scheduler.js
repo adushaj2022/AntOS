@@ -1,18 +1,25 @@
 var TSOS;
 (function (TSOS) {
     class RoundRobinScheduler {
+        /**
+         * Here the round robin will perform a cycle, every n cycles we need to switch processes,
+         *  We switch by performing a context switch, we need to update the cpu with the information of the new process, but we also
+         *  need to store the state of the previous process, the scheduling happens here, and context.ts file will update cpu and update our
+         *  processes.
+         */
         static doCycle() {
-            var _a;
             if (this.count % _QUANTUM === 0 && this.count !== 0) {
+                // update cpu here, and perform switch
                 let top = _ReadyQueue.dequeue();
                 _ReadyQueue.enqueue(top);
             }
             else {
                 this.process = _ReadyQueue.peekFirst();
-                console.log((_a = this.process) === null || _a === void 0 ? void 0 : _a.pid);
-                // _CurrentPartition = 0;
-                // _CPU.cycle();
+                if (this.process) {
+                    _CurrentPartition = this.process.memoryPartitionId;
+                }
             }
+            // _CPU.cycle();
             this.count++;
         }
     }

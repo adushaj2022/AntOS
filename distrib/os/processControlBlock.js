@@ -14,6 +14,13 @@ var TSOS;
             this.yRegister = 0;
             this.zRegister = 0;
             this.programCounter = 0;
+            this.memoryPartitionId = 0;
+            this.accumulator = 0;
+            this.cycle = TSOS.cycle.fetch;
+            this.activeAddress = 0;
+            this.printString = false;
+            this.printNumber = false;
+            this.stringCounter = false;
         }
     }
     TSOS.ProcessControlBlock = ProcessControlBlock;

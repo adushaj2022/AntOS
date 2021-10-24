@@ -12,7 +12,7 @@
      ------------ */
 
 module TSOS {
-  enum cycle { ///enum to represent the cycles
+  export enum cycle { ///enum to represent the cycles
     fetch,
     decode,
     execute,
@@ -171,7 +171,7 @@ module TSOS {
           this.set_y_register(
             this.memory.readIntermediate(this.address + 256 * _CurrentPartition)
           );
-          this.program_counter += 2; // this seems to be one step behind, increment 2
+          this.program_counter += 2;
         case 0xea:
           this.program_counter -= 1;
           break; // no op
@@ -307,7 +307,6 @@ module TSOS {
           }
           break;
         default:
-          // uh oh
           break;
       }
     }

@@ -156,13 +156,6 @@ module TSOS {
       );
 
       this.commandList[this.commandList.length] = sc;
-      sc = new ShellCommand(
-        this.shellRunAll,
-        "runall",
-        "execute all cpu programs"
-      );
-
-      this.commandList[this.commandList.length] = sc;
 
       sc = new ShellCommand(
         this.shellRunAll,

@@ -9,11 +9,6 @@ module TSOS {
   export class DeviceDriverKeyboard extends DeviceDriver {
     constructor() {
       // Override the base method pointers.
-
-      // The code below cannot run because "this" can only be
-      // accessed after calling super.
-      // super(this.krnKbdDriverEntry, this.krnKbdDispatchKeyPress);
-      // So instead...
       super();
       this.driverEntry = this.krnKbdDriverEntry;
       this.isr = this.krnKbdDispatchKeyPress;

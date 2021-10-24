@@ -69,8 +69,6 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellRunAll, "runall", "execute all cpu programs");
             this.commandList[this.commandList.length] = sc;
-            sc = new TSOS.ShellCommand(this.shellRunAll, "runall", "execute all cpu programs");
-            this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellPs, "ps", "displays active processes");
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellKill, "kill", "<pid> kill process by pid");

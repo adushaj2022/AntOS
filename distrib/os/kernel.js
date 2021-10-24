@@ -62,10 +62,10 @@ var TSOS;
         }
         krnOnCPUClockPulse() {
             /* This gets called from the host hardware simulation every time there is a hardware clock pulse.
-                     This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
-                     This, on the other hand, is the clock pulse from the hardware / VM / host that tells the kernel
-                     that it has to look for interrupts and process them if it finds any.
-                  */
+               This is NOT the same as a TIMER, which causes an interrupt and is handled like other interrupts.
+               This, on the other hand, is the clock pulse from the hardware / VM / host that tells the kernel
+               that it has to look for interrupts and process them if it finds any.
+            */
             // Check for an interrupt, if there are any. Page 560
             if (_KernelInterruptQueue.getSize() > 0) {
                 // Process the first interrupt on the interrupt queue.
@@ -172,6 +172,7 @@ var TSOS;
             if (typeof partitionId === "boolean") {
                 return "No memory partitons available (call apple)";
             }
+            _Pcb.memoryPartitionId = partitionId;
             _MemoryAccessor.loadMemory(code, partitionId * 256); // load memory
             // Tell Control to update GUI
             TSOS.Control.hostDisplayPcbs(_Pcb);

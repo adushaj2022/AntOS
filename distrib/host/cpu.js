@@ -17,7 +17,7 @@ var TSOS;
         cycle[cycle["fetch"] = 0] = "fetch";
         cycle[cycle["decode"] = 1] = "decode";
         cycle[cycle["execute"] = 2] = "execute";
-    })(cycle || (cycle = {}));
+    })(cycle = TSOS.cycle || (TSOS.cycle = {}));
     class Cpu {
         constructor() {
             this.accumulator = 0; //accumulator initialized to 0
@@ -131,7 +131,7 @@ var TSOS;
                     this.memory.setLowOrderByte(this.lob);
                     this.address = this.memory.convert_to_li_format();
                     this.set_y_register(this.memory.readIntermediate(this.address + 256 * _CurrentPartition));
-                    this.program_counter += 2; // this seems to be one step behind, increment 2
+                    this.program_counter += 2;
                 case 0xea:
                     this.program_counter -= 1;
                     break; // no op
@@ -250,7 +250,6 @@ var TSOS;
                     }
                     break;
                 default:
-                    // uh oh
                     break;
             }
         }
