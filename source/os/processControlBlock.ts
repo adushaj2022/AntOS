@@ -19,7 +19,9 @@ module TSOS {
     activeAddress: number = 0;
     printString: boolean = false;
     printNumber: boolean = false;
-    stringCounter: boolean = false;
+    stringCounter: number = 0;
+    address: number = 0;
+    lob: number = 0;
     public constructor() {}
   }
 }

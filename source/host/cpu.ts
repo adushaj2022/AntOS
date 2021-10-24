@@ -176,14 +176,16 @@ module TSOS {
           this.program_counter -= 1;
           break; // no op
         case 0x00:
-          this.isExecuting = false;
-          _Pcb.iRegister = this.insuction_register;
-          _Pcb.xRegister = this.x_register;
-          _Pcb.yRegister = this.y_register;
-          _Pcb.zRegister = this.zFlag;
-          _Pcb.programCounter = this.program_counter;
-          _Pcb.state = "terminated";
-          Control.hostDisplayPcbs(_Pcb);
+          if (!RoundRobinScheduler.isActivated) {
+            this.isExecuting = false;
+          }
+          // _Pcb.iRegister = this.insuction_register;
+          // _Pcb.xRegister = this.x_register;
+          // _Pcb.yRegister = this.y_register;
+          // _Pcb.zRegister = this.zFlag;
+          // _Pcb.programCounter = this.program_counter;
+          // _Pcb.state = "terminated";
+          // Control.hostDisplayPcbs(_Pcb);
           _OsShell.handleInput("", true, _OsShell.shellMessage);
           break;
 
@@ -313,12 +315,12 @@ module TSOS {
 
     public program_log(): void {
       //log to see the current cpu state
-      _Pcb.iRegister = this.insuction_register;
-      _Pcb.programCounter = this.program_counter;
-      _Pcb.xRegister = this.x_register;
-      _Pcb.yRegister = this.y_register;
-      _Pcb.zRegister = this.zFlag;
-      Control.hostDisplayPcbs(_Pcb);
+      // _Pcb.iRegister = this.insuction_register;
+      // _Pcb.programCounter = this.program_counter;
+      // _Pcb.xRegister = this.x_register;
+      // _Pcb.yRegister = this.y_register;
+      // _Pcb.zRegister = this.zFlag;
+      // Control.hostDisplayPcbs(_Pcb);
       Control.hostDisplayCpu(this);
       Control.hostDisplayMemory(this.memory.memory.mainMemory);
     }

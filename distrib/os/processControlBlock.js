@@ -20,7 +20,9 @@ var TSOS;
             this.activeAddress = 0;
             this.printString = false;
             this.printNumber = false;
-            this.stringCounter = false;
+            this.stringCounter = 0;
+            this.address = 0;
+            this.lob = 0;
         }
     }
     TSOS.ProcessControlBlock = ProcessControlBlock;

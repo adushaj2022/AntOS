@@ -14,13 +14,19 @@ module TSOS {
         // update cpu here, and perform switch
         let top = _ReadyQueue.dequeue();
         _ReadyQueue.enqueue(top);
+
+        let prev: ProcessControlBlock = top;
+        let next: ProcessControlBlock = _ReadyQueue.peekFirst();
+
+        Context.setPcbInfo(prev);
+        Context.setCpuInfo(next);
       } else {
         this.process = _ReadyQueue.peekFirst();
         if (this.process) {
           _CurrentPartition = this.process.memoryPartitionId;
         }
       }
-      // _CPU.cycle();
+      _CPU.cycle();
       this.count++;
     }
   }
