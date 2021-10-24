@@ -13,7 +13,11 @@ module TSOS {
       if (this.count % _QUANTUM === 0 && this.count !== 0) {
         // update cpu here, and perform switch
         let top: ProcessControlBlock = _ReadyQueue.dequeue();
-        if (top.state !== "terminated") _ReadyQueue.enqueue(top);
+        if (top.state !== "terminated") {
+          _ReadyQueue.enqueue(top);
+        } else {
+          Control.hostDisplayPcbs(top);
+        }
 
         let prev: ProcessControlBlock = top;
         let next: ProcessControlBlock = _ReadyQueue.peekFirst();

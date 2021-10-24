@@ -19,6 +19,9 @@ var TSOS;
         }
         usePartition(pcb) {
             let p = this.getFirstAvailablePartition();
+            if (!p) {
+                return false;
+            }
             p.process = pcb;
             return p.id;
         }

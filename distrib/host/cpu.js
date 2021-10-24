@@ -136,25 +136,22 @@ var TSOS;
                     this.program_counter -= 1;
                     break; // no op
                 case 0x00:
+                    // End of a program
                     if (!TSOS.RoundRobinScheduler.isActivated) {
                         this.isExecuting = false;
                     }
                     else {
+                        // if all processes are terminated, lets stop executing
                         TSOS.Context.processMap.get(_CurrentPcbId).state = "terminated";
                         if (TSOS.Context.allTerminated()) {
                             this.isExecuting = false;
+                            TSOS.RoundRobinScheduler.isActivated = false;
+                            // lets update our GUI
                             _OsShell.handleInput("", true, () => _Console.putText("ALL programs completed"));
+                            this.program_log("terminated");
                             return;
                         }
                     }
-                    // _Pcb.iRegister = this.insuction_register;
-                    // _Pcb.xRegister = this.x_register;
-                    // _Pcb.yRegister = this.y_register;
-                    // _Pcb.zRegister = this.zFlag;
-                    // _Pcb.programCounter = this.program_counter;
-                    // _Pcb.state = "terminated";
-                    // Control.hostDisplayPcbs(_Pcb);
-                    console.log(TSOS.Context.processMap);
                     _OsShell.handleInput("", true, _OsShell.shellMessage);
                     break;
                 case 0xec:
@@ -262,14 +259,18 @@ var TSOS;
                     break;
             }
         }
-        program_log() {
-            //log to see the current cpu state
-            // _Pcb.iRegister = this.insuction_register;
-            // _Pcb.programCounter = this.program_counter;
-            // _Pcb.xRegister = this.x_register;
-            // _Pcb.yRegister = this.y_register;
-            // _Pcb.zRegister = this.zFlag;
-            // Control.hostDisplayPcbs(_Pcb);
+        // log to see the current cpu state
+        program_log(pcbState = null) {
+            // lets make a copy of our PCB, we dont want a global object or a reference to a pcb, this causes trouble
+            let _displayPcb = {
+                iRegister: this.insuction_register,
+                xRegister: this.x_register,
+                yRegister: this.y_register,
+                pid: _CurrentPcbId,
+                programCounter: this.program_counter,
+                state: pcbState !== null && pcbState !== void 0 ? pcbState : "running",
+            };
+            TSOS.Control.hostDisplayPcbs(_displayPcb);
             TSOS.Control.hostDisplayCpu(this);
             TSOS.Control.hostDisplayMemory(this.memory.memory.mainMemory);
         }

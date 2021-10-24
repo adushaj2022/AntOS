@@ -165,19 +165,19 @@ var TSOS;
             _OsShell.shellBSOD(msg);
         }
         krnLoadMemory(code) {
-            _Pcb = new TSOS.ProcessControlBlock(); // create pcb
-            _Pcb.pid = _ResidentList.getSize();
-            _ResidentList.enqueue(_Pcb); // add to resident queue
-            let partitionId = _MemoryManager.usePartition(_Pcb);
+            let p = new TSOS.ProcessControlBlock(); // create pcb
+            p.pid = _ResidentList.getSize();
+            _ResidentList.enqueue(p); // add to resident queue
+            let partitionId = _MemoryManager.usePartition(p);
             if (typeof partitionId === "boolean") {
                 return "No memory partitons available (call apple)";
             }
-            _Pcb.memoryPartitionId = partitionId;
+            p.memoryPartitionId = partitionId;
             _MemoryAccessor.loadMemory(code, partitionId * 256); // load memory
             // Tell Control to update GUI
-            TSOS.Control.hostDisplayPcbs(_Pcb);
+            TSOS.Control.hostDisplayPcbs(p);
             TSOS.Control.hostDisplayMemory(_MemoryAccessor.memory.mainMemory);
-            return `PCB created - pid - ${_Pcb.pid}`;
+            return `PCB created - pid - ${p.pid}`;
         }
         krnClearMemory() {
             _MemoryManager.setPartitions(); // reset partitons

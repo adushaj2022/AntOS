@@ -11,8 +11,12 @@ var TSOS;
             if (this.count % _QUANTUM === 0 && this.count !== 0) {
                 // update cpu here, and perform switch
                 let top = _ReadyQueue.dequeue();
-                if (top.state !== "terminated")
+                if (top.state !== "terminated") {
                     _ReadyQueue.enqueue(top);
+                }
+                else {
+                    TSOS.Control.hostDisplayPcbs(top);
+                }
                 let prev = top;
                 let next = _ReadyQueue.peekFirst();
                 this.process = next;

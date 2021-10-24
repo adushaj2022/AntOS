@@ -28,6 +28,9 @@ module TSOS {
 
     public usePartition(pcb: ProcessControlBlock): boolean | number {
       let p = this.getFirstAvailablePartition() as any;
+      if (!p) {
+        return false;
+      }
       p.process = pcb;
       return p.id;
     }

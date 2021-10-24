@@ -420,9 +420,11 @@ var TSOS;
                 if (pcb.pid === Number(arg)) {
                     _CPU.resetRegisters();
                     _CPU.isExecuting = true; // set this to true, time to run program
-                    _Pcb = pcb; // set global Pcb to current one being ran, we will access this from cpu
-                    _Pcb.state = "running";
-                    _ReadyQueue.enqueue(_Pcb); // move to ready queue since we are now running
+                    // _Pcb = pcb; // set global Pcb to current one being ran, we will access this from cpu
+                    pcb.state = "running";
+                    _CurrentPcbId = pcb.pid;
+                    TSOS.Control.hostDisplayPcbs(pcb);
+                    _ReadyQueue.enqueue(pcb); // move to ready queue since we are now running
                     for (let partition of _MemoryManager.partitions) {
                         if (((_a = partition.process) === null || _a === void 0 ? void 0 : _a.pid) === pcb.pid) {
                             _CurrentPartition = partition.id;
@@ -430,7 +432,6 @@ var TSOS;
                     }
                 }
             }
-            TSOS.Control.hostDisplayPcbs(_Pcb);
             // pcb doesnt exist
             if (!_CPU.isExecuting) {
                 _StdOut.putText("No pid found");
@@ -446,6 +447,9 @@ var TSOS;
             }
             _ReadyQueue.q = [..._ResidentList.q]; // move from resident list to ready queue
             _ResidentList.q.length = 0; // empty resident list
+            for (let pcb of _ResidentList.q) {
+                pcb.state = "running";
+            }
             _CPU.isExecuting = true;
             TSOS.RoundRobinScheduler.isActivated = true;
         }

@@ -17,7 +17,7 @@ const APP_NAME: string = "AntOS"; // 'cause Bob and I were at a loss for a bette
 const APP_VERSION: string = "1.01"; // What did you expect?
 
 let _QUANTUM = 6;
-const CPU_CLOCK_INTERVAL: number = 1; // This is in ms (milliseconds) so 1000 = 1 second.
+const CPU_CLOCK_INTERVAL: number = 50; // This is in ms (milliseconds) so 1000 = 1 second.
 
 const TIMER_IRQ: number = 0; // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
 // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
@@ -58,7 +58,6 @@ var _KernelInputQueue: TSOS.Queue<any> = null;
 var _KernelBuffers = null;
 var _ReadyQueue: TSOS.Queue<TSOS.ProcessControlBlock> | null = null;
 var _ResidentList: TSOS.Queue<TSOS.ProcessControlBlock> | null = null;
-var _Pcb: TSOS.ProcessControlBlock = null;
 // Standard input and output
 var _StdIn: TSOS.Console = null;
 var _StdOut: TSOS.Console = null;
@@ -80,6 +79,15 @@ var Glados: any = null; // This is the function Glados() in glados-ip*.js http:/
 var _GLaDOS: any = null; // If the above is linked in, this is the instantiated instance of Glados.
 
 let _isSingleStep = false;
+
+type DisplayPCB = {
+  pid: number;
+  iRegister: number;
+  xRegister: number;
+  yRegister: number;
+  programCounter: number;
+  state: string;
+};
 
 var onDocumentLoad = function () {
   TSOS.Control.hostInit();

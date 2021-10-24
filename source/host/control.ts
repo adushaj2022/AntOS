@@ -247,7 +247,7 @@ module TSOS {
       }
     }
 
-    public static hostDisplayPcbs(pcb: ProcessControlBlock) {
+    public static hostDisplayPcbs(pcb: DisplayPCB) {
       const pcbTable = document.getElementById("pcbBody");
       const row = document.createElement("tr");
 
