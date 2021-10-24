@@ -17,16 +17,15 @@ module TSOS {
 
         let prev: ProcessControlBlock = top;
         let next: ProcessControlBlock = _ReadyQueue.peekFirst();
+        this.process = next;
 
         Context.setPcbInfo(prev);
         Context.setCpuInfo(next);
       } else {
         this.process = _ReadyQueue.peekFirst();
-        if (this.process) {
-          _CurrentPartition = this.process.memoryPartitionId;
-          _CurrentPcbId = this.process.pid;
-        }
       }
+      _CurrentPcbId = this.process.pid;
+      _CurrentPartition = this.process.memoryPartitionId;
       _CPU.cycle();
       this.count++;
     }

@@ -15,16 +15,15 @@ var TSOS;
                     _ReadyQueue.enqueue(top);
                 let prev = top;
                 let next = _ReadyQueue.peekFirst();
+                this.process = next;
                 TSOS.Context.setPcbInfo(prev);
                 TSOS.Context.setCpuInfo(next);
             }
             else {
                 this.process = _ReadyQueue.peekFirst();
-                if (this.process) {
-                    _CurrentPartition = this.process.memoryPartitionId;
-                    _CurrentPcbId = this.process.pid;
-                }
             }
+            _CurrentPcbId = this.process.pid;
+            _CurrentPartition = this.process.memoryPartitionId;
             _CPU.cycle();
             this.count++;
         }
