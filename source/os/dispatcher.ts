@@ -6,6 +6,10 @@ module TSOS {
     }
 
     static contextSwitch(prev: ProcessControlBlock, next: ProcessControlBlock) {
+      Control.hostLog(
+        `Switching from PID - ${prev.pid} to PID - ${next.pid}`,
+        "Dispatcher"
+      );
       Context.setPcbInfo(prev);
       Context.setCpuInfo(next);
     }

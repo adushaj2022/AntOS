@@ -13,7 +13,7 @@ var TSOS;
                 // update cpu here, and perform switch
                 let top = _ReadyQueue.dequeue();
                 if (top.state !== "terminated") {
-                    _ReadyQueue.enqueue(top);
+                    _ReadyQueue.enqueue(top); // if its terminated we dont want it back in Queue
                 }
                 else {
                     TSOS.Control.hostDisplayPcbs(top);
