@@ -204,7 +204,7 @@ var TSOS;
             if (pcb === null) {
                 return TSOS.Utils.removeAllChildNodes(pcbTable);
             }
-            // we dont want duplicates, and we want to presever order here to
+            // we dont want duplicates, and we want to presever order here too
             const prevRecord = document.getElementById(String(pcb.pid));
             if (prevRecord) {
                 TSOS.Utils.removeAllChildNodes(prevRecord);

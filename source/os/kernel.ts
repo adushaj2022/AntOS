@@ -84,7 +84,7 @@ module TSOS {
       } else if (_CPU.isExecuting && !_isSingleStep) {
         // If there are no interrupts then run one CPU cycle if there is anything being processed.
         if (RoundRobinScheduler.isActivated && _ReadyQueue.getSize() > 1) {
-          RoundRobinScheduler.doCycle();
+          this.krnScheduler();
         } else {
           _CPU.cycle();
         }
@@ -126,6 +126,9 @@ module TSOS {
           _krnKeyboardDriver.isr(params, this.krnTrapError); // Kernel mode device driver
           _StdIn.handleInput();
           break;
+        case SOFTWARE_IRQ:
+          this.krnSoftwareInterrupt();
+          break;
         default:
           this.krnTrapError(
             "Invalid Interrupt Request. irq=" + irq + " params=[" + params + "]"
@@ -137,6 +140,14 @@ module TSOS {
       // The built-in TIMER (not clock) Interrupt Service Routine (as opposed to an ISR coming from a device driver). {
       // Check multiprogramming parameters and enforce quanta here. Call the scheduler / context switch here if necessary.
       // Or do it elsewhere in the Kernel. We don't really need this.
+    }
+
+    public krnScheduler() {
+      RoundRobinScheduler.doCycle();
+    }
+
+    public krnSoftwareInterrupt() {
+      Control.hostLog("Context switch is occuring", "OS");
     }
 
     //

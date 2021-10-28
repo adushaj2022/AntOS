@@ -11,6 +11,7 @@ module TSOS {
      */
     static doCycle() {
       if (this.count % _QUANTUM === 0 && this.count !== 0) {
+        Dispatcher.generateSoftwareInterrupt(); // generate interrupt
         // update cpu here, and perform switch
         let top: ProcessControlBlock = _ReadyQueue.dequeue();
         if (top.state !== "terminated") {

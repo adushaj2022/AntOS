@@ -18,6 +18,7 @@ const CPU_CLOCK_INTERVAL = 50; // This is in ms (milliseconds) so 1000 = 1 secon
 const TIMER_IRQ = 0; // Pages 23 (timer), 9 (interrupts), and 561 (interrupt priority).
 // NOTE: The timer is different from hardware/host clock pulses. Don't confuse these.
 const KEYBOARD_IRQ = 1;
+const SOFTWARE_IRQ = 2;
 const PARTITION_SIZE = 255;
 //
 // Global Variables
