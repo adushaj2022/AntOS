@@ -25,7 +25,14 @@ var TSOS;
             p.process = pcb;
             return p.id;
         }
-        addToAvailablePartitions() { }
+        addToAvailablePartitions(givenPid) {
+            this.partitions = this.partitions.map((pt) => {
+                if (pt.id === givenPid) {
+                    pt.process = null;
+                }
+                return pt;
+            });
+        }
         getFirstAvailablePartition() {
             this.partitions.sort((a, b) => a.id - b.id);
             for (let p of this.partitions) {

@@ -35,7 +35,14 @@ module TSOS {
       return p.id;
     }
 
-    public addToAvailablePartitions() {}
+    public addToAvailablePartitions(givenPid: number) {
+      this.partitions = this.partitions.map((pt) => {
+        if (pt.id === givenPid) {
+          pt.process = null;
+        }
+        return pt;
+      });
+    }
 
     public getFirstAvailablePartition(): boolean | TPartition {
       this.partitions.sort((a, b) => a.id - b.id);

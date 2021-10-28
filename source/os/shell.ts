@@ -580,6 +580,10 @@ module TSOS {
               _CurrentPartition = partition.id;
             }
           }
+          // move out of resident list
+          _ResidentList.q = _ResidentList.q.filter(
+            (prcb) => prcb.pid !== Number(arg)
+          );
         }
       }
 
@@ -627,15 +631,27 @@ module TSOS {
       if (typeof pid !== "number") {
         _StdOut.putText("Please enter a valid process id");
       } else {
-        /**
-         * ask: What do we do here, do we remove that space in memory ? remove it from ready queue and pcb ?
-         *  If the program is running we may also have to reset program counter
-         */
+        // if only one program is running, stop cpu
+        if (_CurrentPcbId === pid && !RoundRobinScheduler.isActivated) {
+          _CPU.isExecuting = false;
+        } else if (RoundRobinScheduler.isActivated) {
+          Context.processMap.get(_CurrentPcbId).state = "terminated";
+        }
+        _CPU.program_log("terminated");
+
+        for (let process of _ReadyQueue.q) {
+          if (process.pid === pid) {
+            _MemoryManager.addToAvailablePartitions(process.memoryPartitionId);
+          }
+        }
+
+        // take out of ready queue
+        _ReadyQueue.q = _ReadyQueue.q.filter((pcb) => pcb.pid !== pid);
       }
     }
 
     public shellKillAll(args: string[]) {
-      _Kernel.krnClearMemory(); // ask: is this ok ?
+      _Kernel.krnClearMemory();
       _StdOut.putText("All processes killed ");
     }
 
