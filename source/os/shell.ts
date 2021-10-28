@@ -644,8 +644,12 @@ module TSOS {
       if (typeof q !== "number") {
         _StdOut.putText("Please pass a number");
       } else {
-        _StdOut.putText(`Quantum set to ${q}`);
-        _QUANTUM = q;
+        if (q <= 0) {
+          _StdOut.lwPutText("Quantum must be greater than 0, sorry");
+        } else {
+          _StdOut.putText(`Quantum set to ${q}`);
+          _QUANTUM = q;
+        }
       }
     }
   }
