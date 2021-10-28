@@ -11,13 +11,13 @@ module TSOS {
     }
 
     public writeIntermediate(address: number, data: number): void {
-      this.memory.setMAR(address);
+      this.memory.setMAR(address + 256 * _CurrentPartition);
       this.memory.setMDR(data);
       this.memory.write(); //set the MAR and MDR, then we can write to Memory
     }
 
     public readIntermediate(address: number): number {
-      this.setMAR(address);
+      this.setMAR(address + 256 * _CurrentPartition);
       return this.memory.read(); //accepts an address and gives us the data there
     }
 

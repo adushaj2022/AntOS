@@ -29,9 +29,10 @@ const PARTITION_SIZE = 255;
 // TODO: Make a global object and use that instead of the "_" naming convention in the global namespace.
 //
 
+let _PCB_ID_COUNT = 0;
 let _CurrentPcbId = 0;
 // when a user hits run pid, we need to know which memory partition is being used
-let _CurrentPartition = -1;
+let _CurrentPartition = 0;
 
 var _CPU: TSOS.Cpu; // Utilize TypeScript's type annotation system to ensure that _CPU is an instance of the Cpu class.
 

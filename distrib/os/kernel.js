@@ -175,7 +175,7 @@ var TSOS;
         }
         krnLoadMemory(code) {
             let p = new TSOS.ProcessControlBlock(); // create pcb
-            p.pid = _ResidentList.getSize();
+            p.pid = _PCB_ID_COUNT++;
             _ResidentList.enqueue(p); // add to resident queue
             let partitionId = _MemoryManager.usePartition(p);
             if (typeof partitionId === "boolean") {
@@ -194,6 +194,7 @@ var TSOS;
             _CPU.resetRegisters();
             _ReadyQueue.q.length = 0; // remove from all pcbs from queue
             _ResidentList.q.length = 0;
+            _CurrentPartition = 0;
             TSOS.Control.hostDisplayMemory(_MemoryAccessor.memory.mainMemory); // update gui
             TSOS.Control.hostDisplayPcbs(null); // update gui
             TSOS.Control.hostDisplayCpu(_CPU);

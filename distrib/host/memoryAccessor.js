@@ -8,12 +8,12 @@ var TSOS;
             this.memory = memory;
         }
         writeIntermediate(address, data) {
-            this.memory.setMAR(address);
+            this.memory.setMAR(address + 256 * _CurrentPartition);
             this.memory.setMDR(data);
             this.memory.write(); //set the MAR and MDR, then we can write to Memory
         }
         readIntermediate(address) {
-            this.setMAR(address);
+            this.setMAR(address + 256 * _CurrentPartition);
             return this.memory.read(); //accepts an address and gives us the data there
         }
         //Helper / Util method

@@ -75,27 +75,27 @@ var TSOS;
             return this.x_register;
         }
         fetch() {
-            let instruction = this.memory.readIntermediate(this.program_counter + 256 * _CurrentPartition);
+            let instruction = this.memory.readIntermediate(this.program_counter);
             this.setInsctrutionRegister(instruction);
             this.program_counter += 1;
         }
         decode() {
             let curr_instr = this.getInstructionRegister();
-            let value = this.memory.readIntermediate(this.program_counter + 256 * _CurrentPartition);
+            let value = this.memory.readIntermediate(this.program_counter);
             switch (curr_instr) {
                 case 0xa9:
                     this.setAccumulator(value);
                     break;
                 case 0xad:
-                    this.lob = this.memory.readIntermediate(this.program_counter + 1 + 256 * _CurrentPartition);
+                    this.lob = this.memory.readIntermediate(this.program_counter + 1);
                     this.memory.setHighOrderByte(value);
                     this.memory.setLowOrderByte(this.lob);
                     this.address = this.memory.convert_to_li_format();
-                    this.setAccumulator(this.memory.readIntermediate(this.address + 256 * _CurrentPartition));
+                    this.setAccumulator(this.memory.readIntermediate(this.address));
                     this.program_counter += 1;
                     break;
                 case 0x8d:
-                    this.lob = this.memory.readIntermediate(this.program_counter + 1 + 256 * _CurrentPartition);
+                    this.lob = this.memory.readIntermediate(this.program_counter + 1);
                     this.memory.setHighOrderByte(value);
                     this.memory.setLowOrderByte(this.lob);
                     this.address = this.memory.convert_to_li_format();
@@ -103,34 +103,33 @@ var TSOS;
                     break;
                 // we store the value in memory when we execute
                 case 0x6d:
-                    this.lob = this.memory.readIntermediate(this.program_counter + 1 + 256 * _CurrentPartition);
+                    this.lob = this.memory.readIntermediate(this.program_counter + 1);
                     this.memory.setHighOrderByte(value);
                     this.memory.setLowOrderByte(this.lob);
                     this.address = this.memory.convert_to_li_format();
-                    this.setAccumulator(this.getAccumulator() +
-                        this.memory.readIntermediate(this.address + 256 * _CurrentPartition));
+                    this.setAccumulator(this.getAccumulator() + this.memory.readIntermediate(this.address));
                     this.program_counter += 1;
                     break;
                 case 0xa2:
                     this.set_x_register(value);
                     break;
                 case 0xae:
-                    this.lob = this.memory.readIntermediate(this.program_counter + 1 + 256 * _CurrentPartition);
+                    this.lob = this.memory.readIntermediate(this.program_counter + 1);
                     this.memory.setHighOrderByte(value);
                     this.memory.setLowOrderByte(this.lob);
                     this.address = this.memory.convert_to_li_format();
-                    this.set_x_register(this.memory.readIntermediate(this.address + 256 * _CurrentPartition));
+                    this.set_x_register(this.memory.readIntermediate(this.address));
                     this.program_counter += 1;
                     break;
                 case 0xa0:
                     this.set_y_register(value);
                     break;
                 case 0xac:
-                    this.lob = this.memory.readIntermediate(this.program_counter + 1 + 256 * _CurrentPartition);
+                    this.lob = this.memory.readIntermediate(this.program_counter + 1);
                     this.memory.setHighOrderByte(value);
                     this.memory.setLowOrderByte(this.lob);
                     this.address = this.memory.convert_to_li_format();
-                    this.set_y_register(this.memory.readIntermediate(this.address + 256 * _CurrentPartition));
+                    this.set_y_register(this.memory.readIntermediate(this.address));
                     this.program_counter += 2;
                 case 0xea:
                     this.program_counter -= 1;
@@ -139,6 +138,7 @@ var TSOS;
                     // End of a program
                     if (!TSOS.RoundRobinScheduler.isActivated) {
                         this.isExecuting = false;
+                        this.program_log("terminated");
                     }
                     else {
                         // if all processes are terminated, lets stop executing
@@ -155,11 +155,11 @@ var TSOS;
                     _OsShell.handleInput("", true, _OsShell.shellMessage);
                     break;
                 case 0xec:
-                    this.lob = this.memory.readIntermediate(this.program_counter + 1 + 256 * _CurrentPartition);
+                    this.lob = this.memory.readIntermediate(this.program_counter + 1);
                     this.memory.setHighOrderByte(value);
                     this.memory.setLowOrderByte(this.lob);
                     this.address = this.memory.convert_to_li_format();
-                    let currValue = this.memory.readIntermediate(this.address + 256 * _CurrentPartition);
+                    let currValue = this.memory.readIntermediate(this.address);
                     if (currValue === this.get_x_register()) {
                         this.zFlag = 1;
                     }
@@ -181,7 +181,7 @@ var TSOS;
                     }
                     break;
                 case 0xee:
-                    this.lob = this.memory.readIntermediate(this.program_counter + 1 + 256 * _CurrentPartition);
+                    this.lob = this.memory.readIntermediate(this.program_counter + 1);
                     this.memory.setHighOrderByte(value);
                     this.memory.setLowOrderByte(this.lob);
                     this.address = this.memory.convert_to_li_format();
@@ -209,12 +209,11 @@ var TSOS;
             switch (curr_instr) {
                 case 0x8d:
                     val = this.getAccumulator();
-                    this.memory.writeIntermediate(this.address + 256 * _CurrentPartition, val);
+                    this.memory.writeIntermediate(this.address, val);
                     break;
                 case 0xee:
-                    val =
-                        this.memory.readIntermediate(this.address + 256 * _CurrentPartition) + 1;
-                    this.memory.writeIntermediate(this.address + 256 * _CurrentPartition, val);
+                    val = this.memory.readIntermediate(this.address) + 1;
+                    this.memory.writeIntermediate(this.address, val);
                     break;
                 case 0xff:
                     if (this.printNumber) {
@@ -222,7 +221,7 @@ var TSOS;
                         this.printNumber = false;
                     }
                     else if (this.printString) {
-                        let num = this.memory.readIntermediate(this.stringCounter + 256 * _CurrentPartition);
+                        let num = this.memory.readIntermediate(this.stringCounter);
                         if (num === 0x00) {
                             this.printString = false;
                         }

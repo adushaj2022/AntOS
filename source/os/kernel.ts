@@ -194,7 +194,7 @@ module TSOS {
 
     public krnLoadMemory(code: number[]): string {
       let p = new ProcessControlBlock(); // create pcb
-      p.pid = _ResidentList.getSize();
+      p.pid = _PCB_ID_COUNT++;
       _ResidentList.enqueue(p); // add to resident queue
 
       let partitionId = _MemoryManager.usePartition(p);
@@ -218,6 +218,7 @@ module TSOS {
       _CPU.resetRegisters();
       _ReadyQueue.q.length = 0; // remove from all pcbs from queue
       _ResidentList.q.length = 0;
+      _CurrentPartition = 0;
       Control.hostDisplayMemory(_MemoryAccessor.memory.mainMemory); // update gui
       Control.hostDisplayPcbs(null); // update gui
       Control.hostDisplayCpu(_CPU);
