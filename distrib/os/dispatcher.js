@@ -5,6 +5,10 @@ var TSOS;
             const interrupt = new TSOS.Interrupt(SOFTWARE_IRQ, []);
             _KernelInterruptQueue.enqueue(interrupt);
         }
+        static contextSwitch(prev, next) {
+            TSOS.Context.setPcbInfo(prev);
+            TSOS.Context.setCpuInfo(next);
+        }
     }
     TSOS.Dispatcher = Dispatcher;
 })(TSOS || (TSOS = {}));

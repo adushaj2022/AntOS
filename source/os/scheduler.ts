@@ -15,7 +15,7 @@ module TSOS {
         // update cpu here, and perform switch
         let top: ProcessControlBlock = _ReadyQueue.dequeue();
         if (top.state !== "terminated") {
-          _ReadyQueue.enqueue(top);
+          _ReadyQueue.enqueue(top); // if its terminated we dont want it back in Queue
         } else {
           Control.hostDisplayPcbs(top);
         }
@@ -24,8 +24,7 @@ module TSOS {
         let next: ProcessControlBlock = _ReadyQueue.peekFirst();
         this.process = next;
 
-        Context.setPcbInfo(prev);
-        Context.setCpuInfo(next);
+        Dispatcher.contextSwitch(prev, next);
       } else {
         this.process = _ReadyQueue.peekFirst();
       }

@@ -21,8 +21,7 @@ var TSOS;
                 let prev = top;
                 let next = _ReadyQueue.peekFirst();
                 this.process = next;
-                TSOS.Context.setPcbInfo(prev);
-                TSOS.Context.setCpuInfo(next);
+                TSOS.Dispatcher.contextSwitch(prev, next);
             }
             else {
                 this.process = _ReadyQueue.peekFirst();
