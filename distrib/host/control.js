@@ -188,6 +188,9 @@ var TSOS;
                 tds.push(td);
                 // split table rows by 8
                 if ((i + 1) % 8 === 0 && i !== 0) {
+                    const pre = document.createElement("td");
+                    pre.innerHTML = `<strong>0x${TSOS.Utils.showHexValue(i + 1)}</strong>`;
+                    row.insertAdjacentElement("afterbegin", pre);
                     for (let td of tds) {
                         row.insertAdjacentElement("beforeend", td);
                     }
