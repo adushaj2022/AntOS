@@ -74,6 +74,8 @@ var _SarcasticMode: boolean = false;
 // Global Device Driver Objects - page 12
 var _krnKeyboardDriver: TSOS.DeviceDriverKeyboard = null;
 
+let _Disk: TSOS.DeviceDisk = null;
+
 var _hardwareClockID: number = null;
 
 // For testing (and enrichment)...
@@ -89,6 +91,12 @@ type DisplayPCB = {
   yRegister: number;
   programCounter: number;
   state: string;
+};
+
+type DiskDataEntry = {
+  bit: 0 | 1 | "0" | "1";
+  chain: string;
+  encoded: Array<string>;
 };
 
 var onDocumentLoad = function () {
