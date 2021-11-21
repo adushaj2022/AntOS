@@ -616,10 +616,8 @@ module TSOS {
     public shellPs(args: string[]) {
       let found = false;
       for (let process of _ReadyQueue.q) {
-        if (process.state === "running") {
-          _StdOut.lwPutText(JSON.stringify(process));
-          found = true;
-        }
+        _StdOut.lwPutText(JSON.stringify(process));
+        found = true;
       }
       if (!found) {
         _StdOut.putText("No running processes, sorry");
