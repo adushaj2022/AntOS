@@ -198,6 +198,13 @@ module TSOS {
       sc = new ShellCommand(this.ls, "ls", "list out files");
       this.commandList[this.commandList.length] = sc;
 
+      sc = new ShellCommand(
+        this.writeToFile,
+        "write",
+        "write to a given file."
+      );
+      this.commandList[this.commandList.length] = sc;
+
       // Display the initial prompt.
       this.putPrompt();
     }
@@ -716,6 +723,15 @@ module TSOS {
         _StdOut.putText(file);
         _StdOut.advanceLine();
       }
+    }
+
+    public writeToFile(args: string[]) {
+      let file_name = args[0];
+      args.shift();
+      let content = args.join(" ");
+      let message = _Disk.echo(file_name, content);
+      _StdOut.putText(message);
+      Control.hostDisplayDisk();
     }
   }
 }

@@ -83,6 +83,8 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.ls, "ls", "list out files");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.writeToFile, "write", "write to a given file.");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -546,6 +548,14 @@ var TSOS;
                 _StdOut.putText(file);
                 _StdOut.advanceLine();
             }
+        }
+        writeToFile(args) {
+            let file_name = args[0];
+            args.shift();
+            let content = args.join(" ");
+            let message = _Disk.echo(file_name, content);
+            _StdOut.putText(message);
+            TSOS.Control.hostDisplayDisk();
         }
     }
     TSOS.Shell = Shell;

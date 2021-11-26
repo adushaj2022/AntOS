@@ -46,7 +46,7 @@ var TSOS;
             // parse our json object
             let newSlot = JSON.parse(sessionStorage.getItem(available));
             // putting our ascii numbers, then filling the rest of the array with 0s
-            newSlot.encoded = this.encodeData(encoded_file_name, newSlot.encoded);
+            newSlot.encoded = this.setSlotData(encoded_file_name, newSlot.encoded);
             newSlot.bit = 1; // now in use
             newSlot.chain = this.getFirstSlot([this.DIRECTORY_LIMIT, this.KEY_SIZE]); // point to first available data slot
             // no data slots available
@@ -98,18 +98,34 @@ var TSOS;
             }
             return res;
         }
+        echo(file_name, content) {
+            let key = this.doesFileExist(file_name);
+            if (!key) {
+                return `file '${file_name}' does not exist'`;
+            }
+            // given string to ascii numbers
+            const encodedContent = this.encodeHex(content);
+            // directory slot
+            let dirSlot = JSON.parse(sessionStorage.getItem(key));
+            // data slot, we must write to this one, acquire by the dir slots chain
+            let dataSlot = JSON.parse(sessionStorage.getItem(dirSlot.chain));
+            dataSlot.encoded = this.setSlotData(encodedContent, dataSlot.encoded);
+            // set data slot with encoded characcters
+            sessionStorage.setItem(dirSlot.chain, JSON.stringify(dataSlot));
+            return "data written to file successfully";
+        }
+        // false if does not exist, return key if exists
         doesFileExist(file_name) {
             let ans = false;
             Object.entries(sessionStorage)
                 .sort()
                 .slice(0, this.DIRECTORY_LIMIT) // only directory data
                 .filter(([_, val]) => JSON.parse(val).bit === 1) // filter out ones that arent used
-                .forEach(([_, value]) => {
+                .forEach(([key, value]) => {
                 // look for the same name given
                 let serialized = JSON.parse(value);
-                console.log(this.decodeData(serialized.encoded));
                 if (this.decodeData(serialized.encoded) === file_name) {
-                    ans = true;
+                    ans = key;
                 }
             });
             return ans;
@@ -131,7 +147,10 @@ var TSOS;
             }
             return result;
         }
-        encodeData(newData, oldData) {
+        /*
+          encoded will be a string of 0s, we want to add our now data in, and fill in any remainingg 0s with this method
+        */
+        setSlotData(newData, oldData) {
             let n = newData.length;
             return newData.concat(oldData.splice(n, this.ENCODED_DATA_LENGTH));
         }

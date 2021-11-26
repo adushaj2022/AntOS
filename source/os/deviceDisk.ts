@@ -49,7 +49,7 @@ module TSOS {
       let newSlot = JSON.parse(sessionStorage.getItem(available as string));
 
       // putting our ascii numbers, then filling the rest of the array with 0s
-      newSlot.encoded = this.encodeData(encoded_file_name, newSlot.encoded);
+      newSlot.encoded = this.setSlotData(encoded_file_name, newSlot.encoded);
 
       newSlot.bit = 1; // now in use
       newSlot.chain = this.getFirstSlot([this.DIRECTORY_LIMIT, this.KEY_SIZE]); // point to first available data slot
@@ -113,18 +113,39 @@ module TSOS {
       return res;
     }
 
-    public doesFileExist(file_name: string): boolean {
-      let ans = false;
+    public echo(file_name: string, content: string): string {
+      let key = this.doesFileExist(file_name);
+      if (!key) {
+        return `file '${file_name}' does not exist'`;
+      }
+
+      // given string to ascii numbers
+      const encodedContent = this.encodeHex(content);
+
+      // directory slot
+      let dirSlot = JSON.parse(sessionStorage.getItem(key as string));
+      // data slot, we must write to this one, acquire by the dir slots chain
+      let dataSlot = JSON.parse(sessionStorage.getItem(dirSlot.chain));
+
+      dataSlot.encoded = this.setSlotData(encodedContent, dataSlot.encoded);
+
+      // set data slot with encoded characcters
+      sessionStorage.setItem(dirSlot.chain as string, JSON.stringify(dataSlot));
+      return "data written to file successfully";
+    }
+
+    // false if does not exist, return key if exists
+    public doesFileExist(file_name: string): boolean | string {
+      let ans: string | boolean = false;
       Object.entries(sessionStorage)
         .sort()
         .slice(0, this.DIRECTORY_LIMIT) // only directory data
         .filter(([_, val]) => JSON.parse(val).bit === 1) // filter out ones that arent used
-        .forEach(([_, value]) => {
+        .forEach(([key, value]) => {
           // look for the same name given
           let serialized = JSON.parse(value);
-          console.log(this.decodeData(serialized.encoded));
           if (this.decodeData(serialized.encoded) === file_name) {
-            ans = true;
+            ans = key;
           }
         });
       return ans;
@@ -150,7 +171,10 @@ module TSOS {
       return result;
     }
 
-    public encodeData(
+    /*
+      encoded will be a string of 0s, we want to add our now data in, and fill in any remainingg 0s with this method
+    */
+    public setSlotData(
       newData: Array<string>,
       oldData: Array<string>
     ): Array<string> {
