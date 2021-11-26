@@ -189,6 +189,9 @@ module TSOS {
 
       this.commandList[this.commandList.length] = sc;
 
+      sc = new ShellCommand(this.createFile, "create", "<name> create a file");
+      this.commandList[this.commandList.length] = sc;
+
       // Display the initial prompt.
       this.putPrompt();
     }
@@ -664,6 +667,24 @@ module TSOS {
           _StdOut.putText(`Quantum set to ${q}`);
           _QUANTUM = q;
         }
+      }
+    }
+
+    public createFile(args: string[]) {
+      let file_name = args.join(" ");
+      // simple regex for checking if we only have english letters
+      if (!/^[a-zA-Z]+$/.test(file_name)) {
+        return _StdOut.lwPutText(
+          "file name must be comprised of only english letters"
+        );
+      }
+
+      if (_Disk.touch(file_name)) {
+        _StdOut.putText("file created");
+      } else {
+        _StdOut.lwPutText(
+          "something went wrong, there is no space left for a new file"
+        );
       }
     }
   }
