@@ -195,6 +195,9 @@ module TSOS {
       sc = new ShellCommand(this.createFile, "create", "<name> create a file");
       this.commandList[this.commandList.length] = sc;
 
+      sc = new ShellCommand(this.ls, "ls", "list out files");
+      this.commandList[this.commandList.length] = sc;
+
       // Display the initial prompt.
       this.putPrompt();
     }
@@ -707,6 +710,14 @@ module TSOS {
 
       // update gui
       Control.hostDisplayDisk();
+    }
+
+    public ls(args: string[]) {
+      let files = _Disk.ls();
+      for (let file of files) {
+        _StdOut.putText(file);
+        _StdOut.advanceLine();
+      }
     }
   }
 }

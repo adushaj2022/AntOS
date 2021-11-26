@@ -81,6 +81,20 @@ var TSOS;
             }
             return false;
         }
+        ls() {
+            let res = [];
+            let sessionKeys = Object.keys(sessionStorage)
+                .sort()
+                .slice(0, this.DIRECTORY_LIMIT);
+            for (let key of sessionKeys) {
+                let val = sessionStorage.getItem(key);
+                let serialized = JSON.parse(val);
+                if (serialized.bit === 1) {
+                    res.push(this.decodeData(serialized.encoded));
+                }
+            }
+            return res;
+        }
         updateToInUse(key) {
             let dataPointerObj = sessionStorage.getItem(key);
             dataPointerObj = JSON.parse(dataPointerObj);
@@ -101,6 +115,15 @@ var TSOS;
         encodeData(newData, oldData) {
             let n = newData.length;
             return newData.concat(oldData.splice(n, this.ENCODED_DATA_LENGTH));
+        }
+        decodeData(encodedData) {
+            let ans = "";
+            let i = 0;
+            while (encodedData[i] !== "00") {
+                ans += String.fromCharCode(parseInt(encodedData[i], 16));
+                i++;
+            }
+            return ans;
         }
     }
     TSOS.DeviceDisk = DeviceDisk;
