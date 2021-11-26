@@ -37,17 +37,19 @@ var TSOS;
                 return false;
             }
             // encode file name, in our available slot
-            let encoded_file_name = this.encodeHex(file_name), n = encoded_file_name.length;
+            let encoded_file_name = this.encodeHex(file_name);
             // parse our json object
             let newSlot = JSON.parse(sessionStorage.getItem(available));
             // putting our ascii numbers, then filling the rest of the array with 0s
-            newSlot.encoded = encoded_file_name.concat(newSlot.encoded.splice(n, this.ENCODED_DATA_LENGTH));
+            newSlot.encoded = this.encodeData(encoded_file_name, newSlot.encoded);
             newSlot.bit = 1; // now in use
             newSlot.chain = this.getFirstSlot([this.DIRECTORY_LIMIT, this.KEY_SIZE]); // point to first available data slot
             // no data slots available
             if (newSlot.chain === false) {
                 return false;
             }
+            // update our chain to in use
+            this.updateToInUse(newSlot.chain);
             // set our updated object
             sessionStorage.setItem(available, JSON.stringify(newSlot));
             return true;
@@ -77,6 +79,12 @@ var TSOS;
             }
             return false;
         }
+        updateToInUse(key) {
+            let dataPointerObj = sessionStorage.getItem(key);
+            dataPointerObj = JSON.parse(dataPointerObj);
+            dataPointerObj.bit = 1;
+            sessionStorage.setItem(key, JSON.stringify(dataPointerObj));
+        }
         /**
          * simply return an array of ascii chars
          * @param word
@@ -87,6 +95,10 @@ var TSOS;
                 result.push(word.charCodeAt(i).toString(16));
             }
             return result;
+        }
+        encodeData(newData, oldData) {
+            let n = newData.length;
+            return newData.concat(oldData.splice(n, this.ENCODED_DATA_LENGTH));
         }
     }
     TSOS.DeviceDisk = DeviceDisk;
