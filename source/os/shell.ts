@@ -676,6 +676,7 @@ module TSOS {
     public formatDisk(args: string[]) {
       if (!_Disk.isFormatted) {
         _Disk.initialize();
+        Control.hostDisplayDisk();
         _StdOut.putText("Disk formatted and initialized");
       } else {
         _StdOut.putText("disk already formatted");
@@ -703,6 +704,9 @@ module TSOS {
           "something went wrong, there is no space left for a new file"
         );
       }
+
+      // update gui
+      Control.hostDisplayDisk();
     }
   }
 }

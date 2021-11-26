@@ -514,6 +514,7 @@ var TSOS;
         formatDisk(args) {
             if (!_Disk.isFormatted) {
                 _Disk.initialize();
+                TSOS.Control.hostDisplayDisk();
                 _StdOut.putText("Disk formatted and initialized");
             }
             else {
@@ -535,6 +536,8 @@ var TSOS;
             else {
                 _StdOut.lwPutText("something went wrong, there is no space left for a new file");
             }
+            // update gui
+            TSOS.Control.hostDisplayDisk();
         }
     }
     TSOS.Shell = Shell;

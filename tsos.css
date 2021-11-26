@@ -22,13 +22,10 @@ body {
   gap: 10px;
 }
 
-.container {
-  display: flex;
-  justify-content: center;
-}
-
 #divConsole {
   margin-top: 15px;
+  display: flex;
+  flex-direction: column;
 }
 
 #taskBar {
@@ -71,6 +68,12 @@ h3 {
   height: 220px !important;
   overflow: hidden;
   overflow-y: scroll;
+}
+
+.w {
+  width: 67%;
+  height: 220px !important;
+  overflow: scroll;
 }
 
 #display {

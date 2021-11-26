@@ -239,6 +239,28 @@ var TSOS;
             var _a;
             (_a = document.getElementById(String(pid))) === null || _a === void 0 ? void 0 : _a.remove();
         }
+        static hostDisplayDisk() {
+            const diskTable = document.getElementById("diskBody");
+            TSOS.Utils.removeAllChildNodes(diskTable);
+            let objs = Object.entries(sessionStorage).sort();
+            for (let [key, val] of objs) {
+                let row = document.createElement("tr");
+                let serialized = JSON.parse(val);
+                let tsb = document.createElement("td");
+                tsb.innerText = key;
+                let bit = document.createElement("td");
+                bit.innerText = serialized.bit;
+                let chain = document.createElement("td");
+                chain.innerText = serialized.chain;
+                let encoded = document.createElement("td");
+                encoded.innerText = serialized.encoded;
+                row.insertAdjacentElement("beforeend", tsb);
+                row.insertAdjacentElement("beforeend", bit);
+                row.insertAdjacentElement("beforeend", chain);
+                row.insertAdjacentElement("beforeend", encoded);
+                diskTable.insertAdjacentElement("beforeend", row);
+            }
+        }
     }
     TSOS.Control = Control;
 })(TSOS || (TSOS = {}));
