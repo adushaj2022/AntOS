@@ -33,10 +33,13 @@ var TSOS;
          * Creating a file
          */
         touch(file_name) {
+            if (this.doesFileExist(file_name)) {
+                return "file already exists";
+            }
             let available = this.getFirstSlot([0, this.DIRECTORY_LIMIT]);
             // all in use
             if (available === false) {
-                return false;
+                return "out of space for files";
             }
             // encode file name, in our available slot
             let encoded_file_name = this.encodeHex(file_name);
@@ -48,13 +51,13 @@ var TSOS;
             newSlot.chain = this.getFirstSlot([this.DIRECTORY_LIMIT, this.KEY_SIZE]); // point to first available data slot
             // no data slots available
             if (newSlot.chain === false) {
-                return false;
+                return "out of space for data";
             }
             // update our chain to in use
             this.updateToInUse(newSlot.chain);
             // set our updated object
             sessionStorage.setItem(available, JSON.stringify(newSlot));
-            return true;
+            return "file created";
         }
         /**
          * boundaries will be the section in storage to retrieve,
@@ -94,6 +97,22 @@ var TSOS;
                 }
             }
             return res;
+        }
+        doesFileExist(file_name) {
+            let ans = false;
+            Object.entries(sessionStorage)
+                .sort()
+                .slice(0, this.DIRECTORY_LIMIT) // only directory data
+                .filter(([_, val]) => JSON.parse(val).bit === 1) // filter out ones that arent used
+                .forEach(([_, value]) => {
+                // look for the same name given
+                let serialized = JSON.parse(value);
+                console.log(this.decodeData(serialized.encoded));
+                if (this.decodeData(serialized.encoded) === file_name) {
+                    ans = true;
+                }
+            });
+            return ans;
         }
         updateToInUse(key) {
             let dataPointerObj = sessionStorage.getItem(key);

@@ -31,12 +31,16 @@ module TSOS {
     /**
      * Creating a file
      */
-    public touch(file_name: string): boolean {
+    public touch(file_name: string): string {
+      if (this.doesFileExist(file_name)) {
+        return "file already exists";
+      }
+
       let available = this.getFirstSlot([0, this.DIRECTORY_LIMIT]);
 
       // all in use
       if (available === false) {
-        return false;
+        return "out of space for files";
       }
 
       // encode file name, in our available slot
@@ -52,7 +56,7 @@ module TSOS {
 
       // no data slots available
       if (newSlot.chain === false) {
-        return false;
+        return "out of space for data";
       }
 
       // update our chain to in use
@@ -61,7 +65,7 @@ module TSOS {
       // set our updated object
       sessionStorage.setItem(available as string, JSON.stringify(newSlot));
 
-      return true;
+      return "file created";
     }
 
     /**
@@ -107,6 +111,23 @@ module TSOS {
       }
 
       return res;
+    }
+
+    public doesFileExist(file_name: string): boolean {
+      let ans = false;
+      Object.entries(sessionStorage)
+        .sort()
+        .slice(0, this.DIRECTORY_LIMIT) // only directory data
+        .filter(([_, val]) => JSON.parse(val).bit === 1) // filter out ones that arent used
+        .forEach(([_, value]) => {
+          // look for the same name given
+          let serialized = JSON.parse(value);
+          console.log(this.decodeData(serialized.encoded));
+          if (this.decodeData(serialized.encoded) === file_name) {
+            ans = true;
+          }
+        });
+      return ans;
     }
 
     public updateToInUse(key: string) {

@@ -699,20 +699,18 @@ module TSOS {
           "file name must be comprised of only english letters"
         );
       }
+      let response = _Disk.touch(file_name);
 
-      if (_Disk.touch(file_name)) {
-        _StdOut.putText("file created");
-      } else {
-        _StdOut.lwPutText(
-          "something went wrong, there is no space left for a new file"
-        );
-      }
+      _StdOut.lwPutText(response);
 
       // update gui
       Control.hostDisplayDisk();
     }
 
     public ls(args: string[]) {
+      if (!_Disk.isFormatted) {
+        return _StdOut.putText("run format first to initialize disk");
+      }
       let files = _Disk.ls();
       for (let file of files) {
         _StdOut.putText(file);

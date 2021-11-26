@@ -532,16 +532,15 @@ var TSOS;
             if (!/^[a-zA-Z]+$/.test(file_name)) {
                 return _StdOut.lwPutText("file name must be comprised of only english letters");
             }
-            if (_Disk.touch(file_name)) {
-                _StdOut.putText("file created");
-            }
-            else {
-                _StdOut.lwPutText("something went wrong, there is no space left for a new file");
-            }
+            let response = _Disk.touch(file_name);
+            _StdOut.lwPutText(response);
             // update gui
             TSOS.Control.hostDisplayDisk();
         }
         ls(args) {
+            if (!_Disk.isFormatted) {
+                return _StdOut.putText("run format first to initialize disk");
+            }
             let files = _Disk.ls();
             for (let file of files) {
                 _StdOut.putText(file);
