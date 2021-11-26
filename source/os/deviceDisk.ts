@@ -3,7 +3,9 @@ module TSOS {
     private readonly KEY_SIZE: number = 255;
     private readonly DIRECTORY_LIMIT = 64; // 0:7:7
     private readonly ENCODED_DATA_LENGTH = 60;
+    public isFormatted: boolean = false;
     public initialize() {
+      this.isFormatted = true;
       // setting our keys
       for (let i = 0; i <= this.KEY_SIZE; i++) {
         let j = Number(i).toString(8).padStart(3, "0");

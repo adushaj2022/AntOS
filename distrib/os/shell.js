@@ -77,6 +77,8 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.shellQuantum, "quantum", "<num> set round robin quantum");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.formatDisk, "format", "formatting the disk");
+            this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.createFile, "create", "<name> create a file");
             this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
@@ -509,7 +511,19 @@ var TSOS;
                 }
             }
         }
+        formatDisk(args) {
+            if (!_Disk.isFormatted) {
+                _Disk.initialize();
+                _StdOut.putText("Disk formatted and initialized");
+            }
+            else {
+                _StdOut.putText("disk already formatted");
+            }
+        }
         createFile(args) {
+            if (!_Disk.isFormatted) {
+                return _StdOut.putText("run format first to initialize disk");
+            }
             let file_name = args.join(" ");
             // simple regex for checking if we only have english letters
             if (!/^[a-zA-Z]+$/.test(file_name)) {

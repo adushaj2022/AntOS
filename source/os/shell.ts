@@ -189,6 +189,9 @@ module TSOS {
 
       this.commandList[this.commandList.length] = sc;
 
+      sc = new ShellCommand(this.formatDisk, "format", "formatting the disk");
+      this.commandList[this.commandList.length] = sc;
+
       sc = new ShellCommand(this.createFile, "create", "<name> create a file");
       this.commandList[this.commandList.length] = sc;
 
@@ -670,8 +673,22 @@ module TSOS {
       }
     }
 
+    public formatDisk(args: string[]) {
+      if (!_Disk.isFormatted) {
+        _Disk.initialize();
+        _StdOut.putText("Disk formatted and initialized");
+      } else {
+        _StdOut.putText("disk already formatted");
+      }
+    }
+
     public createFile(args: string[]) {
+      if (!_Disk.isFormatted) {
+        return _StdOut.putText("run format first to initialize disk");
+      }
+
       let file_name = args.join(" ");
+
       // simple regex for checking if we only have english letters
       if (!/^[a-zA-Z]+$/.test(file_name)) {
         return _StdOut.lwPutText(

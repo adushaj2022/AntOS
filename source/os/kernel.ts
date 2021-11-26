@@ -40,8 +40,8 @@ module TSOS {
       // ... more?
       //
 
+      // Starting up our disk
       _Disk = new DeviceDisk();
-      _Disk.initialize();
 
       // Enable the OS Interrupts.  (Not the CPU clock interrupt, as that is done in the hardware sim.)
       this.krnTrace("Enabling the interrupts.");

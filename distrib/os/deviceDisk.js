@@ -5,8 +5,10 @@ var TSOS;
             this.KEY_SIZE = 255;
             this.DIRECTORY_LIMIT = 64; // 0:7:7
             this.ENCODED_DATA_LENGTH = 60;
+            this.isFormatted = false;
         }
         initialize() {
+            this.isFormatted = true;
             // setting our keys
             for (let i = 0; i <= this.KEY_SIZE; i++) {
                 let j = Number(i).toString(8).padStart(3, "0");
@@ -82,7 +84,7 @@ var TSOS;
         updateToInUse(key) {
             let dataPointerObj = sessionStorage.getItem(key);
             dataPointerObj = JSON.parse(dataPointerObj);
-            dataPointerObj.bit = 1;
+            dataPointerObj.bit = 1; // set from 0 to 1;
             sessionStorage.setItem(key, JSON.stringify(dataPointerObj));
         }
         /**
