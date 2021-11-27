@@ -87,6 +87,8 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.readFile, "read", "<name> read from a given file.");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.deleteFile, "delete", "<name> delete a file.");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -568,6 +570,18 @@ var TSOS;
             }
             let file_name = args[0];
             _StdOut.lwPutText(_Disk.cat(file_name));
+        }
+        deleteFile(args) {
+            if (!_Disk.isFormatted) {
+                return _StdOut.putText("run format first to initialize disk");
+            }
+            let file_name = args[0];
+            if (!file_name) {
+                return _StdOut.putText("please supply a file");
+            }
+            let message = _Disk.rm(file_name);
+            _StdOut.putText(message);
+            TSOS.Control.hostDisplayDisk();
         }
     }
     TSOS.Shell = Shell;

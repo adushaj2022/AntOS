@@ -4,6 +4,7 @@ module TSOS {
     private readonly DIRECTORY_LIMIT = 64; // 0:7:7
     private readonly ENCODED_DATA_LENGTH = 60;
     public isFormatted: boolean = false;
+    // format
     public initialize() {
       this.isFormatted = true;
       // setting our keys
@@ -120,9 +121,7 @@ module TSOS {
      * writing to a file
      * @param file_name
      * @param content
-     * @returns
      */
-
     public echo(file_name: string, content: string): string {
       let key = this.doesFileExist(file_name);
       if (!key) {
@@ -137,10 +136,54 @@ module TSOS {
       // data slot, we must write to this one, acquire by the dir slots chain
       let dataSlot = JSON.parse(sessionStorage.getItem(dirSlot.chain));
 
+      // long text given
+      if (encodedContent.length > 60) {
+        return this.handleMultiLineData(encodedContent, key as string);
+      }
+
       dataSlot.encoded = this.setSlotData(encodedContent, dataSlot.encoded);
 
       // set data slot with encoded characcters
       sessionStorage.setItem(dirSlot.chain as string, JSON.stringify(dataSlot));
+      return "data written to file successfully";
+    }
+
+    // similar to writing, but we will handle this a bit different
+    public handleMultiLineData(data: string[], key: string): string {
+      const LENGTH_LIMIT = 60;
+      let slots: string[][] = new Array();
+      let i = 0;
+      // creating multiple 60 or less length arrays out of N length
+      while (data.length > 60) {
+        slots.push(
+          data.splice(i * LENGTH_LIMIT, Math.min(LENGTH_LIMIT, data.length))
+        );
+      }
+
+      // this is the last array to add, we need to fill in the remaining length with 0s if it necessary
+      let tempLength = new Number(data.length);
+      data.length = 60;
+      data.fill("00", tempLength as number, 60);
+      slots.push(data);
+
+      let currKey = JSON.parse(sessionStorage.getItem(key as string)).chain;
+      let nextChain: string;
+      let len = 0;
+      for (let slot of slots) {
+        let newSlot = JSON.parse(sessionStorage.getItem(currKey)); //parse
+        nextChain = this.getFirstSlot([
+          // next available
+          this.DIRECTORY_LIMIT,
+          this.KEY_SIZE,
+        ]) as string; // basically add 1
+        newSlot.bit = 1; // set to in use
+        newSlot.encoded = [...slot]; // set data from above
+        newSlot.chain = len === slots.length - 1 ? "0:0:0" : nextChain; // last slot has no chain
+        sessionStorage.setItem(currKey, JSON.stringify(newSlot)); // set new slot
+        currKey = nextChain;
+        len++;
+      }
+
       return "data written to file successfully";
     }
 
@@ -157,10 +200,43 @@ module TSOS {
       let dirSlot = JSON.parse(sessionStorage.getItem(key as string));
       // data slot, we must read this one, acquire by the dir slots chain
       let dataSlot = JSON.parse(sessionStorage.getItem(dirSlot.chain));
+
+      let decoded = "";
       // decode the ascii
-      let decoded = this.decodeData(dataSlot.encoded);
+      if (dataSlot.chain === "0:0:0") {
+        decoded = this.decodeData(dataSlot.encoded);
+      } else {
+        let curr = dataSlot;
+        while (curr.chain !== "0:0:0") {
+          decoded += this.decodeData(curr.encoded);
+          curr = { ...JSON.parse(sessionStorage.getItem(curr.chain)) };
+        }
+        decoded += this.decodeData(curr.encoded);
+      }
 
       return decoded ? decoded : "no contents for this file";
+    }
+
+    public rm(file_name: string): string {
+      let key = this.doesFileExist(file_name);
+      if (!key) {
+        return `file '${file_name}' does not exist'`;
+      }
+      // directory slot
+      let dirSlot = JSON.parse(sessionStorage.getItem(key as string));
+
+      let emptyValue: DiskDataEntry = {
+        bit: 0,
+        chain: "0:0:0",
+        encoded: new Array(this.ENCODED_DATA_LENGTH).fill("00"),
+      };
+
+      // remove from dir
+      sessionStorage.setItem(key as string, JSON.stringify(emptyValue));
+      // remove from data slot
+      sessionStorage.setItem(dirSlot.chain, JSON.stringify(emptyValue));
+
+      return `file '${file_name}' deleted'`;
     }
 
     // false if does not exist, return key if exists
@@ -217,6 +293,9 @@ module TSOS {
       while (encodedData[i] !== "00") {
         ans += String.fromCharCode(parseInt(encodedData[i], 16));
         i++;
+        if (i === encodedData.length - 1) {
+          break;
+        }
       }
       return ans;
     }
