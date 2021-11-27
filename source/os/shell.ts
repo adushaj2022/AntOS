@@ -201,7 +201,14 @@ module TSOS {
       sc = new ShellCommand(
         this.writeToFile,
         "write",
-        "write to a given file."
+        "<name> write to a given file."
+      );
+      this.commandList[this.commandList.length] = sc;
+
+      sc = new ShellCommand(
+        this.readFile,
+        "read",
+        "<name> read from a given file."
       );
       this.commandList[this.commandList.length] = sc;
 
@@ -726,12 +733,23 @@ module TSOS {
     }
 
     public writeToFile(args: string[]) {
+      if (!_Disk.isFormatted) {
+        return _StdOut.putText("run format first to initialize disk");
+      }
       let file_name = args[0];
       args.shift();
       let content = args.join(" ");
       let message = _Disk.echo(file_name, content);
       _StdOut.putText(message);
       Control.hostDisplayDisk();
+    }
+
+    public readFile(args: string[]) {
+      if (!_Disk.isFormatted) {
+        return _StdOut.putText("run format first to initialize disk");
+      }
+      let file_name = args[0];
+      _StdOut.lwPutText(_Disk.cat(file_name));
     }
   }
 }

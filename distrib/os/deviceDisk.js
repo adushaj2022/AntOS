@@ -84,6 +84,10 @@ var TSOS;
             }
             return false;
         }
+        /**
+         *
+         * listing out files
+         */
         ls() {
             let res = [];
             let sessionKeys = Object.keys(sessionStorage)
@@ -98,6 +102,12 @@ var TSOS;
             }
             return res;
         }
+        /**
+         * writing to a file
+         * @param file_name
+         * @param content
+         * @returns
+         */
         echo(file_name, content) {
             let key = this.doesFileExist(file_name);
             if (!key) {
@@ -113,6 +123,23 @@ var TSOS;
             // set data slot with encoded characcters
             sessionStorage.setItem(dirSlot.chain, JSON.stringify(dataSlot));
             return "data written to file successfully";
+        }
+        /**
+         * reading from a file
+         * @param file_name
+         */
+        cat(file_name) {
+            let key = this.doesFileExist(file_name);
+            if (!key) {
+                return `file '${file_name}' does not exist'`;
+            }
+            // directory slot
+            let dirSlot = JSON.parse(sessionStorage.getItem(key));
+            // data slot, we must read this one, acquire by the dir slots chain
+            let dataSlot = JSON.parse(sessionStorage.getItem(dirSlot.chain));
+            // decode the ascii
+            let decoded = this.decodeData(dataSlot.encoded);
+            return decoded ? decoded : "no contents for this file";
         }
         // false if does not exist, return key if exists
         doesFileExist(file_name) {

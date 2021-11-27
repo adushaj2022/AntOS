@@ -95,7 +95,10 @@ module TSOS {
 
       return false;
     }
-
+    /**
+     *
+     * listing out files
+     */
     public ls(): Array<string> {
       let res: string[] = [];
       let sessionKeys = Object.keys(sessionStorage)
@@ -112,6 +115,13 @@ module TSOS {
 
       return res;
     }
+
+    /**
+     * writing to a file
+     * @param file_name
+     * @param content
+     * @returns
+     */
 
     public echo(file_name: string, content: string): string {
       let key = this.doesFileExist(file_name);
@@ -132,6 +142,25 @@ module TSOS {
       // set data slot with encoded characcters
       sessionStorage.setItem(dirSlot.chain as string, JSON.stringify(dataSlot));
       return "data written to file successfully";
+    }
+
+    /**
+     * reading from a file
+     * @param file_name
+     */
+    public cat(file_name: string): string {
+      let key = this.doesFileExist(file_name);
+      if (!key) {
+        return `file '${file_name}' does not exist'`;
+      }
+      // directory slot
+      let dirSlot = JSON.parse(sessionStorage.getItem(key as string));
+      // data slot, we must read this one, acquire by the dir slots chain
+      let dataSlot = JSON.parse(sessionStorage.getItem(dirSlot.chain));
+      // decode the ascii
+      let decoded = this.decodeData(dataSlot.encoded);
+
+      return decoded ? decoded : "no contents for this file";
     }
 
     // false if does not exist, return key if exists
