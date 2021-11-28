@@ -249,11 +249,21 @@ var TSOS;
                 let tsb = document.createElement("td");
                 tsb.innerText = key;
                 let bit = document.createElement("td");
-                bit.innerText = serialized.bit;
+                bit.innerHTML = serialized.bit;
+                bit.style.color = serialized.bit ? "#40826D" : "#000";
                 let chain = document.createElement("td");
                 chain.innerText = serialized.chain;
                 let encoded = document.createElement("td");
-                encoded.innerText = serialized.encoded;
+                let opCodes = "";
+                serialized.encoded.forEach((op) => {
+                    if (op !== "00") {
+                        opCodes += `<strong style="color: #40826D">${op}</strong>,`;
+                    }
+                    else {
+                        opCodes += op + ",";
+                    }
+                });
+                encoded.innerHTML = opCodes;
                 row.insertAdjacentElement("beforeend", tsb);
                 row.insertAdjacentElement("beforeend", bit);
                 row.insertAdjacentElement("beforeend", chain);
