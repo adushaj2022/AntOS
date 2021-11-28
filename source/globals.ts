@@ -84,6 +84,9 @@ var _GLaDOS: any = null; // If the above is linked in, this is the instantiated 
 
 let _isSingleStep = false;
 
+// default to RR
+let _currentSchedule: TSchedule = "rr";
+
 type DisplayPCB = {
   pid: number;
   iRegister: number;
@@ -98,6 +101,8 @@ type DiskDataEntry = {
   chain: string;
   encoded: Array<string>;
 };
+
+type TSchedule = "rr" | "fcfs" | "priority";
 
 var onDocumentLoad = function () {
   TSOS.Control.hostInit();

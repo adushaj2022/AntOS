@@ -89,6 +89,10 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.deleteFile, "delete", "<name> delete a file.");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.setSchedule, "setschedule", "<name> set cpu scheduler.");
+            this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.getSchedule, "getschedule", "get current cpu scheduler.");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -582,6 +586,17 @@ var TSOS;
             let message = _Disk.rm(file_name);
             _StdOut.putText(message);
             TSOS.Control.hostDisplayDisk();
+        }
+        setSchedule(args) {
+            let choice = args[0];
+            if (!new Set(["rr", "fcfs", "priority"]).has(choice)) {
+                return _StdOut.putText("please select: rr, fcfs, or priority");
+            }
+            _currentSchedule = choice;
+            _StdOut.lwPutText(`schedule set to ${choice}`);
+        }
+        getSchedule() {
+            _StdOut.putText(_currentSchedule);
         }
     }
     TSOS.Shell = Shell;
