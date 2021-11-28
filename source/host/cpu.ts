@@ -154,10 +154,13 @@ module TSOS {
           break; // no op
         case 0x00:
           // End of a program
-          if (!RoundRobinScheduler.isActivated) {
+          if (
+            !RoundRobinScheduler.isActivated &&
+            !FirstComeFirstServe.isActivated
+          ) {
             this.isExecuting = false;
             this.program_log("terminated");
-          } else {
+          } else if (RoundRobinScheduler.isActivated) {
             // if all processes are terminated, lets stop executing
             Context.processMap.get(_CurrentPcbId).state = "terminated";
             if (Context.allTerminated()) {
@@ -168,9 +171,15 @@ module TSOS {
               _OsShell.handleInput("", true, () =>
                 _Console.putText("ALL programs completed")
               );
-              this.program_log("terminated");
               return;
             }
+          } else if (FirstComeFirstServe.isActivated) {
+            FirstComeFirstServe.shouldAdvance = true;
+            if (_ReadyQueue.getSize() === 1) {
+              this.isExecuting = false;
+              FirstComeFirstServe.isActivated = false;
+            }
+            this.program_log("terminated");
           }
 
           _OsShell.handleInput("", true, _OsShell.shellMessage);
@@ -292,7 +301,6 @@ module TSOS {
         programCounter: this.program_counter,
         state: pcbState ?? "running",
       } as DisplayPCB;
-
       Control.hostDisplayPcbs(_displayPcb);
       Control.hostDisplayCpu(this);
       Control.hostDisplayMemory(this.memory.memory.mainMemory);

@@ -136,11 +136,12 @@ var TSOS;
                     break; // no op
                 case 0x00:
                     // End of a program
-                    if (!TSOS.RoundRobinScheduler.isActivated) {
+                    if (!TSOS.RoundRobinScheduler.isActivated &&
+                        !TSOS.FirstComeFirstServe.isActivated) {
                         this.isExecuting = false;
                         this.program_log("terminated");
                     }
-                    else {
+                    else if (TSOS.RoundRobinScheduler.isActivated) {
                         // if all processes are terminated, lets stop executing
                         TSOS.Context.processMap.get(_CurrentPcbId).state = "terminated";
                         if (TSOS.Context.allTerminated()) {
@@ -148,9 +149,16 @@ var TSOS;
                             TSOS.RoundRobinScheduler.isActivated = false;
                             // lets update our GUI
                             _OsShell.handleInput("", true, () => _Console.putText("ALL programs completed"));
-                            this.program_log("terminated");
                             return;
                         }
+                    }
+                    else if (TSOS.FirstComeFirstServe.isActivated) {
+                        TSOS.FirstComeFirstServe.shouldAdvance = true;
+                        if (_ReadyQueue.getSize() === 1) {
+                            this.isExecuting = false;
+                            TSOS.FirstComeFirstServe.isActivated = false;
+                        }
+                        this.program_log("terminated");
                     }
                     _OsShell.handleInput("", true, _OsShell.shellMessage);
                     break;

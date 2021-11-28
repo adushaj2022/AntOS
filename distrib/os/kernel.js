@@ -80,6 +80,9 @@ var TSOS;
                 if (TSOS.RoundRobinScheduler.isActivated && _ReadyQueue.getSize() > 1) {
                     this.krnScheduler();
                 }
+                else if (TSOS.FirstComeFirstServe.isActivated) {
+                    TSOS.FirstComeFirstServe.doCycle();
+                }
                 else {
                     _CPU.cycle();
                 }

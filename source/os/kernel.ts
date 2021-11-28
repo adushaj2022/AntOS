@@ -88,6 +88,8 @@ module TSOS {
         // If there are no interrupts then run one CPU cycle if there is anything being processed.
         if (RoundRobinScheduler.isActivated && _ReadyQueue.getSize() > 1) {
           this.krnScheduler();
+        } else if (FirstComeFirstServe.isActivated) {
+          FirstComeFirstServe.doCycle();
         } else {
           _CPU.cycle();
         }

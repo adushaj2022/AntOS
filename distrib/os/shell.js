@@ -469,7 +469,14 @@ var TSOS;
                 pcb.state = "running";
             }
             _CPU.isExecuting = true;
-            TSOS.RoundRobinScheduler.isActivated = true;
+            if (_currentSchedule === "fcfs") {
+                TSOS.RoundRobinScheduler.isActivated = false;
+                TSOS.FirstComeFirstServe.isActivated = true;
+            }
+            else if (_currentSchedule === "rr") {
+                TSOS.FirstComeFirstServe.isActivated = false;
+                TSOS.RoundRobinScheduler.isActivated = true;
+            }
         }
         shellPs(args) {
             let found = false;

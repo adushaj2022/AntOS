@@ -36,5 +36,35 @@ var TSOS;
     RoundRobinScheduler.process = null;
     RoundRobinScheduler.isActivated = false;
     TSOS.RoundRobinScheduler = RoundRobinScheduler;
+    class FirstComeFirstServe {
+        static doCycle() {
+            if (!this.isActivated)
+                return;
+            if (this.process === null) {
+                this.process = _ReadyQueue.peekFirst();
+            }
+            else {
+                if (this.shouldAdvance) {
+                    let top = _ReadyQueue.dequeue();
+                    let prev = top;
+                    let next = _ReadyQueue.peekFirst();
+                    this.process = next;
+                    if (next && prev) {
+                        TSOS.Dispatcher.contextSwitch(prev, next);
+                    }
+                    this.shouldAdvance = false;
+                }
+                if (this.process) {
+                    _CurrentPcbId = this.process.pid;
+                    _CurrentPartition = this.process.memoryPartitionId;
+                    _CPU.cycle();
+                }
+            }
+        }
+    }
+    FirstComeFirstServe.isActivated = false;
+    FirstComeFirstServe.process = null;
+    FirstComeFirstServe.shouldAdvance = false;
+    TSOS.FirstComeFirstServe = FirstComeFirstServe;
 })(TSOS || (TSOS = {}));
 //# sourceMappingURL=scheduler.js.map

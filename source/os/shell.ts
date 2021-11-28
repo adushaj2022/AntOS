@@ -649,8 +649,13 @@ module TSOS {
         pcb.state = "running";
       }
       _CPU.isExecuting = true;
-
-      RoundRobinScheduler.isActivated = true;
+      if (_currentSchedule === "fcfs") {
+        RoundRobinScheduler.isActivated = false;
+        FirstComeFirstServe.isActivated = true;
+      } else if (_currentSchedule === "rr") {
+        FirstComeFirstServe.isActivated = false;
+        RoundRobinScheduler.isActivated = true;
+      }
     }
 
     public shellPs(args: string[]) {

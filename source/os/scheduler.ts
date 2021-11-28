@@ -34,4 +34,33 @@ module TSOS {
       this.count++;
     }
   }
+
+  export class FirstComeFirstServe {
+    static isActivated = false;
+    static process: null | ProcessControlBlock = null;
+    static next: typeof this.process;
+    static shouldAdvance = false;
+    static doCycle() {
+      if (!this.isActivated) return;
+      if (this.process === null) {
+        this.process = _ReadyQueue.peekFirst();
+      } else {
+        if (this.shouldAdvance) {
+          let top: ProcessControlBlock = _ReadyQueue.dequeue();
+          let prev: ProcessControlBlock = top;
+          let next: ProcessControlBlock = _ReadyQueue.peekFirst();
+          this.process = next;
+          if (next && prev) {
+            Dispatcher.contextSwitch(prev, next);
+          }
+          this.shouldAdvance = false;
+        }
+        if (this.process) {
+          _CurrentPcbId = this.process.pid;
+          _CurrentPartition = this.process.memoryPartitionId;
+          _CPU.cycle();
+        }
+      }
+    }
+  }
 }
