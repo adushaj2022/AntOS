@@ -387,6 +387,7 @@ var TSOS;
             _StdOut.putText(message + "Program complete");
         }
         shellLoad(args) {
+            let priority = typeof args[0] !== "undefined" ? Number(args[0]) : 0; // default to 0
             const data = TSOS.Control.hostGetUserInput().trim();
             if (!data) {
                 _StdOut.putText("Input is empty");
@@ -402,14 +403,14 @@ var TSOS;
                 if (Number(num) < 10) {
                     return; // handle cases like 09 00 02 03, these are all valid
                 }
-                let hexValue = parseInt(num, 16).toString(16).toUpperCase();
+                let hexValue = TSOS.Utils.showHexValue(parseInt(num, 16), 2);
                 if (hexValue !== num.toUpperCase()) {
                     valid = false;
                 }
             });
             numbers = numbers.map((n) => parseInt(n, 16)); // convert to numbers, not string represention
             if (valid) {
-                let answer = _Kernel.krnLoadMemory(numbers); // Kernel will return a message here, like pid: 1 or no more partitons
+                let answer = _Kernel.krnLoadMemory(numbers, priority); // Kernel will return a message here, like pid: 1 or no more partitons
                 _StdOut.putText(answer);
             }
             else {
@@ -469,13 +470,19 @@ var TSOS;
                 pcb.state = "running";
             }
             _CPU.isExecuting = true;
-            if (_currentSchedule === "fcfs") {
-                TSOS.RoundRobinScheduler.isActivated = false;
-                TSOS.FirstComeFirstServe.isActivated = true;
-            }
-            else if (_currentSchedule === "rr") {
-                TSOS.FirstComeFirstServe.isActivated = false;
-                TSOS.RoundRobinScheduler.isActivated = true;
+            TSOS.FirstComeFirstServe.isActivated = false;
+            TSOS.RoundRobinScheduler.isActivated = false;
+            switch (_currentSchedule) {
+                case "fcfs":
+                    TSOS.FirstComeFirstServe.isActivated;
+                case "rr":
+                    TSOS.RoundRobinScheduler.isActivated;
+                case "priority":
+                    // dont overcomplicate it, reorder our queue based on priority
+                    _ReadyQueue.q.sort((a, b) => a.priority - b.priority);
+                    TSOS.FirstComeFirstServe.isActivated = true;
+                default:
+                    break;
             }
         }
         shellPs(args) {

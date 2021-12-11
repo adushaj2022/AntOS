@@ -22,6 +22,7 @@ module TSOS {
     stringCounter: number = 0;
     address: number = 0;
     lob: number = 0;
+    priority?: number;
     public constructor() {}
   }
 }

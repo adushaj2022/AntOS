@@ -38,7 +38,7 @@ module TSOS {
   export class FirstComeFirstServe {
     static isActivated = false;
     static process: null | ProcessControlBlock = null;
-    static next: typeof this.process;
+    static next: null | ProcessControlBlock;
     static shouldAdvance = false;
     static doCycle() {
       if (!this.isActivated) return;

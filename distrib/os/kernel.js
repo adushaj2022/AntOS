@@ -178,9 +178,10 @@ var TSOS;
             this.krnShutdown();
             _OsShell.shellBSOD(msg);
         }
-        krnLoadMemory(code) {
+        krnLoadMemory(code, priority) {
             let p = new TSOS.ProcessControlBlock(); // create pcb
             p.pid = _PCB_ID_COUNT++;
+            p.priority = priority;
             _ResidentList.enqueue(p); // add to resident queue
             let partitionId = _MemoryManager.usePartition(p);
             if (typeof partitionId === "boolean") {

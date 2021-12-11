@@ -556,6 +556,7 @@ module TSOS {
     }
 
     public shellLoad(args: string[]) {
+      let priority = typeof args[0] !== "undefined" ? Number(args[0]) : 0; // default to 0
       const data = Control.hostGetUserInput().trim();
       if (!data) {
         _StdOut.putText("Input is empty");
@@ -574,7 +575,7 @@ module TSOS {
           return; // handle cases like 09 00 02 03, these are all valid
         }
 
-        let hexValue = parseInt(num, 16).toString(16).toUpperCase();
+        let hexValue = Utils.showHexValue(parseInt(num, 16), 2);
         if (hexValue !== num.toUpperCase()) {
           valid = false;
         }
@@ -582,7 +583,7 @@ module TSOS {
       numbers = numbers.map((n) => parseInt(n, 16)); // convert to numbers, not string represention
 
       if (valid) {
-        let answer = _Kernel.krnLoadMemory(numbers); // Kernel will return a message here, like pid: 1 or no more partitons
+        let answer = _Kernel.krnLoadMemory(numbers, priority); // Kernel will return a message here, like pid: 1 or no more partitons
         _StdOut.putText(answer);
       } else {
         _StdOut.putText("Inproper input, data not loaded");
@@ -649,12 +650,21 @@ module TSOS {
         pcb.state = "running";
       }
       _CPU.isExecuting = true;
-      if (_currentSchedule === "fcfs") {
-        RoundRobinScheduler.isActivated = false;
-        FirstComeFirstServe.isActivated = true;
-      } else if (_currentSchedule === "rr") {
-        FirstComeFirstServe.isActivated = false;
-        RoundRobinScheduler.isActivated = true;
+
+      FirstComeFirstServe.isActivated = false;
+      RoundRobinScheduler.isActivated = false;
+
+      switch (_currentSchedule) {
+        case "fcfs":
+          FirstComeFirstServe.isActivated;
+        case "rr":
+          RoundRobinScheduler.isActivated;
+        case "priority":
+          // dont overcomplicate it, reorder our queue based on priority
+          _ReadyQueue.q.sort((a, b) => a.priority - b.priority);
+          FirstComeFirstServe.isActivated = true;
+        default:
+          break;
       }
     }
 

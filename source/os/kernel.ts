@@ -197,9 +197,10 @@ module TSOS {
       _OsShell.shellBSOD(msg);
     }
 
-    public krnLoadMemory(code: number[]): string {
+    public krnLoadMemory(code: number[], priority: number): string {
       let p = new ProcessControlBlock(); // create pcb
       p.pid = _PCB_ID_COUNT++;
+      p.priority = priority;
       _ResidentList.enqueue(p); // add to resident queue
 
       let partitionId = _MemoryManager.usePartition(p);
