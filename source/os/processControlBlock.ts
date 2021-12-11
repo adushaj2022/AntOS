@@ -23,6 +23,7 @@ module TSOS {
     address: number = 0;
     lob: number = 0;
     priority?: number;
+    location?: "memory" | "disk";
     public constructor() {}
   }
 }

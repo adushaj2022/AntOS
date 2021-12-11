@@ -185,11 +185,15 @@ var TSOS;
             _ResidentList.enqueue(p); // add to resident queue
             let partitionId = _MemoryManager.usePartition(p);
             if (typeof partitionId === "boolean") {
-                return "No memory partitons available (call apple)";
+                p.memoryPartitionId = DISK_PARTITION;
+                p.location = "disk";
+                TSOS.Swapper.roll_in(code);
             }
-            p.memoryPartitionId = partitionId;
-            _MemoryAccessor.loadMemory(code, partitionId * 256); // load memory
-            // Tell Control to update GUI
+            else {
+                p.memoryPartitionId = partitionId;
+                p.location = "memory";
+                _MemoryAccessor.loadMemory(code, partitionId * 256); // load memory
+            }
             TSOS.Control.hostDisplayPcbs(p);
             TSOS.Control.hostDisplayMemory(_MemoryAccessor.memory.mainMemory);
             return `PCB created - pid - ${p.pid}`;

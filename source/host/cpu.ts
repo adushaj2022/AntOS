@@ -171,6 +171,7 @@ module TSOS {
               _OsShell.handleInput("", true, () =>
                 _Console.putText("ALL programs completed")
               );
+              Control.hostDisplayPcbs(Context.processMap.get(_CurrentPcbId));
               return;
             }
           } else if (FirstComeFirstServe.isActivated) {
@@ -300,6 +301,7 @@ module TSOS {
         pid: _CurrentPcbId,
         programCounter: this.program_counter,
         state: pcbState ?? "running",
+        location: "memory",
       } as DisplayPCB;
       Control.hostDisplayPcbs(_displayPcb);
       Control.hostDisplayCpu(this);

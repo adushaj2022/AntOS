@@ -2,7 +2,7 @@ module TSOS {
   export class RoundRobinScheduler {
     static count = 0;
     static process: null | ProcessControlBlock = null;
-    static isActivated = false;
+    static isActivated = true;
     /**
      * Here the round robin will perform a cycle, every n cycles we need to switch processes,
      *  We switch by performing a context switch, we need to update the cpu with the information of the new process, but we also
@@ -22,6 +22,11 @@ module TSOS {
 
         let prev: ProcessControlBlock = top;
         let next: ProcessControlBlock = _ReadyQueue.peekFirst();
+
+        if (next.location === "disk") {
+          // swap
+        }
+
         this.process = next;
 
         Dispatcher.contextSwitch(prev, next);

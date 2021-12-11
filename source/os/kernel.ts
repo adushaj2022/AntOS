@@ -205,14 +205,14 @@ module TSOS {
 
       let partitionId = _MemoryManager.usePartition(p);
       if (typeof partitionId === "boolean") {
-        return "No memory partitons available (call apple)";
+        p.memoryPartitionId = DISK_PARTITION;
+        p.location = "disk";
+        Swapper.roll_in(code);
+      } else {
+        p.memoryPartitionId = partitionId;
+        p.location = "memory";
+        _MemoryAccessor.loadMemory(code, partitionId * 256); // load memory
       }
-
-      p.memoryPartitionId = partitionId;
-
-      _MemoryAccessor.loadMemory(code, partitionId * 256); // load memory
-
-      // Tell Control to update GUI
       Control.hostDisplayPcbs(p);
       Control.hostDisplayMemory(_MemoryAccessor.memory.mainMemory);
       return `PCB created - pid - ${p.pid}`;

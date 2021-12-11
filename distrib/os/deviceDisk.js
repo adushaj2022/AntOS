@@ -108,13 +108,19 @@ var TSOS;
          * @param file_name
          * @param content
          */
-        echo(file_name, content) {
+        echo(file_name, content, isEncoded = false) {
             let key = this.doesFileExist(file_name);
             if (!key) {
                 return `file '${file_name}' does not exist'`;
             }
             // given string to ascii numbers
-            const encodedContent = this.encodeHex(content);
+            let encodedContent;
+            if (isEncoded) {
+                encodedContent = content;
+            }
+            else {
+                encodedContent = this.encodeHex(content);
+            }
             // directory slot
             let dirSlot = JSON.parse(sessionStorage.getItem(key));
             // data slot, we must write to this one, acquire by the dir slots chain

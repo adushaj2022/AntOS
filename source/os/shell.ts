@@ -548,11 +548,7 @@ module TSOS {
     }
 
     public shellMessage() {
-      let message = "";
-      if (RoundRobinScheduler.isActivated) {
-        message += "Pid: " + _CurrentPcbId + " ";
-      }
-      _StdOut.putText(message + "Program complete");
+      _StdOut.putText("Program complete");
     }
 
     public shellLoad(args: string[]) {
@@ -656,9 +652,9 @@ module TSOS {
 
       switch (_currentSchedule) {
         case "fcfs":
-          FirstComeFirstServe.isActivated;
+          FirstComeFirstServe.isActivated = true;
         case "rr":
-          RoundRobinScheduler.isActivated;
+          RoundRobinScheduler.isActivated = true;
         case "priority":
           // dont overcomplicate it, reorder our queue based on priority
           _ReadyQueue.q.sort((a, b) => a.priority - b.priority);
@@ -740,9 +736,9 @@ module TSOS {
       let file_name = args.join(" ");
 
       // simple regex for checking if we only have english letters
-      if (!/^[a-zA-Z]+$/.test(file_name)) {
+      if (!/^([a-zA-Z0-9._-]+)$/.test(file_name)) {
         return _StdOut.lwPutText(
-          "file name must be comprised of only english letters"
+          "file name must be comprised of only english letters, numbers, period, dash or underscore"
         );
       }
       let response = _Disk.touch(file_name);

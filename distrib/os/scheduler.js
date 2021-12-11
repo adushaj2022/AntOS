@@ -20,6 +20,9 @@ var TSOS;
                 }
                 let prev = top;
                 let next = _ReadyQueue.peekFirst();
+                if (next.location === "disk") {
+                    // swap
+                }
                 this.process = next;
                 TSOS.Dispatcher.contextSwitch(prev, next);
             }
@@ -34,7 +37,7 @@ var TSOS;
     }
     RoundRobinScheduler.count = 0;
     RoundRobinScheduler.process = null;
-    RoundRobinScheduler.isActivated = false;
+    RoundRobinScheduler.isActivated = true;
     TSOS.RoundRobinScheduler = RoundRobinScheduler;
     class FirstComeFirstServe {
         static doCycle() {

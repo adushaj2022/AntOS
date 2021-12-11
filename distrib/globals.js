@@ -64,6 +64,8 @@ var _hardwareClockID = null;
 var Glados = null; // This is the function Glados() in glados-ip*.js http://alanclasses.github.io/TSOS/test/ .
 var _GLaDOS = null; // If the above is linked in, this is the instantiated instance of Glados.
 let _isSingleStep = false;
+/** signifies that process is stored in disk */
+const DISK_PARTITION = -1;
 // default to RR
 let _currentSchedule = "rr";
 var onDocumentLoad = function () {

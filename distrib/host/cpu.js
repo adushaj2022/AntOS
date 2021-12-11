@@ -149,6 +149,7 @@ var TSOS;
                             TSOS.RoundRobinScheduler.isActivated = false;
                             // lets update our GUI
                             _OsShell.handleInput("", true, () => _Console.putText("ALL programs completed"));
+                            TSOS.Control.hostDisplayPcbs(TSOS.Context.processMap.get(_CurrentPcbId));
                             return;
                         }
                     }
@@ -276,6 +277,7 @@ var TSOS;
                 pid: _CurrentPcbId,
                 programCounter: this.program_counter,
                 state: pcbState !== null && pcbState !== void 0 ? pcbState : "running",
+                location: "memory",
             };
             TSOS.Control.hostDisplayPcbs(_displayPcb);
             TSOS.Control.hostDisplayCpu(this);

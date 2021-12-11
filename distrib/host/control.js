@@ -227,12 +227,15 @@ var TSOS;
             pc.innerText = TSOS.Utils.showHexValue(pcb.programCounter);
             const state = document.createElement("td");
             state.innerText = pcb.state;
+            const location = document.createElement("td");
+            location.innerText = pcb.location;
             row.insertAdjacentElement("beforeend", pid);
             row.insertAdjacentElement("beforeend", ir);
             row.insertAdjacentElement("beforeend", xr);
             row.insertAdjacentElement("beforeend", yr);
             row.insertAdjacentElement("beforeend", pc);
             row.insertAdjacentElement("beforeend", state);
+            row.insertAdjacentElement("beforeend", location);
             pcbTable.insertAdjacentElement("beforeend", row);
         }
         static hostRemoveProcessPid(pid) {

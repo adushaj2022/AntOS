@@ -122,14 +122,23 @@ module TSOS {
      * @param file_name
      * @param content
      */
-    public echo(file_name: string, content: string): string {
+    public echo(
+      file_name: string,
+      content: string | string[],
+      isEncoded = false
+    ): string {
       let key = this.doesFileExist(file_name);
       if (!key) {
         return `file '${file_name}' does not exist'`;
       }
 
       // given string to ascii numbers
-      const encodedContent = this.encodeHex(content);
+      let encodedContent: string[];
+      if (isEncoded) {
+        encodedContent = content as string[];
+      } else {
+        encodedContent = this.encodeHex(content as string);
+      }
 
       // directory slot
       let dirSlot = JSON.parse(sessionStorage.getItem(key as string));

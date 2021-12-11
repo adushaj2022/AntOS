@@ -380,11 +380,7 @@ var TSOS;
             }
         }
         shellMessage() {
-            let message = "";
-            if (TSOS.RoundRobinScheduler.isActivated) {
-                message += "Pid: " + _CurrentPcbId + " ";
-            }
-            _StdOut.putText(message + "Program complete");
+            _StdOut.putText("Program complete");
         }
         shellLoad(args) {
             let priority = typeof args[0] !== "undefined" ? Number(args[0]) : 0; // default to 0
@@ -474,9 +470,9 @@ var TSOS;
             TSOS.RoundRobinScheduler.isActivated = false;
             switch (_currentSchedule) {
                 case "fcfs":
-                    TSOS.FirstComeFirstServe.isActivated;
+                    TSOS.FirstComeFirstServe.isActivated = true;
                 case "rr":
-                    TSOS.RoundRobinScheduler.isActivated;
+                    TSOS.RoundRobinScheduler.isActivated = true;
                 case "priority":
                     // dont overcomplicate it, reorder our queue based on priority
                     _ReadyQueue.q.sort((a, b) => a.priority - b.priority);
@@ -553,8 +549,8 @@ var TSOS;
             }
             let file_name = args.join(" ");
             // simple regex for checking if we only have english letters
-            if (!/^[a-zA-Z]+$/.test(file_name)) {
-                return _StdOut.lwPutText("file name must be comprised of only english letters");
+            if (!/^([a-zA-Z0-9._-]+)$/.test(file_name)) {
+                return _StdOut.lwPutText("file name must be comprised of only english letters, numbers, period, dash or underscore");
             }
             let response = _Disk.touch(file_name);
             _StdOut.lwPutText(response);

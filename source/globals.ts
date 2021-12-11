@@ -84,6 +84,9 @@ var _GLaDOS: any = null; // If the above is linked in, this is the instantiated 
 
 let _isSingleStep = false;
 
+/** signifies that process is stored in disk */
+const DISK_PARTITION = -1;
+
 // default to RR
 let _currentSchedule: TSchedule = "rr";
 
@@ -94,6 +97,7 @@ type DisplayPCB = {
   yRegister: number;
   programCounter: number;
   state: string;
+  location?: "memory" | "disk";
 };
 
 type DiskDataEntry = {
