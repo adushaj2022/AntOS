@@ -1,8 +1,3 @@
-/* ------------------------------
-     DeviceDriver.ts
-
-     The "base class" for all Device Drivers.
-     ------------------------------ */
 var TSOS;
 (function (TSOS) {
     class ProcessControlBlock {

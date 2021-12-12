@@ -1,9 +1,3 @@
-/* ------------------------------
-     DeviceDriver.ts
-
-     The "base class" for all Device Drivers.
-     ------------------------------ */
-
 module TSOS {
   export class ProcessControlBlock {
     pid: number = 0;

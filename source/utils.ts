@@ -75,10 +75,10 @@ module TSOS {
     public static twos_comp(hex_number: number): number {
       //get twos comp of a number (for branching)
 
-      const flip_bits = (str) =>
+      const flip_bits = (str: any) =>
         str
           .split("")
-          .map((x) => (1 - x).toString())
+          .map((x: any) => (1 - x).toString())
           .join(""); //flip bits
 
       let num: string = flip_bits(hex_number.toString(2)); //turn into decimal
