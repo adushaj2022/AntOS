@@ -6,8 +6,8 @@ var TSOS;
             if (!_Disk.isFormatted) {
                 _Disk.initialize();
             }
-            // fill name will be `process{id}`
-            let file_name = `process${_PCB_ID_COUNT}`;
+            // fill name will be `.process{id}`, we wont show this to users, so distinguish with . as file name
+            let file_name = `.process${_PCB_ID_COUNT}`;
             _Disk.touch(file_name);
             // convert numbers back to strings
             let new_data = data.map((hex) => hex.toString(16));

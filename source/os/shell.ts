@@ -753,9 +753,20 @@ module TSOS {
       if (!_Disk.isFormatted) {
         return _StdOut.putText("run format first to initialize disk");
       }
+      let opt = args[0];
       let files = _Disk.ls();
+      if (files.length === 0) {
+        return _StdOut.putText("no files found");
+      }
+
       for (let file of files) {
-        _StdOut.putText(file);
+        if (opt === "-l") {
+          _StdOut.putText(file);
+        } else {
+          if (file[0] !== ".") {
+            _StdOut.putText(file);
+          }
+        }
         _StdOut.advanceLine();
       }
     }
