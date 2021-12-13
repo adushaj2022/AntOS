@@ -240,6 +240,15 @@ module TSOS {
         encoded: new Array(this.ENCODED_DATA_LENGTH).fill("00"),
       };
 
+      let curr = dirSlot.chain;
+
+      // delete all chains
+      while (curr !== "0:0:0") {
+        let row = JSON.parse(sessionStorage.getItem(curr));
+        curr = row.chain;
+        sessionStorage.setItem(row.chain, JSON.stringify(emptyValue));
+      }
+
       // remove from dir
       sessionStorage.setItem(key as string, JSON.stringify(emptyValue));
       // remove from data slot

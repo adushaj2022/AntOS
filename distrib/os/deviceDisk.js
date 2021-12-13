@@ -207,6 +207,13 @@ var TSOS;
                 chain: "0:0:0",
                 encoded: new Array(this.ENCODED_DATA_LENGTH).fill("00"),
             };
+            let curr = dirSlot.chain;
+            // delete all chains
+            while (curr !== "0:0:0") {
+                let row = JSON.parse(sessionStorage.getItem(curr));
+                curr = row.chain;
+                sessionStorage.setItem(row.chain, JSON.stringify(emptyValue));
+            }
             // remove from dir
             sessionStorage.setItem(key, JSON.stringify(emptyValue));
             // remove from data slot

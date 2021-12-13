@@ -14,18 +14,21 @@ var TSOS;
             _Disk.echo(file_name, new_data, true);
             TSOS.Control.hostDisplayDisk();
         }
-        static roll_out(partitionId) {
+        static roll_out(partitionId, diskProcessId) {
             // put code from disk into memory, and write code from memory to disk
+            // temporary array of code from memory
             let temp = [];
             for (let i = 0; i < PARTITION_SIZE - 1; i++) {
                 temp[i] = _MemoryAccessor.readIntermediate(i, partitionId).toString(16);
             }
             for (let i = 0; i < temp.length - 1; i++) {
                 if (temp[i] == "0" && temp[i] == temp[i + 1]) {
-                    temp.length = i + 1;
+                    temp.length = i + 1; // chop off extra zeros
                     break;
                 }
             }
+            // write this temp code to disk
+            // move code from disk into memory
             console.log(temp);
         }
     }

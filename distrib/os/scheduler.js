@@ -22,9 +22,9 @@ var TSOS;
                 let next = _ReadyQueue.peekFirst();
                 if (next.location === "disk") {
                     // swap
+                    // roll out
                 }
                 this.process = next;
-                console.log(TSOS.Swapper.roll_out(this.process.memoryPartitionId));
                 TSOS.Dispatcher.contextSwitch(prev, next);
             }
             else {
