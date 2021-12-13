@@ -14,8 +14,19 @@ var TSOS;
             _Disk.echo(file_name, new_data, true);
             TSOS.Control.hostDisplayDisk();
         }
-        static roll_out() {
-            // read from disk and place process on ready queue
+        static roll_out(partitionId) {
+            // put code from disk into memory, and write code from memory to disk
+            let temp = [];
+            for (let i = 0; i < PARTITION_SIZE - 1; i++) {
+                temp[i] = _MemoryAccessor.readIntermediate(i, partitionId).toString(16);
+            }
+            for (let i = 0; i < temp.length - 1; i++) {
+                if (temp[i] == "0" && temp[i] == temp[i + 1]) {
+                    temp.length = i + 1;
+                    break;
+                }
+            }
+            console.log(temp);
         }
     }
     TSOS.Swapper = Swapper;

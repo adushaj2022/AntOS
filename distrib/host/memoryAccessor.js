@@ -22,8 +22,8 @@ var TSOS;
                 this.memory.write(); // valid write to memory
             }
         }
-        readIntermediate(address) {
-            this.setMAR(address + 256 * _CurrentPartition);
+        readIntermediate(address, partition = _CurrentPartition) {
+            this.setMAR(address + 256 * partition);
             return this.memory.read(); //accepts an address and gives us the data there
         }
         //Helper / Util method

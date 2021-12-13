@@ -25,6 +25,7 @@ module TSOS {
 
         if (next.location === "disk") {
           // swap
+          // roll out
         }
 
         this.process = next;

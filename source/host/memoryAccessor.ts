@@ -26,8 +26,11 @@ module TSOS {
       }
     }
 
-    public readIntermediate(address: number): number {
-      this.setMAR(address + 256 * _CurrentPartition);
+    public readIntermediate(
+      address: number,
+      partition = _CurrentPartition
+    ): number {
+      this.setMAR(address + 256 * partition);
       return this.memory.read(); //accepts an address and gives us the data there
     }
 

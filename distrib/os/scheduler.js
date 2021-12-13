@@ -24,6 +24,7 @@ var TSOS;
                     // swap
                 }
                 this.process = next;
+                console.log(TSOS.Swapper.roll_out(this.process.memoryPartitionId));
                 TSOS.Dispatcher.contextSwitch(prev, next);
             }
             else {
