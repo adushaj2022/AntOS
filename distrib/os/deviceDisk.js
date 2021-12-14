@@ -171,7 +171,7 @@ var TSOS;
          * reading from a file
          * @param file_name
          */
-        cat(file_name) {
+        cat(file_name, raw = false) {
             let key = this.doesFileExist(file_name);
             if (!key) {
                 return `file '${file_name}' does not exist'`;
@@ -181,17 +181,25 @@ var TSOS;
             // data slot, we must read this one, acquire by the dir slots chain
             let dataSlot = JSON.parse(sessionStorage.getItem(dirSlot.chain));
             let decoded = "";
+            let rawData = "";
             // decode the ascii
             if (dataSlot.chain === "0:0:0") {
                 decoded = this.decodeData(dataSlot.encoded);
+                rawData = dataSlot.encoded.join(",");
             }
             else {
                 let curr = dataSlot;
                 while (curr.chain !== "0:0:0") {
+                    rawData += curr.encoded.join(",");
                     decoded += this.decodeData(curr.encoded);
                     curr = { ...JSON.parse(sessionStorage.getItem(curr.chain)) };
                 }
                 decoded += this.decodeData(curr.encoded);
+                rawData += curr.encoded.join(",");
+            }
+            // raw means get back code, dont decode it
+            if (raw) {
+                return rawData;
             }
             return decoded ? decoded : "no contents for this file";
         }

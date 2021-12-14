@@ -13,27 +13,50 @@ module TSOS {
       _Disk.echo(file_name, new_data, true);
       Control.hostDisplayDisk();
     }
-    public static roll_out(partitionId: number, diskProcessId: number) {
+    public static roll_out(
+      partitionId: number,
+      diskProcessId: number,
+      prevId: number
+    ) {
       // put code from disk into memory, and write code from memory to disk
 
-      // temporary array of code from memory
-      let temp = [];
-      for (let i = 0; i < PARTITION_SIZE - 1; i++) {
-        temp[i] = _MemoryAccessor.readIntermediate(i, partitionId).toString(16);
+      // temp array of code from memory
+      let memoryCode = [];
+      for (let i = 0; i <= PARTITION_SIZE; i++) {
+        memoryCode[i] = _MemoryAccessor
+          .readIntermediate(i, partitionId)
+          .toString(16);
       }
 
-      for (let i = 0; i < temp.length - 1; i++) {
-        if (temp[i] == "0" && temp[i] == temp[i + 1]) {
-          temp.length = i + 1; // chop off extra zeros
-          break;
+      let rawData = true;
+      let fileName = `.process${diskProcessId + 1}`;
+      let diskCode: any[] = _Disk.cat(fileName, rawData).split(",");
+
+      if (diskCode.length > 255) {
+        diskCode.length = 256;
+      } else {
+        let count = 0;
+        while (count++ < 255) {
+          if (typeof diskCode[count] == "undefined") {
+            diskCode[count] = 0;
+          }
         }
       }
+      diskCode = diskCode.map((num) => parseInt(num, 16)) as number[];
 
-      // write this temp code to disk
+      console.log(`SWITHCING FROM ${diskProcessId} TO ${prevId}`);
 
-      // move code from disk into memory
+      // now we have our disk and memory code, we can swap
 
-      console.log(temp);
+      for (let i = 0; i < PARTITION_SIZE; i++) {
+        _MemoryManager.mainMemory[i + 256 * partitionId] = diskCode[i];
+      }
+
+      _Disk.rm(fileName);
+      _Disk.touch(fileName);
+      _Disk.echo(fileName, [...memoryCode], true);
+
+      Control.hostDisplayDisk();
     }
   }
 }

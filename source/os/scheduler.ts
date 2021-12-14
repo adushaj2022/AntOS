@@ -23,12 +23,15 @@ module TSOS {
         let prev: ProcessControlBlock = top;
         let next: ProcessControlBlock = _ReadyQueue.peekFirst();
 
+        this.process = next;
+
         if (next.location === "disk") {
           // swap
-          // roll out
-        }
+          Swapper.roll_out(next.memoryPartitionId, next.pid, prev.pid);
 
-        this.process = next;
+          prev.location = "disk";
+          next.location = "memory";
+        }
 
         Dispatcher.contextSwitch(prev, next);
       } else {

@@ -20,11 +20,13 @@ var TSOS;
                 }
                 let prev = top;
                 let next = _ReadyQueue.peekFirst();
+                this.process = next;
                 if (next.location === "disk") {
                     // swap
-                    // roll out
+                    TSOS.Swapper.roll_out(next.memoryPartitionId, next.pid, prev.pid);
+                    prev.location = "disk";
+                    next.location = "memory";
                 }
-                this.process = next;
                 TSOS.Dispatcher.contextSwitch(prev, next);
             }
             else {

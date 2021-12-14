@@ -384,7 +384,7 @@ var TSOS;
         }
         shellLoad(args) {
             let priority = typeof args[0] !== "undefined" ? Number(args[0]) : 0; // default to 0
-            const data = TSOS.Control.hostGetUserInput().trim();
+            const data = TSOS.Control.hostGetUserInput().trim().replace(/\n|\r/g, " ");
             if (!data) {
                 _StdOut.putText("Input is empty");
                 return;
