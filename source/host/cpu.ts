@@ -158,6 +158,7 @@ module TSOS {
             !RoundRobinScheduler.isActivated &&
             !FirstComeFirstServe.isActivated
           ) {
+            // single program, simply terminate
             this.isExecuting = false;
             this.program_log("terminated");
           } else if (RoundRobinScheduler.isActivated) {
@@ -175,8 +176,10 @@ module TSOS {
               return;
             }
           } else if (FirstComeFirstServe.isActivated) {
+            // program complete complete, tell scheduler to advance
             FirstComeFirstServe.shouldAdvance = true;
             if (_ReadyQueue.getSize() === 1) {
+              // last program, we are done
               this.isExecuting = false;
               FirstComeFirstServe.isActivated = false;
             }

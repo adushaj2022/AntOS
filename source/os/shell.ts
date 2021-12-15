@@ -229,6 +229,13 @@ module TSOS {
       );
       this.commandList[this.commandList.length] = sc;
 
+      sc = new ShellCommand(
+        this.renameFile,
+        "rename",
+        "<old_file> <new_file>."
+      );
+      this.commandList[this.commandList.length] = sc;
+
       // Display the initial prompt.
       this.putPrompt();
     }
@@ -802,6 +809,20 @@ module TSOS {
       let message = _Disk.rm(file_name);
       _StdOut.putText(message);
       Control.hostDisplayDisk();
+    }
+
+    public renameFile(args: string[]) {
+      let [old_file, new_file] = args;
+
+      if (!old_file || !new_file) {
+        return _StdOut.putText("improper usage of rename command");
+      }
+
+      if (!_Disk.mv(old_file, new_file)) {
+        return _StdOut.lwPutText("couldnt move file, it doesnt exist");
+      }
+
+      _StdOut.lwPutText(`Successfully renamed ${old_file} to ${new_file}`);
     }
 
     public setSchedule(args: string[]) {

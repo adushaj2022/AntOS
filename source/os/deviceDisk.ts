@@ -164,6 +164,7 @@ module TSOS {
       let i = 0;
       // creating multiple 60 or less length arrays out of N length
       while (data.length > 60) {
+        // slicing our data array up into useable sizes
         slots.push(
           data.splice(i * LENGTH_LIMIT, Math.min(LENGTH_LIMIT, data.length))
         );
@@ -178,18 +179,19 @@ module TSOS {
       let currKey = JSON.parse(sessionStorage.getItem(key as string)).chain;
       let nextChain: string;
       let len = 0;
+      // iterate through data we need to write
       for (let slot of slots) {
         let newSlot = JSON.parse(sessionStorage.getItem(currKey)); //parse
         nextChain = this.getFirstSlot([
-          // next available
+          // next available dir
           this.DIRECTORY_LIMIT,
           this.KEY_SIZE,
-        ]) as string; // basically add 1
+        ]) as string;
         newSlot.bit = 1; // set to in use
         newSlot.encoded = [...slot]; // set data from above
         newSlot.chain = len === slots.length - 1 ? "0:0:0" : nextChain; // last slot has no chain
         sessionStorage.setItem(currKey, JSON.stringify(newSlot)); // set new slot
-        currKey = nextChain;
+        currKey = nextChain; // move reference
         len++;
       }
 
@@ -215,11 +217,13 @@ module TSOS {
       // decode the ascii
       if (dataSlot.chain === "0:0:0") {
         decoded = this.decodeData(dataSlot.encoded);
+        // raw data is simply just hex
         rawData = dataSlot.encoded.join(",");
       } else {
         let curr = dataSlot;
         while (curr.chain !== "0:0:0") {
           rawData += curr.encoded.join(",");
+          // decoded data will be an acii char of some sort
           decoded += this.decodeData(curr.encoded);
           curr = { ...JSON.parse(sessionStorage.getItem(curr.chain)) };
         }
@@ -235,6 +239,9 @@ module TSOS {
       return decoded ? decoded : "no contents for this file";
     }
 
+    /**
+     * Naming methods after there linux commands, to give us more of an `OS` feel
+     */
     public rm(file_name: string): string {
       let key = this.doesFileExist(file_name);
       if (!key) {
@@ -243,6 +250,7 @@ module TSOS {
       // directory slot
       let dirSlot = JSON.parse(sessionStorage.getItem(key as string));
 
+      // empty value which means deleted
       let emptyValue: DiskDataEntry = {
         bit: 0,
         chain: "0:0:0",
@@ -251,7 +259,7 @@ module TSOS {
 
       let curr = dirSlot.chain;
 
-      // delete all chains
+      // delete all chains, meaning if we have a slot of data in other keys in storage
       while (curr !== "0:0:0") {
         let row = JSON.parse(sessionStorage.getItem(curr));
         curr = row.chain;
@@ -264,6 +272,31 @@ module TSOS {
       sessionStorage.setItem(dirSlot.chain, JSON.stringify(emptyValue));
 
       return `file '${file_name}' deleted'`;
+    }
+
+    public mv(old_file: string, new_file: string): boolean {
+      const key = this.doesFileExist(old_file);
+
+      // file doesnt exist
+      if (!key) {
+        return false;
+      }
+
+      const slot = JSON.parse(sessionStorage.getItem(key as string));
+
+      // reset the name
+      slot.encoded = new Array(this.DIRECTORY_LIMIT).fill("00");
+
+      // encode new name
+      let encodedData = this.encodeHex(new_file);
+
+      // set new encoded data
+      slot.encoded = this.setSlotData(encodedData, slot.encoded);
+
+      // update storage
+      sessionStorage.setItem(key as string, JSON.stringify(slot));
+
+      return true;
     }
 
     // false if does not exist, return key if exists
