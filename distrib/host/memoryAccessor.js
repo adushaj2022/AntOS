@@ -10,20 +10,10 @@ var TSOS;
         writeIntermediate(address, data) {
             this.memory.setMAR(address + 256 * _CurrentPartition);
             this.memory.setMDR(data);
-            if (this.getMDR() > _MemoryManager.totalAddressableSpace()) {
-                _StdOut.putText("Memory out of bounds");
-                _CPU.isExecuting = false; // stop program
-            }
-            else if (this.getMDR() > 256 * (_CurrentPcbId + 1)) {
-                _StdOut.lwPutText(`PCB - ${_CurrentPcbId} does not have access to this portion of memory`);
-                _CPU.isExecuting = false;
-            }
-            else {
-                this.memory.write(); // valid write to memory
-            }
+            this.memory.write(); // valid write to memory
         }
-        readIntermediate(address) {
-            this.setMAR(address + 256 * _CurrentPartition);
+        readIntermediate(address, partition = _CurrentPartition) {
+            this.setMAR(address + 256 * partition);
             return this.memory.read(); //accepts an address and gives us the data there
         }
         //Helper / Util method

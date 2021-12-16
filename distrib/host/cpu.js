@@ -138,6 +138,7 @@ var TSOS;
                     // End of a program
                     if (!TSOS.RoundRobinScheduler.isActivated &&
                         !TSOS.FirstComeFirstServe.isActivated) {
+                        // single program, simply terminate
                         this.isExecuting = false;
                         this.program_log("terminated");
                     }
@@ -154,8 +155,10 @@ var TSOS;
                         }
                     }
                     else if (TSOS.FirstComeFirstServe.isActivated) {
+                        // program complete complete, tell scheduler to advance
                         TSOS.FirstComeFirstServe.shouldAdvance = true;
                         if (_ReadyQueue.getSize() === 1) {
+                            // last program, we are done
                             this.isExecuting = false;
                             TSOS.FirstComeFirstServe.isActivated = false;
                         }

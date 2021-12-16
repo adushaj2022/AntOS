@@ -23,11 +23,17 @@ module TSOS {
         let prev: ProcessControlBlock = top;
         let next: ProcessControlBlock = _ReadyQueue.peekFirst();
 
+        this.process = next;
+
+        // if next program is disk, lets swap that program with the previous one in memory
         if (next.location === "disk") {
           // swap
-        }
+          Swapper.roll_out(next.memoryPartitionId, next.pid, prev.pid);
 
-        this.process = next;
+          // change locations
+          prev.location = "disk";
+          next.location = "memory";
+        }
 
         Dispatcher.contextSwitch(prev, next);
       } else {
@@ -45,6 +51,12 @@ module TSOS {
     static process: null | ProcessControlBlock = null;
     static next: null | ProcessControlBlock;
     static shouldAdvance = false;
+    /**
+     * Similar to round robin, but we simply want to dequeue a process,
+     *  run the program until that process is over, next we advance and dequeue a new object,
+     *  we are simply ,oving references from previous process to next process
+     *
+     */
     static doCycle() {
       if (!this.isActivated) return;
       if (this.process === null) {
@@ -55,11 +67,14 @@ module TSOS {
           let prev: ProcessControlBlock = top;
           let next: ProcessControlBlock = _ReadyQueue.peekFirst();
           this.process = next;
+          // null checks, if one is null, no need to switch
           if (next && prev) {
             Dispatcher.contextSwitch(prev, next);
           }
+          // wait until next program is done
           this.shouldAdvance = false;
         }
+        // null check
         if (this.process) {
           _CurrentPcbId = this.process.pid;
           _CurrentPartition = this.process.memoryPartitionId;

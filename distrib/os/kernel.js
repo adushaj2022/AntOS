@@ -192,6 +192,7 @@ var TSOS;
             else {
                 p.memoryPartitionId = partitionId;
                 p.location = "memory";
+                console.log("your: ", partitionId);
                 _MemoryAccessor.loadMemory(code, partitionId * 256); // load memory
             }
             TSOS.Control.hostDisplayPcbs(p);

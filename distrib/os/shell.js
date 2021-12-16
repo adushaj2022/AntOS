@@ -93,6 +93,8 @@ var TSOS;
             this.commandList[this.commandList.length] = sc;
             sc = new TSOS.ShellCommand(this.getSchedule, "getschedule", "get current cpu scheduler.");
             this.commandList[this.commandList.length] = sc;
+            sc = new TSOS.ShellCommand(this.renameFile, "rename", "<old_file> <new_file>.");
+            this.commandList[this.commandList.length] = sc;
             // Display the initial prompt.
             this.putPrompt();
         }
@@ -384,7 +386,7 @@ var TSOS;
         }
         shellLoad(args) {
             let priority = typeof args[0] !== "undefined" ? Number(args[0]) : 0; // default to 0
-            const data = TSOS.Control.hostGetUserInput().trim();
+            const data = TSOS.Control.hostGetUserInput().trim().replace(/\n|\r/g, " ");
             if (!data) {
                 _StdOut.putText("Input is empty");
                 return;
@@ -561,9 +563,20 @@ var TSOS;
             if (!_Disk.isFormatted) {
                 return _StdOut.putText("run format first to initialize disk");
             }
+            let opt = args[0];
             let files = _Disk.ls();
+            if (files.length === 0) {
+                return _StdOut.putText("no files found");
+            }
             for (let file of files) {
-                _StdOut.putText(file);
+                if (opt === "-l") {
+                    _StdOut.putText(file);
+                }
+                else {
+                    if (file[0] !== ".") {
+                        _StdOut.putText(file);
+                    }
+                }
                 _StdOut.advanceLine();
             }
         }
@@ -596,6 +609,16 @@ var TSOS;
             let message = _Disk.rm(file_name);
             _StdOut.putText(message);
             TSOS.Control.hostDisplayDisk();
+        }
+        renameFile(args) {
+            let [old_file, new_file] = args;
+            if (!old_file || !new_file) {
+                return _StdOut.putText("improper usage of rename command");
+            }
+            if (!_Disk.mv(old_file, new_file)) {
+                return _StdOut.lwPutText("couldnt move file, it doesnt exist");
+            }
+            _StdOut.lwPutText(`Successfully renamed ${old_file} to ${new_file}`);
         }
         setSchedule(args) {
             let choice = args[0];

@@ -13,21 +13,14 @@ module TSOS {
     public writeIntermediate(address: number, data: number): void {
       this.memory.setMAR(address + 256 * _CurrentPartition);
       this.memory.setMDR(data);
-      if (this.getMDR() > _MemoryManager.totalAddressableSpace()) {
-        _StdOut.putText("Memory out of bounds");
-        _CPU.isExecuting = false; // stop program
-      } else if (this.getMDR() > 256 * (_CurrentPcbId + 1)) {
-        _StdOut.lwPutText(
-          `PCB - ${_CurrentPcbId} does not have access to this portion of memory`
-        );
-        _CPU.isExecuting = false;
-      } else {
-        this.memory.write(); // valid write to memory
-      }
+      this.memory.write(); // valid write to memory
     }
 
-    public readIntermediate(address: number): number {
-      this.setMAR(address + 256 * _CurrentPartition);
+    public readIntermediate(
+      address: number,
+      partition = _CurrentPartition
+    ): number {
+      this.setMAR(address + 256 * partition);
       return this.memory.read(); //accepts an address and gives us the data there
     }
 
